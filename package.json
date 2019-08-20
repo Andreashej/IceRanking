@@ -68,7 +68,7 @@
     "access": "restricted"
   },
   "release": {
-    "repositoryUrl": "https://github.com/LEGO/react-native-scripts.git",
+    "repositoryUrl": "git@github.com:LEGO/react-native-scripts.git",
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
