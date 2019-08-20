@@ -1,0 +1,50 @@
+{
+  "name": "@lego/react-native-scripts",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
+  "files": [
+    "/lib"
+  ],
+  "bin": {
+    "react-native-scripts": "./lib/index.js"
+  },
+  "scripts": {
+    "build": "npm run clean && tsc -b ./tsconfig.json && npm run copy-sentry-sh-files && npm run chmod-sentry-sh-files",
+    "copy-sentry-sh-files": "cd lib && mkdir sentry && cp ../src/sentry/bundle-react-native-code-and-images.sh ./sentry/ && cp ../src/sentry/upload-debug-symbols-to-sentry.sh ./sentry/",
+    "chmod-sentry-sh-files": "chmod +x ./lib/sentry/bundle-react-native-code-and-images.sh && chmod +x ./lib/sentry/upload-debug-symbols-to-sentry.sh",
+    "clean": "rimraf ./lib",
+    "prepublishOnly": "yarn build"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "8.0.0",
+    "inquirer": "6.5.1",
+    "minimist": "1.2.0",
+    "node-fetch": "2.6.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.4.5",
+    "@babel/preset-env": "7.4.5",
+    "@babel/preset-typescript": "7.3.3",
+    "@lego/prettier-config": "1.7.8",
+    "@lego/tslint-config-react-native": "1.0.2",
+    "@types/dotenv": "6.1.1",
+    "@types/inquirer": "6.5.0",
+    "@types/jest": "24.0.15",
+    "@types/minimist": "1.2.0",
+    "@types/node": "^12.7.2",
+    "@types/node-fetch": "2.3.5",
+    "babel-jest": "24.8.0",
+    "husky": "2.4.1",
+    "jest": "24.8.0",
+    "jest-fetch-mock": "2.1.2",
+    "lint-staged": "8.2.1",
+    "rimraf": "2.6.3",
+    "ts-node": "8.2.0",
+    "typescript": "3.5.1",
+    "typescript-tslint-plugin": "0.3.1"
+  }
+}

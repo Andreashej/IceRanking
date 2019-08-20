@@ -1,0 +1,13 @@
+{
+    "editor.formatOnSave": true,
+    // "editor.codeActionsOnSave": {
+    //   "source.fixAll.tslint": true
+    // },
+    "tslint.autoFixOnSave": true,
+    "editor.rulers": [100],
+    "workbench.colorCustomizations": {
+      "editorRuler.foreground": "#505050"
+    },
+    "typescript.tsdk": "node_modules/typescript/lib"
+  }
+  
