@@ -35,5 +35,5 @@ switch (target) {
     }
     break;
   default:
-    console.log('default');
+    console.log('no valid target found');
 }
