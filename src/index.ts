@@ -35,5 +35,5 @@ switch (target) {
     }
     break;
   default:
-    console.log('no valid target found');
+    console.log('no valid target found, pass using appcenter | fastlane');
 }
