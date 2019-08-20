@@ -16,7 +16,7 @@ jobs:
       - name: Check Skip CI commits
         uses: veggiemonk/skip-commit@master
         env:
-          COMMIT_FILTER: chore(release)
+          COMMIT_FILTER: skip-ci
       - uses: actions/setup-node@v1
         with:
           version: 10
