@@ -16,17 +16,17 @@ Sets the environment variables and other settings in in the build configuration 
 
 #### Mandatory environment variables
 
-The following environment variables are required and they need to be secret:
-**_APPCENTER_API_TOKEN_**: information about acquiring an appcenter api token [can be found here](https://docs.microsoft.com/en-us/appcenter/api-docs/)\
-**\*APPCENTER_APP_NAME**:\* the name of your app on appcenter\
-**_APPCENTER_OWNER_NAME_**: the name of your team on appcenter\
-**_GIT_TOKEN_**: your github access token, which [can be obtained here](https://docs.cachethq.io/docs/github-oauth-token)\
-**_GIT_USER_**: your github username\
-**_IOS_CERTIFICATES_GIT_URL_**: the github repository url where your generated certificates and provisioning profiles are stored\
-**_MATCH_PASSWORD_**: the passphrase you provided for encrypting the certificates and provisioning profiles
-**_NPM_AUTH_TOKEN_**: provide an npm auth token if you already have one or [create one here](https://docs.npmjs.com/creating-and-viewing-authentication-tokens)\
-**_PROJECT_OR_WORKSPACE_PATH_**: the path from the root folder to you .xcodeproj or .xcworkspace file\
-**_XCODE_SCHEME_NAME_**: the name of the scheme used for building the app\
+| Environment Variable      | Description                                                                                                                               |
+|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
+| APPCENTER_API_TOKEN       | information about acquiring an appcenter api token [can be found here](https://docs.microsoft.com/en-us/appcenter/api-docs/)              |
+| APPCENTER_APP_NAME        | the name of your app on appcenter                                                                                                         |
+| APPCENTER_OWNER_NAME      | the name of your team on appcenter                                                                                                        |
+| BUNDLE_GIT__COM           | needs to be in the form of "username:github_token"                                                                                        |
+| IOS_CERTIFICATES_GIT_URL  | the github repository url where your generated certificates and provisioning profiles are stored                                          |
+| MATCH_PASSWORD            | the passphrase you provided for encrypting the certificates and provisioning profiles                                                     |
+| NPM_AUTH_TOKEN            | provide an npm auth token if you already have one or [create one here](https://docs.npmjs.com/creating-and-viewing-authentication-tokens) |
+| PROJECT_OR_WORKSPACE_PATH | the path from the root folder to you .xcodeproj or .xcworkspace file                                                                      |
+| XCODE_SCHEME_NAME         | the name of the scheme used for building the app                                                                                          |
 
 #### Usage
 
