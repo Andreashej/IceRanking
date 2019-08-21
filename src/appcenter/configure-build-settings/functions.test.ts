@@ -27,7 +27,7 @@ describe('setBranchConfig', () => {
     expect(response).toStrictEqual({ success: true });
 
     expect(fetchMock.mock.calls[0]).toEqual([
-      'https://api.appcenter.ms/v0.1/apps/appcenterOwnerName/appcenterAppName/branches/githubRef/config',
+      'https://api.appcenter.ms/v0.1/apps/appcenterOwnerName/appcenterAppName/branches/master/config',
       {
         body: expectedBody,
         headers: {
@@ -56,7 +56,7 @@ describe('setBranchConfig', () => {
       expect(error.message).toStrictEqual('error');
 
       expect(fetchMock.mock.calls[0]).toEqual([
-        'https://api.appcenter.ms/v0.1/apps/appcenterOwnerName/appcenterAppName/branches/githubRef/config',
+        'https://api.appcenter.ms/v0.1/apps/appcenterOwnerName/appcenterAppName/branches/master/config',
         {
           body: expectedBody,
           headers: {
