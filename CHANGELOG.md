@@ -1,3 +1,10 @@
+## [0.0.2](https://github.com/LEGO/react-native-scripts/compare/v0.0.1...v0.0.2) (2019-08-21)
+
+
+### Bug Fixes
+
+* change version and trigger release ([6377ce7](https://github.com/LEGO/react-native-scripts/commit/6377ce7))
+
 # 1.0.0 (2019-08-21)
 
 
