@@ -21,7 +21,7 @@
     "clean": "rimraf ./lib",
     "prepublishOnly": "yarn build",
     "release": "semantic-release",
-    "release:ci": "echo 'unsafe-perm = true' > ./.npmrc && yarn run semantic-release && rm -rf ./.npmrc",
+    "release:ci": "echo 'unsafe-perm = true' > ./.npmrc && yarn run semantic-release --debug && rm -rf ./.npmrc",
     "test": "jest"
   },
   "author": "",
