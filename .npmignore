@@ -8,3 +8,4 @@ prettier.config.js
 release.config.js
 tsconfig.json
 tslint.json
+.env
