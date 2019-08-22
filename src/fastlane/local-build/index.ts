@@ -6,16 +6,20 @@ let buildConfig: string;
 let environment: string;
 let destination: string;
 let internal: boolean;
+let gitUrl: string;
+let username: string;
 
 const args = minimist(process.argv, {
   alias: {
     b: 'build-type',
     d: 'destination',
     e: 'env-type',
+    g: 'git-url',
     i: 'internal',
+    u: 'username',
   },
   boolean: ['internal'],
-  string: ['build-type', 'env-type', 'destination'],
+  string: ['build-type', 'env-type', 'destination', 'git-url', 'username'],
 });
 
 const getArgs = async () => {
@@ -65,6 +69,9 @@ const getArgs = async () => {
       destination = answer.destination;
     }
 
+    gitUrl = args['git-url'] ? args['git-url'] : 'git@github.com:LEGO/ios-certificates.git';
+    username = args.username ? args.username : 'MAFBuildServer@lego.com';
+
     internal = args.internal;
   } catch (err) {
     throw new Error(err);
@@ -95,13 +102,13 @@ export const localBuild = async () => {
 
       if (destination === 'device') {
         return execSync(
-          `cd ./ios && BUILD_CONFIG=${buildConfig} ENV_TYPE=${envType} ENV_FILE=${envFile} bundle exec fastlane RUN && cd .. && react-native run-ios --device && cd ./ios && bundle exec fastlane RESET`,
+          `cd ./ios && BUILD_CONFIG=${buildConfig} ENV_TYPE=${envType} ENV_FILE=${envFile} CERT_URL=${gitUrl} APPLE_USERNAME=${username} bundle exec fastlane RUN && cd .. && react-native run-ios --device && cd ./ios && bundle exec fastlane RESET`,
           { stdio: 'inherit' }
         );
       }
 
       return execSync(
-        `cd ./ios && BUILD_CONFIG=${buildConfig} ENV_TYPE=${envType} ENV_FILE=${envFile} bundle exec fastlane RUN --verbose && cd .. && react-native run-ios --simulator='iPhone 6' && cd ./ios && bundle exec fastlane RESET`,
+        `cd ./ios && BUILD_CONFIG=${buildConfig} ENV_TYPE=${envType} ENV_FILE=${envFile} CERT_URL=${gitUrl} APPLE_USERNAME=${username} bundle exec fastlane RUN --verbose && cd .. && react-native run-ios --simulator='iPhone 6' && cd ./ios && bundle exec fastlane RESET`,
         { stdio: 'inherit' }
       );
     })
