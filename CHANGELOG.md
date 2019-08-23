@@ -1,3 +1,10 @@
+# [0.1.0](https://github.com/LEGO/react-native-scripts/compare/v0.0.2...v0.1.0) (2019-08-22)
+
+
+### Features
+
+* add CERT_URL and APPLE_USERNAME env variables for local builds ([a7c5d12](https://github.com/LEGO/react-native-scripts/commit/a7c5d12))
+
 ## [0.0.2](https://github.com/LEGO/react-native-scripts/compare/v0.0.1...v0.0.2) (2019-08-21)
 
 
