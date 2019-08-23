@@ -1,3 +1,10 @@
+## [0.1.1](https://github.com/LEGO/react-native-scripts/compare/v0.1.0...v0.1.1) (2019-08-23)
+
+
+### Bug Fixes
+
+* add another option for mobileprovision files ([41c9bc1](https://github.com/LEGO/react-native-scripts/commit/41c9bc1))
+
 # [0.1.0](https://github.com/LEGO/react-native-scripts/compare/v0.0.2...v0.1.0) (2019-08-22)
 
 
