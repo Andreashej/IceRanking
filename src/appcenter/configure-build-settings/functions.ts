@@ -228,10 +228,18 @@ export const decryptCerts = () => {
       const certificateCerFilename = certificateFiles.find((file) => path.extname(file) === '.cer');
       const provProfileFilename = provProfileFiles.find((file) => {
         if (GITHUB_REF === 'develop' || GITHUB_REF.startsWith('feature/')) {
-          return path.basename(file).endsWith(`${XCODE_SCHEME_NAME}.dev.mobileprovision`);
+          // TODO: decide if we should keep .dev or -dev
+          return (
+            path.basename(file).endsWith(`${XCODE_SCHEME_NAME}.dev.mobileprovision`) ||
+            path.basename(file).endsWith(`${XCODE_SCHEME_NAME}-dev.mobileprovision`)
+          );
         }
         if (GITHUB_REF.startsWith('hotfix/') || GITHUB_REF.startsWith('release/')) {
-          return path.basename(file).endsWith(`${XCODE_SCHEME_NAME}.qa.mobileprovision`);
+          // TODO: decide if we should keep .qa or -qa
+          return (
+            path.basename(file).endsWith(`${XCODE_SCHEME_NAME}.qa.mobileprovision`) ||
+            path.basename(file).endsWith(`${XCODE_SCHEME_NAME}-qa.mobileprovision`)
+          );
         }
 
         return path.basename(file).endsWith(`${XCODE_SCHEME_NAME}.mobileprovision`);
