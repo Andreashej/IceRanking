@@ -88,6 +88,13 @@ Alternatively you can set some custom scripts in your package.json:
 "ios-simulator-int":  "yarn ios-build -b Debug -e prod -d simulator -i"
 ```
 
+If you want to target a specific device or simulator, parse the name as an argument:
+
+```javascript
+"ios-device-dev":  "yarn ios-build -b Debug -e dev -d device -t iPhone",
+"ios-simulator-dev":  "yarn ios-build -b Debug -e dev -d simulator -t 'iPhone Xʀ'",
+```
+
 ## SENTRY
 
 A couple of shell scripts that are used for uploading DSYM to sentry and for bundling RN code and images.

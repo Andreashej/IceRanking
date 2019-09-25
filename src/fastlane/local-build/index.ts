@@ -8,6 +8,7 @@ let destination: string;
 let internal: boolean;
 let gitUrl: string;
 let username: string;
+let target: string;
 
 const args = minimist(process.argv, {
   alias: {
@@ -16,6 +17,7 @@ const args = minimist(process.argv, {
     e: 'env-type',
     g: 'git-url',
     i: 'internal',
+    t: 'target',
     u: 'username',
   },
   boolean: ['internal'],
@@ -73,6 +75,8 @@ const getArgs = async () => {
     username = args.username ? args.username : 'MAFBuildServer@lego.com';
 
     internal = args.internal;
+
+    target = args.target;
   } catch (err) {
     throw new Error(err);
   }
@@ -101,14 +105,18 @@ export const localBuild = async () => {
       }
 
       if (destination === 'device') {
+        const deviceArg = `--device${target && `=${target}`}`;
+
         return execSync(
-          `cd ./ios && BUILD_CONFIG=${buildConfig} ENV_TYPE=${envType} ENV_FILE=${envFile} CERT_URL=${gitUrl} APPLE_USERNAME=${username} bundle exec fastlane RUN && cd .. && react-native run-ios --device && cd ./ios && bundle exec fastlane RESET`,
+          `cd ./ios && BUILD_CONFIG=${buildConfig} ENV_TYPE=${envType} ENV_FILE=${envFile} CERT_URL=${gitUrl} APPLE_USERNAME=${username} bundle exec fastlane RUN && cd .. && react-native run-ios ${deviceArg} && cd ./ios && bundle exec fastlane RESET`,
           { stdio: 'inherit' }
         );
       }
 
+      const simulatorName = target || 'iPhone 6';
+
       return execSync(
-        `cd ./ios && BUILD_CONFIG=${buildConfig} ENV_TYPE=${envType} ENV_FILE=${envFile} CERT_URL=${gitUrl} APPLE_USERNAME=${username} bundle exec fastlane RUN --verbose && cd .. && react-native run-ios --simulator='iPhone 6' && cd ./ios && bundle exec fastlane RESET`,
+        `cd ./ios && BUILD_CONFIG=${buildConfig} ENV_TYPE=${envType} ENV_FILE=${envFile} CERT_URL=${gitUrl} APPLE_USERNAME=${username} bundle exec fastlane RUN --verbose && cd .. && react-native run-ios --simulator='${simulatorName}' && cd ./ios && bundle exec fastlane RESET`,
         { stdio: 'inherit' }
       );
     })
