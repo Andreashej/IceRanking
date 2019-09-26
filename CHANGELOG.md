@@ -1,3 +1,10 @@
+## [0.2.1](https://github.com/LEGO/react-native-scripts/compare/v0.2.0...v0.2.1) (2019-09-26)
+
+
+### Bug Fixes
+
+* add correct registry ([755913d](https://github.com/LEGO/react-native-scripts/commit/755913d))
+
 # [0.2.0](https://github.com/LEGO/react-native-scripts/compare/v0.1.1...v0.2.0) (2019-09-26)
 
 
