@@ -23,7 +23,6 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: '@lego'
       - run: npm install -g yarn
-      - run: npm config set "//registry.npmjs.org/:_authToken" ${{ secrets.NPM_TOKEN }}
       - run: yarn install
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
