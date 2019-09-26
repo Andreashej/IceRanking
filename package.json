@@ -65,6 +65,7 @@
     "typescript-tslint-plugin": "0.3.1"
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
   }
 }
