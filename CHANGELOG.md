@@ -1,3 +1,10 @@
+# [0.3.0](https://github.com/LEGO/react-native-scripts/compare/v0.2.2...v0.3.0) (2019-10-04)
+
+
+### Features
+
+* use GH_TOKEN instead of NPM ([9020d01](https://github.com/LEGO/react-native-scripts/commit/9020d01))
+
 ## [0.2.2](https://github.com/LEGO/react-native-scripts/compare/v0.2.1...v0.2.2) (2019-09-26)
 
 
