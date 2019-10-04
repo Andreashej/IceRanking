@@ -16,7 +16,7 @@ interface IEnvVars {
   GITHUB_REF?: string;
   BUNDLE_GIT__COM?: string;
   IOS_CERTIFICATES_GIT_URL?: string;
-  NPM_AUTH_TOKEN?: string;
+  GH_TOKEN?: string;
   PROJECT_OR_WORKSPACE_PATH?: string;
   XCODE_SCHEME_NAME?: string;
 }
@@ -39,10 +39,10 @@ const envVars: IEnvVars = {
   APPCENTER_APP_NAME: process.env.APPCENTER_APP_NAME,
   APPCENTER_OWNER_NAME: process.env.APPCENTER_OWNER_NAME,
   BUNDLE_GIT__COM: process.env.BUNDLE_GIT__COM,
+  GH_TOKEN: process.env.GH_TOKEN,
   GITHUB_REF: process.env.GITHUB_REF ? process.env.GITHUB_REF.split('refs/heads/')[1] : undefined,
   IOS_CERTIFICATES_GIT_URL: process.env.IOS_CERTIFICATES_GIT_URL,
   MATCH_PASSWORD: process.env.MATCH_PASSWORD,
-  NPM_AUTH_TOKEN: process.env.NPM_AUTH_TOKEN,
   PROJECT_OR_WORKSPACE_PATH: process.env.PROJECT_OR_WORKSPACE_PATH,
   XCODE_SCHEME_NAME: process.env.XCODE_SCHEME_NAME,
 };
@@ -71,7 +71,7 @@ export const setBranchConfig = (
       MATCH_PASSWORD,
       PROJECT_OR_WORKSPACE_PATH,
       XCODE_SCHEME_NAME,
-      NPM_AUTH_TOKEN,
+      GH_TOKEN,
       BUNDLE_GIT__COM,
     } = envVars;
 
@@ -83,7 +83,7 @@ export const setBranchConfig = (
       !MATCH_PASSWORD ||
       !PROJECT_OR_WORKSPACE_PATH ||
       !XCODE_SCHEME_NAME ||
-      !NPM_AUTH_TOKEN ||
+      !GH_TOKEN ||
       !BUNDLE_GIT__COM
     ) {
       return reject('MISSING ENV VARS');
@@ -101,8 +101,8 @@ export const setBranchConfig = (
     const environmentVariables: IBodyEnvVars[] = [
       {
         isSecret: true,
-        name: 'NPM_AUTH_TOKEN',
-        value: NPM_AUTH_TOKEN,
+        name: 'GH_TOKEN',
+        value: GH_TOKEN,
       },
       {
         isSecret: true,

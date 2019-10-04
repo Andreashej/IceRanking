@@ -2,8 +2,8 @@ export const expectedBody = JSON.stringify({
   environmentVariables: [
     {
       isSecret: true,
-      name: 'NPM_AUTH_TOKEN',
-      value: 'npmAuthToken',
+      name: 'GH_TOKEN',
+      value: 'ghAuthToken',
     },
     {
       isSecret: true,
