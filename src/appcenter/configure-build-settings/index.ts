@@ -53,7 +53,9 @@ const checkEnvVars = () => {
     currentBranchName !== 'master' &&
     currentBranchName !== 'develop'
   ) {
-    console.log('We only want whitelisted git flow branches having configurations copied into');
+    console.log(
+      'We only want whitelisted git flow branches having configurations copied into. For more information visit https://confluence.corp.lego.com/display/UXMP/Git+Workflow'
+    );
     process.exit(78);
   }
 };
