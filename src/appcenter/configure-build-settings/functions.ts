@@ -47,7 +47,7 @@ const envVars: IEnvVars = {
   XCODE_SCHEME_NAME: process.env.XCODE_SCHEME_NAME,
 };
 
-export const setBranchConfig = (
+export const setBranchConfig = async (
   certificateEncoded: string,
   certificateFilename: string,
   profileEncoded: string,
@@ -156,24 +156,12 @@ export const setBranchConfig = (
       trigger: 'manual',
     };
 
-    // if (
-    //   GITHUB_REF.startsWith('hotfix/') ||
-    //   GITHUB_REF.startsWith('release/') ||
-    //   GITHUB_REF === 'master'
-    // ) {
-    //   body.toolsets.testcloud = {
-    //     deviceSelection: 'any_top_1_device',
-    //     frameworkProperties: {},
-    //     frameworkType: 'Generated',
-    //   };
-    // }
-
     fetch(uri, {
       body: JSON.stringify(body),
       headers,
       method,
     })
-      .then((res) => {
+      .then(async (res) => {
         if (res.status === 409 && res.statusText === 'Conflict') {
           reject(409);
         }
@@ -189,7 +177,7 @@ export const setBranchConfig = (
   });
 };
 
-export const decryptCerts = () => {
+export const decryptCerts = async () => {
   return new Promise((resolve, reject) => {
     const {
       MATCH_PASSWORD,
@@ -227,15 +215,19 @@ export const decryptCerts = () => {
       const certificateFilename = certificateFiles.find((file) => path.extname(file) === '.p12');
       const certificateCerFilename = certificateFiles.find((file) => path.extname(file) === '.cer');
       const provProfileFilename = provProfileFiles.find((file) => {
-        if (GITHUB_REF === 'develop' || GITHUB_REF.startsWith('feature/')) {
-          // TODO: decide if we should keep .dev or -dev
+        if (
+          GITHUB_REF.toLowerCase() === 'develop' ||
+          GITHUB_REF.toLowerCase().startsWith('feature/')
+        ) {
           return (
             path.basename(file).endsWith(`${XCODE_SCHEME_NAME}.dev.mobileprovision`) ||
             path.basename(file).endsWith(`${XCODE_SCHEME_NAME}-dev.mobileprovision`)
           );
         }
-        if (GITHUB_REF.startsWith('hotfix/') || GITHUB_REF.startsWith('release/')) {
-          // TODO: decide if we should keep .qa or -qa
+        if (
+          GITHUB_REF.toLowerCase().startsWith('hotfix/') ||
+          GITHUB_REF.toLowerCase().startsWith('release/')
+        ) {
           return (
             path.basename(file).endsWith(`${XCODE_SCHEME_NAME}.qa.mobileprovision`) ||
             path.basename(file).endsWith(`${XCODE_SCHEME_NAME}-qa.mobileprovision`)

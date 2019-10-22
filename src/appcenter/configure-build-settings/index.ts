@@ -47,11 +47,11 @@ const checkEnvVars = () => {
   }
 
   if (
-    !currentBranchName.startsWith('feature/') &&
-    !currentBranchName.startsWith('hotfix/') &&
-    !currentBranchName.startsWith('release/') &&
-    currentBranchName !== 'master' &&
-    currentBranchName !== 'develop'
+    !currentBranchName.toLowerCase().startsWith('feature/') &&
+    !currentBranchName.toLowerCase().startsWith('hotfix/') &&
+    !currentBranchName.toLowerCase().startsWith('release/') &&
+    currentBranchName.toLowerCase() !== 'master' &&
+    currentBranchName.toLowerCase() !== 'develop'
   ) {
     console.log('We only want whitelisted git flow branches having configurations copied into');
     process.exit(78);
