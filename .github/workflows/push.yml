@@ -7,7 +7,6 @@ on:
   push:
     branches:
       - master
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,7 +18,7 @@ jobs:
           COMMIT_FILTER: skip-ci
       - uses: actions/setup-node@v1
         with:
-          version: 10
+          node-version: '10.x'
           registry-url: https://npm.pkg.github.com/
           scope: '@lego'
       - run: npm install -g yarn
