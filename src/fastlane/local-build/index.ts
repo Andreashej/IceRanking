@@ -105,7 +105,7 @@ export const localBuild = async () => {
       }
 
       if (destination === 'device') {
-        const deviceArg = target ? `--device=${target}` : '--device';
+        const deviceArg = target ? `--device "${target}"` : '--device';
 
         return execSync(
           `cd ./ios && BUILD_CONFIG=${buildConfig} ENV_TYPE=${envType} ENV_FILE=${envFile} CERT_URL=${gitUrl} APPLE_USERNAME=${username} bundle exec fastlane RUN && cd .. && react-native run-ios ${deviceArg} && cd ./ios && bundle exec fastlane RESET`,
