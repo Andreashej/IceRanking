@@ -1,3 +1,13 @@
+## [0.3.1](https://github.com/LEGO/react-native-scripts/compare/v0.3.0...v0.3.1) (2019-10-30)
+
+
+### Bug Fixes
+
+* add more information regarding git workflow ([1556376](https://github.com/LEGO/react-native-scripts/commit/1556376c98a4d07bbdc3bc2285ae86b80c5bca94))
+* add toLowerCase when checking the branch name ([5228078](https://github.com/LEGO/react-native-scripts/commit/52280789fb124a7cc5fa7e868ce7db0081713c45))
+* correctly use the device name that was passed ([da7def1](https://github.com/LEGO/react-native-scripts/commit/da7def127810bc9cffbeadaf2d17461d5c450e53))
+* fix device argument resulting in --deviceundefined ([20d7b9f](https://github.com/LEGO/react-native-scripts/commit/20d7b9f5415be8312f942ddb6a01e65136842799))
+
 # [0.3.0](https://github.com/LEGO/react-native-scripts/compare/v0.2.2...v0.3.0) (2019-10-04)
 
 
