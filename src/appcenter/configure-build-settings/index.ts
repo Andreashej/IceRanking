@@ -1,9 +1,8 @@
 #!/usr/bin/env node
-// we allow console.logs  in this file so that a message will get printed to the user in github actions
-/* eslint-disable no-console */
 // exit with specific codes instead of throwing errors
 /* eslint-disable no-process-exit */
 import fs from 'fs';
+import { printMsg } from '../../utils/printMsg';
 import { decryptCerts, setBranchConfig } from './functions';
 
 const currentBranchName = process.env.GITHUB_REF
@@ -11,7 +10,7 @@ const currentBranchName = process.env.GITHUB_REF
   : undefined;
 const appcenterAppName = process.env.APPCENTER_APP_NAME;
 
-const checkEnvVars = () => {
+const checkEnvVars: () => void = () => {
   if (!currentBranchName) {
     throw new Error('GITHUB_REF environment variable is undefined');
   }
@@ -23,11 +22,9 @@ const checkEnvVars = () => {
     currentBranchName.toLowerCase() !== 'master' &&
     currentBranchName.toLowerCase() !== 'develop'
   ) {
-    // disable rule so that a message is printed in github actions
-    // eslint-disable-next-line no-console
-    console.log(
-      'We only want whitelisted git flow branches having configurations copied into. For more information visit https://confluence.corp.lego.com/display/UXMP/Git+Workflow'
-    );
+    printMsg([
+      'We only want whitelisted git flow branches having configurations copied into. For more information visit https://confluence.corp.lego.com/display/UXMP/Git+Workflow',
+    ]);
     process.exit(78);
   }
 };
@@ -57,11 +54,11 @@ export const setBuildConfiguration: () => Promise<undefined> = async () => {
           'PUT'
         );
       } catch (error) {
-        console.log('error after PUT', error);
+        printMsg(['error after PUT', error]);
         process.exit(1);
       }
     } else {
-      console.log('An error occurred: ', err);
+      printMsg(['An error occurred: ', err]);
       process.exit(1);
     }
   }

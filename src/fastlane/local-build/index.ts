@@ -1,6 +1,7 @@
 import { execSync } from 'child_process';
 import inquirer from 'inquirer';
 import minimist from 'minimist';
+import { printMsg } from '../../utils/printMsg';
 
 let buildConfig: string;
 let environment: string;
@@ -121,7 +122,6 @@ export const localBuild: () => void = () => {
       );
     })
     .catch((err) => {
-      // eslint-disable-next-line no-console
-      console.log('Oops, there was an error', err);
+      printMsg(['Oops, there was an error', err]);
     });
 };

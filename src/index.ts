@@ -1,11 +1,10 @@
 #!/usr/bin/env node
-// we want a message to be printed to the user, therefore disable console.log() calls
-/* eslint-disable no-console */
 import { execSync } from 'child_process';
 import minimist from 'minimist';
 import { join } from 'path';
 import { setBuildConfiguration } from './appcenter';
 import { localBuild } from './fastlane';
+import { printMsg } from './utils/printMsg';
 
 const args = minimist(process.argv.slice(2));
 
@@ -22,7 +21,7 @@ switch (target) {
         execSync(join(__dirname, './appcenter/report-build-status/report-build-status.sh'));
         break;
       default:
-        console.log('no action found in appcenter that matches your arguments');
+        printMsg(['no action found in appcenter that matches your arguments']);
     }
     break;
   case 'fastlane':
@@ -31,15 +30,15 @@ switch (target) {
         localBuild();
         break;
       default:
-        console.log('no action found in fastlane that matches your arguments');
+        printMsg(['no action found in fastlane that matches your arguments']);
     }
     break;
   case 'sentry':
     switch (action) {
       default:
-        console.log('no action found in sentry that matches your arguments');
+        printMsg(['no action found in sentry that matches your arguments']);
     }
     break;
   default:
-    console.log('no valid target found, pass using appcenter | fastlane');
+    printMsg(['no valid target found, pass using appcenter | fastlane']);
 }
