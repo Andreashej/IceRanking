@@ -15,9 +15,10 @@
     "react-native-scripts": "./lib/index.js"
   },
   "scripts": {
-    "build": "npm run clean && tsc -b ./tsconfig.json && npm run copy-sentry-sh-files && npm run chmod-sentry-sh-files",
+    "build": "yarn clean && tsc -b ./tsconfig.json && yarn copy-sh-files",
+    "copy-sh-files": "yarn copy-sentry-sh-files && yarn copy-appcenter-sh-files",
     "copy-sentry-sh-files": "cd lib && mkdir sentry && cp ../src/sentry/bundle-react-native-code-and-images.sh ./sentry/ && cp ../src/sentry/upload-debug-symbols-to-sentry.sh ./sentry/",
-    "chmod-sentry-sh-files": "chmod +x ./lib/sentry/bundle-react-native-code-and-images.sh && chmod +x ./lib/sentry/upload-debug-symbols-to-sentry.sh",
+    "copy-appcenter-sh-files": "cd lib/appcenter && mkdir report-build-status && cp ../../src/appcenter/report-build-status/report-build-status.sh ./report-build-status/",
     "clean": "rimraf ./lib",
     "prepublishOnly": "yarn build",
     "release": "semantic-release",
