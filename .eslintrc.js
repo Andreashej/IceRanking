@@ -6,6 +6,6 @@ module.exports = {
   ],
   rules: {
     complexity: ['error', 13],
-    'max-lines-per-function': 0,
+    'max-lines-per-function': 'off',
   },
 };
