@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// tslint:disable: no-floating-promises
+// we want a message to be printed to the user, therefore disable console.log() calls
+/* eslint-disable no-console */
 import { execSync } from 'child_process';
 import minimist from 'minimist';
 import { join } from 'path';
@@ -7,7 +8,6 @@ import { setBuildConfiguration } from './appcenter';
 import { localBuild } from './fastlane';
 
 const args = minimist(process.argv.slice(2));
-console.log('args: ', args);
 
 const target = args._[0];
 const action = args._[1];

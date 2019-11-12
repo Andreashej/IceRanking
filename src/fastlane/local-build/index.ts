@@ -24,7 +24,7 @@ const args = minimist(process.argv, {
   string: ['build-type', 'env-type', 'destination', 'git-url', 'username'],
 });
 
-const getArgs = async () => {
+const getArgs: () => Promise<void> = async () => {
   try {
     if (args['build-type']) {
       buildConfig =
@@ -85,9 +85,9 @@ const getArgs = async () => {
 let envFile: string;
 let envType: string;
 
-export const localBuild = async () => {
+export const localBuild: () => void = () => {
   getArgs()
-    .then(async () => {
+    .then(() => {
       switch (environment) {
         case 'dev':
           envFile = internal ? '.env.dev.int' : '.env.dev';
@@ -121,7 +121,7 @@ export const localBuild = async () => {
       );
     })
     .catch((err) => {
-      // tslint:disable-next-line:no-console
+      // eslint-disable-next-line no-console
       console.log('Oops, there was an error', err);
     });
 };
