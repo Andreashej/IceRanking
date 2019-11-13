@@ -1,3 +1,10 @@
+# [0.4.0](https://github.com/LEGO/react-native-scripts/compare/v0.3.1...v0.4.0) (2019-11-13)
+
+
+### Features
+
+* add a script that reports the build status from appcenter ([8ed1d7f](https://github.com/LEGO/react-native-scripts/commit/8ed1d7fbd7f47384f2847af6b8211f92dfb6bd8d))
+
 ## [0.3.1](https://github.com/LEGO/react-native-scripts/compare/v0.3.0...v0.3.1) (2019-10-30)
 
 
