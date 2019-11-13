@@ -60,8 +60,7 @@ export const setBranchConfig: (
   profileEncoded: string,
   provisioningProfileFilename: string,
   method: 'POST' | 'PUT'
-) => // eslint-disable-next-line @typescript-eslint/no-explicit-any
-Promise<any> = (
+) => Promise<object> = (
   certificateEncoded,
   certificateFilename,
   profileEncoded,
