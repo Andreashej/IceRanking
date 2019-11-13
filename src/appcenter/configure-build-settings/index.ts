@@ -1,5 +1,8 @@
 #!/usr/bin/env node
+// exit with specific codes instead of throwing errors
+/* eslint-disable no-process-exit */
 import fs from 'fs';
+import { printMsg } from '../../utils/printMsg';
 import { decryptCerts, setBranchConfig } from './functions';
 
 const currentBranchName = process.env.GITHUB_REF
@@ -7,7 +10,27 @@ const currentBranchName = process.env.GITHUB_REF
   : undefined;
 const appcenterAppName = process.env.APPCENTER_APP_NAME;
 
-export const setBuildConfiguration = async () => {
+const checkEnvVars: () => void = () => {
+  if (!currentBranchName) {
+    throw new Error('GITHUB_REF environment variable is undefined');
+  }
+
+  if (
+    !currentBranchName.toLowerCase().startsWith('feature/') &&
+    !currentBranchName.toLowerCase().startsWith('hotfix/') &&
+    !currentBranchName.toLowerCase().startsWith('release/') &&
+    currentBranchName.toLowerCase() !== 'master' &&
+    currentBranchName.toLowerCase() !== 'develop'
+  ) {
+    printMsg([
+      'We only want whitelisted git flow branches having configurations copied into. For more information visit https://confluence.corp.lego.com/display/UXMP/Git+Workflow',
+    ]);
+    process.exit(78);
+  }
+};
+
+// eslint-disable-next-line consistent-return
+export const setBuildConfiguration: () => Promise<undefined> = async () => {
   checkEnvVars();
   let certEncoded;
   let ppEncoded;
@@ -31,31 +54,12 @@ export const setBuildConfiguration = async () => {
           'PUT'
         );
       } catch (error) {
-        console.log('error after PUT', error);
+        printMsg(['error after PUT', error]);
         process.exit(1);
       }
     } else {
-      console.log('An error occured: ', err);
+      printMsg(['An error occurred: ', err]);
       process.exit(1);
     }
-  }
-};
-
-const checkEnvVars = () => {
-  if (!currentBranchName) {
-    throw new Error('GITHUB_REF environment variable is undefined');
-  }
-
-  if (
-    !currentBranchName.toLowerCase().startsWith('feature/') &&
-    !currentBranchName.toLowerCase().startsWith('hotfix/') &&
-    !currentBranchName.toLowerCase().startsWith('release/') &&
-    currentBranchName.toLowerCase() !== 'master' &&
-    currentBranchName.toLowerCase() !== 'develop'
-  ) {
-    console.log(
-      'We only want whitelisted git flow branches having configurations copied into. For more information visit https://confluence.corp.lego.com/display/UXMP/Git+Workflow'
-    );
-    process.exit(78);
   }
 };

@@ -27,6 +27,7 @@ interface IBodyEnvVars {
   isSecret: boolean;
 }
 interface IBodyObject {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
@@ -47,18 +48,33 @@ const envVars: IEnvVars = {
   XCODE_SCHEME_NAME: process.env.XCODE_SCHEME_NAME,
 };
 
-export const setBranchConfig = async (
+const fileExists: (fileName: string) => boolean = (fileName) => {
+  const homeDir = process.env.GITHUB_WORKSPACE || '';
+
+  return fs.existsSync(`${homeDir}/${fileName}`);
+};
+
+export const setBranchConfig: (
   certificateEncoded: string,
   certificateFilename: string,
   profileEncoded: string,
   provisioningProfileFilename: string,
   method: 'POST' | 'PUT'
+) => // eslint-disable-next-line @typescript-eslint/no-explicit-any
+Promise<any> = (
+  certificateEncoded,
+  certificateFilename,
+  profileEncoded,
+  provisioningProfileFilename,
+  method
 ) => {
-  return new Promise(async (resolve, reject) => {
+  // disable consistent-return because the function has a different return behavior depending on
+  // code branching https://eslint.org/docs/rules/consistent-return#when-not-to-use-it
+  // eslint-disable-next-line consistent-return
+  return new Promise((resolve, reject) => {
     Object.keys(envVars).forEach((key: string) => {
-      // tslint:disable-next-line:ban-ts-ignore
-      // @ts-ignore
-      if (!envVars[key]) {
+      const envVarsKey = key as keyof IEnvVars;
+      if (!envVars[envVarsKey]) {
         throw new Error(`${key} environment variable is undefined. Please provide it`);
       }
     });
@@ -113,9 +129,9 @@ export const setBranchConfig = async (
 
     const paramObject: IBuildScripts = {};
 
-    const postCloneExists = await fileExists('appcenter-post-clone.sh');
-    const preBuildExists = await fileExists('appcenter-pre-build.sh');
-    const postBuildExists = await fileExists('appcenter-post-build.sh');
+    const postCloneExists = fileExists('appcenter-post-clone.sh');
+    const preBuildExists = fileExists('appcenter-pre-build.sh');
+    const postBuildExists = fileExists('appcenter-post-build.sh');
 
     if (postCloneExists) {
       paramObject.postClone = 'appcenter-post-clone.sh';
@@ -177,7 +193,7 @@ export const setBranchConfig = async (
   });
 };
 
-export const decryptCerts = async () => {
+export const decryptCerts: () => Promise<string> = () => {
   return new Promise((resolve, reject) => {
     const {
       MATCH_PASSWORD,
@@ -264,10 +280,4 @@ export const decryptCerts = async () => {
       return reject(err);
     }
   });
-};
-
-const fileExists = async (fileName: string) => {
-  const homeDir = process.env.GITHUB_WORKSPACE || '';
-
-  return fs.existsSync(`${homeDir}/${fileName}`);
 };
