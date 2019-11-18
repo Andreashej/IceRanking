@@ -114,7 +114,44 @@ export const localBuild: () => void = () => {
         );
       }
 
-      const simulatorName = target || 'iPhone 6';
+      let simulatorName;
+
+      // check available devices
+      const deviceListJson = execSync('xcrun simctl list --json', {
+        encoding: 'utf-8',
+      });
+
+      const deviceList = JSON.parse(deviceListJson);
+
+      // filter off watchOS and tvOS simulators
+      const deviceKeys = Object.keys(deviceList.devices).filter(
+        (key) => !key.includes('tvOS') && !key.includes('watchOS')
+      );
+
+      // put all available simulator names in a string array
+      const allDevices: string[] = deviceKeys.reduce((acc, cur) => {
+        const devices = deviceList.devices[cur].map((device: IDevice) => device.name);
+
+        return acc.concat(devices);
+      }, []);
+
+      if (target) {
+        const deviceExist = allDevices.find((deviceName) => deviceName.includes(target));
+        if (deviceExist) {
+          simulatorName = target;
+        }
+      }
+
+      if (!simulatorName) {
+        // checks for iPhone 6 simulator as default
+        const iPhoneSix = allDevices.find((deviceName) => deviceName === 'iPhone 6');
+        if (iPhoneSix) {
+          simulatorName = iPhoneSix;
+        } else {
+          // defaults to last simulator in the list
+          simulatorName = allDevices[allDevices.length - 1];
+        }
+      }
 
       return execSync(
         `cd ./ios && BUILD_CONFIG=${buildConfig} ENV_TYPE=${envType} ENV_FILE=${envFile} CERT_URL=${gitUrl} APPLE_USERNAME=${username} bundle exec fastlane RUN --verbose && cd .. && react-native run-ios --simulator='${simulatorName}' && cd ./ios && bundle exec fastlane RESET`,
@@ -125,3 +162,10 @@ export const localBuild: () => void = () => {
       printMsg(['Oops, there was an error', err]);
     });
 };
+
+export interface IDevice {
+  state: string;
+  isAvailable: boolean;
+  udid: string;
+  name: string;
+}
