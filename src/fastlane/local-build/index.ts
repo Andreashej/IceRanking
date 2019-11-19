@@ -86,7 +86,7 @@ const getArgs: () => Promise<void> = async () => {
 let envFile: string;
 let envType: string;
 
-const defaultDeviceName = 'iPhone Xr';
+const defaultDeviceName = 'iPhone Xʀ';
 
 export const localBuild: () => void = () => {
   getArgs()
