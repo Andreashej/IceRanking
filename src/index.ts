@@ -18,7 +18,9 @@ switch (target) {
         setBuildConfiguration();
         break;
       case 'report-build-status':
-        execSync(join(__dirname, './appcenter/report-build-status/report-build-status.sh'));
+        execSync(join(__dirname, './appcenter/report-build-status/report-build-status.sh'), {
+          stdio: 'inherit',
+        });
         break;
       default:
         printMsg(['no action found in appcenter that matches your arguments']);
