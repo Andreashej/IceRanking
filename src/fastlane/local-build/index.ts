@@ -86,6 +86,8 @@ const getArgs: () => Promise<void> = async () => {
 let envFile: string;
 let envType: string;
 
+const defaultDeviceName = 'iPhone Xr';
+
 export const localBuild: () => void = () => {
   getArgs()
     .then(() => {
@@ -117,39 +119,39 @@ export const localBuild: () => void = () => {
       let simulatorName;
 
       // check available devices
-      const deviceListJson = execSync('xcrun simctl list --json', {
+      const simulatorListJson = execSync('xcrun simctl list --json', {
         encoding: 'utf-8',
       });
 
-      const deviceList = JSON.parse(deviceListJson);
+      const deviceList = JSON.parse(simulatorListJson);
 
       // filter off watchOS and tvOS simulators
-      const deviceKeys = Object.keys(deviceList.devices).filter(
+      const simulatorKeys = Object.keys(deviceList.devices).filter(
         (key) => !key.includes('tvOS') && !key.includes('watchOS')
       );
 
       // put all available simulator names in a string array
-      const allDevices: string[] = deviceKeys.reduce((acc, cur) => {
-        const devices = deviceList.devices[cur].map((device: IDevice) => device.name);
+      const allSimulators: string[] = simulatorKeys.reduce((simulatorArr, simulator) => {
+        const devices = deviceList.devices[simulator].map((device: IDevice) => device.name);
 
-        return acc.concat(devices);
+        return simulatorArr.concat(devices);
       }, []);
 
       if (target) {
-        const deviceExist = allDevices.find((deviceName) => deviceName.includes(target));
+        const deviceExist = allSimulators.find((deviceName) => deviceName === target);
         if (deviceExist) {
           simulatorName = target;
         }
       }
 
       if (!simulatorName) {
-        // checks for iPhone 6 simulator as default
-        const iPhoneSix = allDevices.find((deviceName) => deviceName === 'iPhone 6');
-        if (iPhoneSix) {
-          simulatorName = iPhoneSix;
+        // checks for iPhone Xr simulator as default
+        const iPhoneXR = allSimulators.find((deviceName) => deviceName === defaultDeviceName);
+        if (iPhoneXR) {
+          simulatorName = iPhoneXR;
         } else {
-          // defaults to last simulator in the list
-          simulatorName = allDevices[allDevices.length - 1];
+          // defaults to last simulator in the list, suggestions for another default are welcome
+          simulatorName = allSimulators[allSimulators.length - 1];
         }
       }
 
