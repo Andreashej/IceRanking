@@ -1,3 +1,10 @@
+## [0.4.1](https://github.com/LEGO/react-native-scripts/compare/v0.4.0...v0.4.1) (2019-11-19)
+
+
+### Bug Fixes
+
+* pass the parent's stdio to the child process for appcenter script ([694c01a](https://github.com/LEGO/react-native-scripts/commit/694c01a1e56990277f3ee3358b7d540f6ce2b029))
+
 # [0.4.0](https://github.com/LEGO/react-native-scripts/compare/v0.3.1...v0.4.0) (2019-11-13)
 
 
