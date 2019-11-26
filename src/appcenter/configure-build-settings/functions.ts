@@ -8,6 +8,9 @@ if (process.env.NODE_ENV === 'test') {
   dotenv.config();
 }
 
+// eslint-disable-next-line require-unicode-regexp
+const LEGORN_ENV_PREFIX = 'LEGORNS_';
+
 interface IEnvVars {
   APPCENTER_API_TOKEN?: string;
   APPCENTER_APP_NAME?: string;
@@ -36,12 +39,12 @@ interface IBuildScripts {
 }
 
 const envVars: IEnvVars = {
-  APPCENTER_API_TOKEN: process.env.APPCENTER_API_TOKEN ? process.env.APPCENTER_API_TOKEN : '',
+  APPCENTER_API_TOKEN: process.env.APPCENTER_API_TOKEN,
   APPCENTER_APP_NAME: process.env.APPCENTER_APP_NAME,
   APPCENTER_OWNER_NAME: process.env.APPCENTER_OWNER_NAME,
   BUNDLE_GIT__COM: process.env.BUNDLE_GIT__COM,
   GH_TOKEN: process.env.GH_TOKEN,
-  GITHUB_REF: process.env.GITHUB_REF ? process.env.GITHUB_REF.split('refs/heads/')[1] : undefined,
+  GITHUB_REF: process.env.GITHUB_REF?.split('refs/heads/')[1],
   IOS_CERTIFICATES_GIT_URL: process.env.IOS_CERTIFICATES_GIT_URL,
   MATCH_PASSWORD: process.env.MATCH_PASSWORD,
   PROJECT_OR_WORKSPACE_PATH: process.env.PROJECT_OR_WORKSPACE_PATH,
@@ -52,6 +55,15 @@ const fileExists: (fileName: string) => boolean = (fileName) => {
   const homeDir = process.env.GITHUB_WORKSPACE || '';
 
   return fs.existsSync(`${homeDir}/${fileName}`);
+};
+
+const validateEnvVars: (vars: IEnvVars) => asserts vars is Required<IEnvVars> = (vars) => {
+  Object.keys(envVars).forEach((key: string) => {
+    const envVarsKey = key as keyof IEnvVars;
+    if (!vars[envVarsKey] || typeof vars[envVarsKey] !== 'string') {
+      throw new Error(`${key} environment variable is undefined. Please provide it`);
+    }
+  });
 };
 
 export const setBranchConfig: (
@@ -71,12 +83,7 @@ export const setBranchConfig: (
   // code branching https://eslint.org/docs/rules/consistent-return#when-not-to-use-it
   // eslint-disable-next-line consistent-return
   return new Promise((resolve, reject) => {
-    Object.keys(envVars).forEach((key: string) => {
-      const envVarsKey = key as keyof IEnvVars;
-      if (!envVars[envVarsKey]) {
-        throw new Error(`${key} environment variable is undefined. Please provide it`);
-      }
-    });
+    validateEnvVars(envVars);
 
     const {
       GITHUB_REF,
@@ -90,20 +97,6 @@ export const setBranchConfig: (
       BUNDLE_GIT__COM,
     } = envVars;
 
-    if (
-      !GITHUB_REF ||
-      !APPCENTER_OWNER_NAME ||
-      !APPCENTER_APP_NAME ||
-      !APPCENTER_API_TOKEN ||
-      !MATCH_PASSWORD ||
-      !PROJECT_OR_WORKSPACE_PATH ||
-      !XCODE_SCHEME_NAME ||
-      !GH_TOKEN ||
-      !BUNDLE_GIT__COM
-    ) {
-      return reject('MISSING ENV VARS');
-    }
-
     const encodedBranchName = encodeURIComponent(GITHUB_REF);
     const uri = `https://api.appcenter.ms/v0.1/apps/${APPCENTER_OWNER_NAME}/${APPCENTER_APP_NAME}/branches/${encodedBranchName}/config`;
 
@@ -113,7 +106,15 @@ export const setBranchConfig: (
       'X-API-Token': APPCENTER_API_TOKEN,
     };
 
-    const environmentVariables: IBodyEnvVars[] = [
+    const legoRNEnvs: IBodyEnvVars[] = Object.keys(process.env)
+      .filter((key) => key.startsWith(LEGORN_ENV_PREFIX))
+      .map((key) => ({
+        name: key,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        value: process.env[key]!,
+        isSecret: true,
+      }));
+    const environmentVariables: IBodyEnvVars[] = legoRNEnvs.concat([
       {
         isSecret: true,
         name: 'GH_TOKEN',
@@ -124,7 +125,7 @@ export const setBranchConfig: (
         name: 'BUNDLE_GIT__COM',
         value: BUNDLE_GIT__COM,
       },
-    ];
+    ]);
 
     const paramObject: IBuildScripts = {};
 
