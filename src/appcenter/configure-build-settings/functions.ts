@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 // eslint-disable-next-line require-unicode-regexp
-const LEGORN_ENV_PREFIX = 'LEGORNS_';
+const LEGORN_ENV_PREFIX = 'LEGORN_';
 
 interface IEnvVars {
   APPCENTER_API_TOKEN?: string;
