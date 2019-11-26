@@ -28,6 +28,9 @@ Sets the environment variables and other settings in in the build configuration 
 | PROJECT_OR_WORKSPACE_PATH | the path from the root folder to you .xcodeproj or .xcworkspace file, required by appcenter openapi                                                                                                                             | ios/lbrgoodsreceipt.xcworkspace                                                                    |
 | XCODE_SCHEME_NAME         | the name of the scheme used for building the app, required by appcenter openapi                                                                                                                                                 | lbrgoodsreceipt                                                                                    |
 
+It is also possible to add arbitrary environment variables by adding them to the environment with the prefix `LEGORN_`.
+They will then automatically be added to the AppCenter Configuration.
+
 #### Usage
 
 Open package.json and add the following line to your scripts:

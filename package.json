@@ -34,14 +34,15 @@
   },
   "devDependencies": {
     "@babel/core": "7.4.5",
+    "@babel/plugin-proposal-optional-chaining": "7.7.4",
     "@babel/preset-env": "7.4.5",
     "@babel/preset-typescript": "7.3.3",
     "@commitlint/cli": "8.1.0",
     "@commitlint/config-conventional": "8.1.0",
-    "@lego/eslint-config-jest": "1.4.0",
-    "@lego/eslint-config-prettier": "1.2.7",
-    "@lego/eslint-config-typescript": "1.3.1",
-    "@lego/prettier-config": "1.10.8",
+    "@lego/eslint-config-jest": "1.6.3",
+    "@lego/eslint-config-prettier": "1.4.0",
+    "@lego/eslint-config-typescript": "1.5.1",
+    "@lego/prettier-config": "1.12.0",
     "@semantic-release/changelog": "3.0.4",
     "@semantic-release/commit-analyzer": "6.2.0",
     "@semantic-release/git": "7.0.16",
@@ -64,7 +65,7 @@
     "rimraf": "2.6.3",
     "semantic-release": "15.13.19",
     "ts-node": "8.2.0",
-    "typescript": "3.5.1"
+    "typescript": "3.7.2"
   },
   "publishConfig": {
     "access": "restricted",
