@@ -1,3 +1,10 @@
+## [0.5.1](https://github.com/LEGO/react-native-scripts/compare/v0.5.0...v0.5.1) (2019-11-26)
+
+
+### Bug Fixes
+
+* use LEGORN_ as a prefix ([35bea81](https://github.com/LEGO/react-native-scripts/commit/35bea816063be375566dff308c22bab2faa58543))
+
 # [0.5.0](https://github.com/LEGO/react-native-scripts/compare/v0.4.1...v0.5.0) (2019-11-26)
 
 

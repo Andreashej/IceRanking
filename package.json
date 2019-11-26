@@ -1,6 +1,6 @@
 {
   "name": "@lego/react-native-scripts",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/LEGO/react-native-scripts.git"
