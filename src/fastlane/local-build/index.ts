@@ -145,10 +145,12 @@ export const localBuild: () => void = () => {
       }
 
       if (!simulatorName) {
-        // checks for iPhone Xr simulator as default
-        const iPhoneXR = allSimulators.find((deviceName) => deviceName === defaultDeviceName);
-        if (iPhoneXR) {
-          simulatorName = iPhoneXR;
+        // checks for minSupportedDevice simulator as default
+        const minSupportedDevice = allSimulators.find(
+          (deviceName) => deviceName === defaultDeviceName
+        );
+        if (minSupportedDevice) {
+          simulatorName = minSupportedDevice;
         } else {
           // defaults to last simulator in the list, suggestions for another default are welcome
           simulatorName = allSimulators[allSimulators.length - 1];
