@@ -44,7 +44,7 @@ const envVars: IEnvVars = {
   APPCENTER_OWNER_NAME: process.env.APPCENTER_OWNER_NAME,
   BUNDLE_GIT__COM: process.env.BUNDLE_GIT__COM,
   GH_TOKEN: process.env.GH_TOKEN,
-  GITHUB_REF: process.env.GITHUB_REF?.split('refs/heads/')[1],
+  GITHUB_REF: process.env.GITHUB_REF ? process.env.GITHUB_REF.split('refs/heads/')[1] : undefined,
   IOS_CERTIFICATES_GIT_URL: process.env.IOS_CERTIFICATES_GIT_URL,
   MATCH_PASSWORD: process.env.MATCH_PASSWORD,
   PROJECT_OR_WORKSPACE_PATH: process.env.PROJECT_OR_WORKSPACE_PATH,
@@ -55,15 +55,6 @@ const fileExists: (fileName: string) => boolean = (fileName) => {
   const homeDir = process.env.GITHUB_WORKSPACE || '';
 
   return fs.existsSync(`${homeDir}/${fileName}`);
-};
-
-const validateEnvVars: (vars: IEnvVars) => asserts vars is Required<IEnvVars> = (vars) => {
-  Object.keys(envVars).forEach((key: string) => {
-    const envVarsKey = key as keyof IEnvVars;
-    if (!vars[envVarsKey] || typeof vars[envVarsKey] !== 'string') {
-      throw new Error(`${key} environment variable is undefined. Please provide it`);
-    }
-  });
 };
 
 export const setBranchConfig: (
@@ -83,7 +74,12 @@ export const setBranchConfig: (
   // code branching https://eslint.org/docs/rules/consistent-return#when-not-to-use-it
   // eslint-disable-next-line consistent-return
   return new Promise((resolve, reject) => {
-    validateEnvVars(envVars);
+    Object.keys(envVars).forEach((key: string) => {
+      const envVarsKey = key as keyof IEnvVars;
+      if (!envVars[envVarsKey]) {
+        throw new Error(`${key} environment variable is undefined. Please provide it`);
+      }
+    });
 
     const {
       GITHUB_REF,
@@ -96,6 +92,20 @@ export const setBranchConfig: (
       GH_TOKEN,
       BUNDLE_GIT__COM,
     } = envVars;
+
+    if (
+      !GITHUB_REF ||
+      !APPCENTER_OWNER_NAME ||
+      !APPCENTER_APP_NAME ||
+      !APPCENTER_API_TOKEN ||
+      !MATCH_PASSWORD ||
+      !PROJECT_OR_WORKSPACE_PATH ||
+      !XCODE_SCHEME_NAME ||
+      !GH_TOKEN ||
+      !BUNDLE_GIT__COM
+    ) {
+      return reject('MISSING ENV VARS');
+    }
 
     const encodedBranchName = encodeURIComponent(GITHUB_REF);
     const uri = `https://api.appcenter.ms/v0.1/apps/${APPCENTER_OWNER_NAME}/${APPCENTER_APP_NAME}/branches/${encodedBranchName}/config`;
@@ -124,6 +134,21 @@ export const setBranchConfig: (
         isSecret: true,
         name: 'BUNDLE_GIT__COM',
         value: BUNDLE_GIT__COM,
+      },
+      {
+        isSecret: false,
+        name: 'APPCENTER_OWNER_NAME',
+        value: APPCENTER_OWNER_NAME,
+      },
+      {
+        isSecret: false,
+        name: 'APPCENTER_APP_NAME',
+        value: APPCENTER_APP_NAME,
+      },
+      {
+        isSecret: true,
+        name: 'APPCENTER_API_TOKEN',
+        value: APPCENTER_API_TOKEN,
       },
     ]);
 
