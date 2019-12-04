@@ -212,45 +212,33 @@ export const decryptCerts: () => Promise<string> = () => {
       return reject('missing GITHUB_REF');
     }
 
+    const githubRef = GITHUB_REF.toLowerCase();
+
     try {
       execSync(`git clone https://${BUNDLE_GIT__COM}@github.com/${IOS_CERTIFICATES_GIT_URL}`);
-      let certPath = './ios-certificates/certs/development';
-      let profilePath = './ios-certificates/profiles/development';
+      const certPath = './ios-certificates/certs/enterprise';
+      const profilePath = './ios-certificates/profiles/enterprise';
 
-      if (
-        GITHUB_REF === 'master' ||
-        GITHUB_REF.startsWith('release/') ||
-        GITHUB_REF.startsWith('hotfix/')
-      ) {
-        certPath = './ios-certificates/certs/enterprise';
-        profilePath = './ios-certificates/profiles/enterprise';
-      }
+      const qaPrefixes = ['release/', 'bugfix/', 'hotfix/'];
 
       const certificateFiles = fs.readdirSync(`${certPath}`);
       const provProfileFiles = fs.readdirSync(`${profilePath}`);
       const certificateFilename = certificateFiles.find((file) => path.extname(file) === '.p12');
       const certificateCerFilename = certificateFiles.find((file) => path.extname(file) === '.cer');
       const provProfileFilename = provProfileFiles.find((file) => {
-        if (
-          GITHUB_REF.toLowerCase() === 'develop' ||
-          GITHUB_REF.toLowerCase().startsWith('feature/')
-        ) {
+        if (githubRef === 'master') {
+          return path.basename(file).endsWith(`${XCODE_SCHEME_NAME}.mobileprovision`);
+        } else if (qaPrefixes.some((prefix) => githubRef.startsWith(prefix))) {
+          return (
+            path.basename(file).endsWith(`${XCODE_SCHEME_NAME}.qa.mobileprovision`) ||
+            path.basename(file).endsWith(`${XCODE_SCHEME_NAME}-qa.mobileprovision`)
+          );
+        } else {
           return (
             path.basename(file).endsWith(`${XCODE_SCHEME_NAME}.dev.mobileprovision`) ||
             path.basename(file).endsWith(`${XCODE_SCHEME_NAME}-dev.mobileprovision`)
           );
         }
-        if (
-          GITHUB_REF.toLowerCase().startsWith('hotfix/') ||
-          GITHUB_REF.toLowerCase().startsWith('release/')
-        ) {
-          return (
-            path.basename(file).endsWith(`${XCODE_SCHEME_NAME}.qa.mobileprovision`) ||
-            path.basename(file).endsWith(`${XCODE_SCHEME_NAME}-qa.mobileprovision`)
-          );
-        }
-
-        return path.basename(file).endsWith(`${XCODE_SCHEME_NAME}.mobileprovision`);
       });
 
       execSync(
