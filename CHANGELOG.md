@@ -1,3 +1,17 @@
+# [0.7.0](https://github.com/LEGO/react-native-scripts/compare/v0.6.0...v0.7.0) (2019-12-06)
+
+
+### Bug Fixes
+
+* pull request changes ([883d8c8](https://github.com/LEGO/react-native-scripts/commit/883d8c849a7874d0aba8efdac3ab82eab1fd2ead))
+* renamed variable ([f1d61fb](https://github.com/LEGO/react-native-scripts/commit/f1d61fbcf45616a963e346131602b73109fb5bb0))
+* typo in defaultDeviceName ([04869c8](https://github.com/LEGO/react-native-scripts/commit/04869c8c681b8e60bd6dd8ac2baaf97ab1ed8d3a))
+
+
+### Features
+
+* check available simulators in {simulator-name} in cmd  rn run-ios ([be592ee](https://github.com/LEGO/react-native-scripts/commit/be592ee4bdd11a70a2a6ad2f7e3b01507250fe02))
+
 # [0.6.0](https://github.com/LEGO/react-native-scripts/compare/v0.5.1...v0.6.0) (2019-12-06)
 
 
