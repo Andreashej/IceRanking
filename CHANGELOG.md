@@ -1,3 +1,10 @@
+# [0.6.0](https://github.com/LEGO/react-native-scripts/compare/v0.5.1...v0.6.0) (2019-12-06)
+
+
+### Features
+
+* use enterprise pp for all builds ([ed715ae](https://github.com/LEGO/react-native-scripts/commit/ed715ae4a996f0f876f827d9bcb39368fa35d5d8))
+
 ## [0.5.1](https://github.com/LEGO/react-native-scripts/compare/v0.5.0...v0.5.1) (2019-11-26)
 
 
