@@ -42,7 +42,7 @@ Open package.json and add the following line to your scripts:
 \
 Next you can use it in your custom github action e.g.:
 
-```javascript
+```yaml
 -  	name:  Set AppCenter build configuration
 	uses:  actions/npm@master
 	env:
@@ -58,6 +58,15 @@ Next you can use it in your custom github action e.g.:
 	with:
 		args:  '"run appcenter-configure-build-settings"'
 ```
+
+> If you want to skip some builds on appcenter, add
+>
+> ```yaml
+> - name: Set AppCenter build configuration
+> 	if: "!contains(github.event.head_commit.message, '[skip-appcenter]')"
+> ```
+>
+> and use `[skip-appcenter]` in your commit message
 
 ## FASTLANE
 
