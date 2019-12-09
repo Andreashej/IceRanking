@@ -59,14 +59,20 @@ Next you can use it in your custom github action e.g.:
 		args:  '"run appcenter-configure-build-settings"'
 ```
 
-> If you want to skip some builds on appcenter, add
+> We build in 2 phases, in the first phase we execute our simple tests with github actions, in the
+> second phase we build on appcenter.
+>
+> The functionality to skip building on github and on appcenter is not part of react-native-scripts
+> as it is too opinionated, instead create a commit message using [skip-ci] or [skip-appcenter]
+> for whichever scenario you see fit and use the correct github action checks to help you facilitate
+> this scenario.
+>
+> Example:
 >
 > ```yaml
 > - name: Set AppCenter build configuration
 > 	if: "!contains(github.event.head_commit.message, '[skip-appcenter]')"
 > ```
->
-> and use `[skip-appcenter]` in your commit message
 
 ## FASTLANE
 
