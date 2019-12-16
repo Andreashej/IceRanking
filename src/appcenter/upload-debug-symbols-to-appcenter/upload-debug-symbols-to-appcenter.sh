@@ -5,14 +5,6 @@ umask 0000
 # some comment
 set -e
 
-# Ensure Microsoft AppCenter CLI installed
-if hash appcenter 2>/dev/null; then
-  echo "Microsoft AppCenter CLI already installed."
-else
-  echo "Microsoft AppCenter CLI is not installed. Installing...."
-  npm install -g appcenter-cli
-fi
-
 # do not upload symbols to AppCenter if BRANCH_NAME is develop or feature, as they are not built with InHouse Provisioning
 if [[  ("$APPCENTER_BRANCH" = "feature/"*) || ("$APPCENTER_BRANCH" = "develop") ]]; then
  
