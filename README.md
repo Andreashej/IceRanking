@@ -24,7 +24,7 @@ Sets the environment variables and other settings in in the build configuration 
 | BUNDLE_GIT\_\_COM         | needs to be in the form of "username:github_token", not base64 encoded, required by fastlane to be able to authenticate and install react-native-ci                                                                             | gituser:12398yjhadiy1238hqwueqwgehaksjbkas                                                         |
 | IOS_CERTIFICATES_GIT_URL  | the github repository url where your generated certificates and provisioning profiles are stored, required by configure-build-settings to download the certificates                                                             | add only the last part of the URL, the one after "github. com/", e.g.: "LEGO/ios-certificates.git" |
 | MATCH_PASSWORD            | the passphrase you provided for encrypting the certificates and provisioning profiles, required by configure-build-settings to decrypt the certificates                                                                         | mysecretpassword                                                                                   |
-| NPM_AUTH_TOKEN            | provide an npm auth token if you already have one or [create one here](https://docs.npmjs.com/creating-and-viewing-authentication-tokens), required by github and appcenter to be able to install private LEGO packages         | 234yhdkjfhsdjf7ewr6wehrjkjhsduf                                                                    |
+| GH_TOKEN                  | A personal access token generated in GitHub with at least `read:packages` permissions. [More information here](https://help.github.com/en/github/managing-packages-with-github-packages/about-github-packages#about-tokens)     | 234yhdkjfhsdjf7ewr6wehrjkjhsduf                                                                    |
 | PROJECT_OR_WORKSPACE_PATH | the path from the root folder to you .xcodeproj or .xcworkspace file, required by appcenter openapi                                                                                                                             | ios/lbrgoodsreceipt.xcworkspace                                                                    |
 | XCODE_SCHEME_NAME         | the name of the scheme used for building the app, required by appcenter openapi                                                                                                                                                 | lbrgoodsreceipt                                                                                    |
 
@@ -58,6 +58,21 @@ Next you can use it in your custom github action e.g.:
 	with:
 		args:  '"run appcenter-configure-build-settings"'
 ```
+
+> We build in 2 phases, in the first phase we execute our simple tests with github actions, in the
+> second phase we build on appcenter.
+>
+> The functionality to skip building on github and on appcenter is not part of react-native-scripts
+> as it is too opinionated, instead create a commit message using [skip-ci] or [skip-appcenter]
+> for whichever scenario you see fit and use the correct github action checks to help you facilitate
+> this scenario.
+>
+> Example:
+>
+> ```javascript
+> - name: Set AppCenter build configuration
+> 	if: "!contains(github.event.head_commit.message, '[skip-appcenter]')"
+> ```
 
 ## FASTLANE
 
