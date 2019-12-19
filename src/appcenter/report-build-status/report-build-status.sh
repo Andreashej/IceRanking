@@ -20,7 +20,7 @@ if [[ ("$BRANCH_NAME" != "release/"*) && ("$BRANCH_NAME" != "feature/"*) && ("$B
 fi
  
 # queue a new build in APPCENTER for the current branch and get the id
-APPCENTER_BUILD_ID=$(appcenter build queue --app $APPCENTER_OWNER_NAME/$APPCENTER_APP_NAME --branch $BRANCH_NAME --output json | jq -r .buildId)
+APPCENTER_BUILD_ID=$(appcenter build queue --app $APPCENTER_OWNER_NAME/$APPCENTER_APP_NAME --branch $BRANCH_NAME --source-version $GITHUB_SHA --output json | jq -r .buildId)
 echo "STARTED THE BUILD WITH ID $APPCENTER_BUILD_ID ON APPCENTER"
 RUNNING=true
  
