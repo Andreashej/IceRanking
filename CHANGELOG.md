@@ -1,3 +1,10 @@
+# [0.8.0](https://github.com/LEGO/react-native-scripts/compare/v0.7.0...v0.8.0) (2019-12-19)
+
+
+### Features
+
+* **appcenter:** add source-version flag to appcenter command ([dca8060](https://github.com/LEGO/react-native-scripts/commit/dca806009a02d3451532a22eb918a33065aab1d2))
+
 # [0.7.0](https://github.com/LEGO/react-native-scripts/compare/v0.6.0...v0.7.0) (2019-12-06)
 
 
