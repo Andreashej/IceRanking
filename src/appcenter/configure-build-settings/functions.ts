@@ -56,6 +56,24 @@ const fileExists: (fileName: string) => boolean = (fileName) => {
 
   return fs.existsSync(`${homeDir}/${fileName}`);
 };
+const missingEnvVars: string[] = [];
+
+// Assertion functions are a new Typescript 3.7 feature:
+// https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-7.html#assertion-functions
+const validateEnvVars: (vars: IEnvVars) => asserts vars is Required<IEnvVars> = (vars) => {
+  Object.keys(envVars).forEach((key: string) => {
+    const envVarsKey = key as keyof IEnvVars;
+    if (!vars[envVarsKey] || typeof vars[envVarsKey] !== 'string') {
+      missingEnvVars.push(key);
+    }
+  });
+
+  if (missingEnvVars.length) {
+    throw new Error(
+      `The following environment variables are undefined. Please provide them: ${missingEnvVars.toString()}`
+    );
+  }
+};
 
 export const setBranchConfig: (
   certificateEncoded: string,
@@ -74,12 +92,7 @@ export const setBranchConfig: (
   // code branching https://eslint.org/docs/rules/consistent-return#when-not-to-use-it
   // eslint-disable-next-line consistent-return
   return new Promise((resolve, reject) => {
-    Object.keys(envVars).forEach((key: string) => {
-      const envVarsKey = key as keyof IEnvVars;
-      if (!envVars[envVarsKey]) {
-        throw new Error(`${key} environment variable is undefined. Please provide it`);
-      }
-    });
+    validateEnvVars(envVars);
 
     const {
       GITHUB_REF,
@@ -92,20 +105,6 @@ export const setBranchConfig: (
       GH_TOKEN,
       BUNDLE_GIT__COM,
     } = envVars;
-
-    if (
-      !GITHUB_REF ||
-      !APPCENTER_OWNER_NAME ||
-      !APPCENTER_APP_NAME ||
-      !APPCENTER_API_TOKEN ||
-      !MATCH_PASSWORD ||
-      !PROJECT_OR_WORKSPACE_PATH ||
-      !XCODE_SCHEME_NAME ||
-      !GH_TOKEN ||
-      !BUNDLE_GIT__COM
-    ) {
-      return reject('MISSING ENV VARS');
-    }
 
     const encodedBranchName = encodeURIComponent(GITHUB_REF);
     const uri = `https://api.appcenter.ms/v0.1/apps/${APPCENTER_OWNER_NAME}/${APPCENTER_APP_NAME}/branches/${encodedBranchName}/config`;
