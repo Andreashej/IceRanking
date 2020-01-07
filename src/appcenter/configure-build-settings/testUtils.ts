@@ -10,6 +10,21 @@ export const expectedBody = JSON.stringify({
       name: 'BUNDLE_GIT__COM',
       value: 'bundleGitCom',
     },
+    {
+      isSecret: false,
+      name: 'APPCENTER_OWNER_NAME',
+      value: 'appcenterOwnerName',
+    },
+    {
+      isSecret: false,
+      name: 'APPCENTER_APP_NAME',
+      value: 'appcenterAppName',
+    },
+    {
+      isSecret: true,
+      name: 'APPCENTER_API_TOKEN',
+      value: 'appcenterApiToken',
+    },
   ],
   signed: true,
   toolsets: {
