@@ -92,6 +92,9 @@ export const setBranchConfig: (
   // code branching https://eslint.org/docs/rules/consistent-return#when-not-to-use-it
   // eslint-disable-next-line consistent-return
   return new Promise((resolve, reject) => {
+    // The code of a promise executor and promise handlers has an "invisible try..catch" around it.
+    // If an exception happens, it gets caught and treated as a rejection.
+    // https://javascript.info/promise-error-handling
     validateEnvVars(envVars);
 
     const {
