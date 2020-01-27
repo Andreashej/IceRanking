@@ -8,4 +8,7 @@ module.exports = {
     complexity: ['error', 14],
     'max-lines-per-function': 'off',
   },
+  parserOptions: {
+    project: 'tsconfig.eslint.json',
+  },
 };

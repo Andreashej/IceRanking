@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-try-expect */
 import { FetchMock } from 'jest-fetch-mock';
 import { setBranchConfig } from './functions';
 import { expectedBody } from './testUtils';
