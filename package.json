@@ -57,6 +57,7 @@
     "@types/node-fetch": "2.3.5",
     "babel-jest": "24.8.0",
     "copyfiles": "2.1.1",
+    "cosmiconfig": "6.0.0",
     "dotenv": "8.0.0",
     "husky": "2.4.1",
     "jest": "24.8.0",

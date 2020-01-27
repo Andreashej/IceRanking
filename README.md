@@ -74,6 +74,41 @@ Next you can use it in your custom github action e.g.:
 > 	if: "!contains(github.event.head_commit.message, '[skip-appcenter]')"
 > ```
 
+By default this package uses the [Git Flow branch
+configuration](https://confluence.corp.lego.com/display/UXMP/Git+Workflow). Starting with `v 0.9.1`, if you have a different
+branch setup, it is possible to pass a custom configuration using
+
+- a `legornscripts` property in `package.json`
+- a `.legornscriptsrc` file in JSON or YAML format
+- a `.legornscriptsrc.json` file
+- a `.legornscriptsrc.yaml`, `.legornscriptsrc.yml`, or `.legornscriptsrc.js` file
+- a `legornscripts.config.js` file exporting a JS object
+
+Example:
+
+```json
+"legornscripts": {
+    "branchConfig": {
+      "qa": [
+		"release/",
+		"bugfix/",
+		"hotfix/"
+      ],
+      "dev": [
+		"develop",
+		"feature/"
+	  ],
+	  "prod": [
+		  "master"
+	  ]
+    }
+  }
+```
+
+> When creating a custom branch configuration it is important that you specify all environments with
+> their corresponding branches. All branch names that are not included in the custom
+> configuration will be omitted by the script.
+
 ## FASTLANE
 
 ### LOCAL BUILDS

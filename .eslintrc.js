@@ -5,7 +5,7 @@ module.exports = {
     '@lego/eslint-config-prettier',
   ],
   rules: {
-    complexity: ['error', 13],
+    complexity: ['error', 14],
     'max-lines-per-function': 'off',
   },
 };

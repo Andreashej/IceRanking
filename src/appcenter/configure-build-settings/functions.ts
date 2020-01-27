@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import fetch from 'node-fetch';
 import path from 'path';
+import { EnvType } from '../..';
 
 if (process.env.NODE_ENV === 'test') {
   dotenv.config();
@@ -220,13 +221,12 @@ export const setBranchConfig: (
   });
 };
 
-export const decryptCerts: () => Promise<string> = () => {
+export const decryptCerts: (env: EnvType) => Promise<string> = (env) => {
   return new Promise((resolve, reject) => {
     const {
       MATCH_PASSWORD,
       APPCENTER_APP_NAME,
       BUNDLE_GIT__COM,
-      GITHUB_REF,
       IOS_CERTIFICATES_GIT_URL,
       XCODE_SCHEME_NAME,
     } = envVars;
@@ -235,36 +235,31 @@ export const decryptCerts: () => Promise<string> = () => {
       return reject('missing XCODE_SCHEME_NAME');
     }
 
-    if (!GITHUB_REF) {
-      return reject('missing GITHUB_REF');
-    }
-
-    const githubRef = GITHUB_REF.toLowerCase();
-
     try {
       execSync(`git clone https://${BUNDLE_GIT__COM}@github.com/${IOS_CERTIFICATES_GIT_URL}`);
       const certPath = './ios-certificates/certs/enterprise';
       const profilePath = './ios-certificates/profiles/enterprise';
-
-      const qaPrefixes = ['release/', 'bugfix/', 'hotfix/'];
 
       const certificateFiles = fs.readdirSync(`${certPath}`);
       const provProfileFiles = fs.readdirSync(`${profilePath}`);
       const certificateFilename = certificateFiles.find((file) => path.extname(file) === '.p12');
       const certificateCerFilename = certificateFiles.find((file) => path.extname(file) === '.cer');
       const provProfileFilename = provProfileFiles.find((file) => {
-        if (githubRef === 'master') {
-          return path.basename(file).endsWith(`${XCODE_SCHEME_NAME}.mobileprovision`);
-        } else if (qaPrefixes.some((prefix) => githubRef.startsWith(prefix))) {
-          return (
-            path.basename(file).endsWith(`${XCODE_SCHEME_NAME}.qa.mobileprovision`) ||
-            path.basename(file).endsWith(`${XCODE_SCHEME_NAME}-qa.mobileprovision`)
-          );
-        } else {
-          return (
-            path.basename(file).endsWith(`${XCODE_SCHEME_NAME}.dev.mobileprovision`) ||
-            path.basename(file).endsWith(`${XCODE_SCHEME_NAME}-dev.mobileprovision`)
-          );
+        switch (env) {
+          case EnvType.prod:
+            return path.basename(file).endsWith(`${XCODE_SCHEME_NAME}.mobileprovision`);
+          case EnvType.qa:
+            return (
+              path.basename(file).endsWith(`${XCODE_SCHEME_NAME}.qa.mobileprovision`) ||
+              path.basename(file).endsWith(`${XCODE_SCHEME_NAME}-qa.mobileprovision`)
+            );
+          case EnvType.dev:
+            return (
+              path.basename(file).endsWith(`${XCODE_SCHEME_NAME}.dev.mobileprovision`) ||
+              path.basename(file).endsWith(`${XCODE_SCHEME_NAME}-dev.mobileprovision`)
+            );
+          default:
+            return false;
         }
       });
 
