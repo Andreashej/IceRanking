@@ -26,7 +26,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
       - run: yarn build
-      - run: yarn test
+      # - run: yarn test
       - run: echo @lego:registry=https://npm.pkg.github.com/ >> .npmrc
       - run: yarn release:ci
         env:
