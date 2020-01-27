@@ -44,7 +44,7 @@ const envVars: IEnvVars = {
   APPCENTER_OWNER_NAME: process.env.APPCENTER_OWNER_NAME,
   BUNDLE_GIT__COM: process.env.BUNDLE_GIT__COM,
   GH_TOKEN: process.env.GH_TOKEN,
-  GITHUB_REF: process.env.GITHUB_REF?.split('refs/heads/')[1],
+  GITHUB_REF: process.env.GITHUB_REF ? process.env.GITHUB_REF.split('refs/heads/')[1] : undefined,
   IOS_CERTIFICATES_GIT_URL: process.env.IOS_CERTIFICATES_GIT_URL,
   MATCH_PASSWORD: process.env.MATCH_PASSWORD,
   PROJECT_OR_WORKSPACE_PATH: process.env.PROJECT_OR_WORKSPACE_PATH,
@@ -56,14 +56,23 @@ const fileExists: (fileName: string) => boolean = (fileName) => {
 
   return fs.existsSync(`${homeDir}/${fileName}`);
 };
+const missingEnvVars: string[] = [];
 
+// Assertion functions are a new Typescript 3.7 feature:
+// https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-7.html#assertion-functions
 const validateEnvVars: (vars: IEnvVars) => asserts vars is Required<IEnvVars> = (vars) => {
   Object.keys(envVars).forEach((key: string) => {
     const envVarsKey = key as keyof IEnvVars;
     if (!vars[envVarsKey] || typeof vars[envVarsKey] !== 'string') {
-      throw new Error(`${key} environment variable is undefined. Please provide it`);
+      missingEnvVars.push(key);
     }
   });
+
+  if (missingEnvVars.length) {
+    throw new Error(
+      `The following environment variables are undefined. Please provide them: ${missingEnvVars.toString()}`
+    );
+  }
 };
 
 export const setBranchConfig: (
@@ -83,6 +92,9 @@ export const setBranchConfig: (
   // code branching https://eslint.org/docs/rules/consistent-return#when-not-to-use-it
   // eslint-disable-next-line consistent-return
   return new Promise((resolve, reject) => {
+    // The code of a promise executor and promise handlers has an "invisible try..catch" around it.
+    // If an exception happens, it gets caught and treated as a rejection.
+    // https://javascript.info/promise-error-handling
     validateEnvVars(envVars);
 
     const {
@@ -124,6 +136,21 @@ export const setBranchConfig: (
         isSecret: true,
         name: 'BUNDLE_GIT__COM',
         value: BUNDLE_GIT__COM,
+      },
+      {
+        isSecret: false,
+        name: 'APPCENTER_OWNER_NAME',
+        value: APPCENTER_OWNER_NAME,
+      },
+      {
+        isSecret: false,
+        name: 'APPCENTER_APP_NAME',
+        value: APPCENTER_APP_NAME,
+      },
+      {
+        isSecret: true,
+        name: 'APPCENTER_API_TOKEN',
+        value: APPCENTER_API_TOKEN,
       },
     ]);
 

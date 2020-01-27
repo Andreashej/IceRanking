@@ -1,3 +1,22 @@
+# [0.9.0](https://github.com/LEGO/react-native-scripts/compare/v0.8.0...v0.9.0) (2020-01-07)
+
+
+### Bug Fixes
+
+* appcenter cli is always installed ([9b1992a](https://github.com/LEGO/react-native-scripts/commit/9b1992ad0640c157cc766a51b61bf5f008f3363c))
+
+
+### Features
+
+* add upload debug symbols to appcenter ([c89c48e](https://github.com/LEGO/react-native-scripts/commit/c89c48ec485a6e5fd372a80933a20a33b3073ec8))
+
+# [0.8.0](https://github.com/LEGO/react-native-scripts/compare/v0.7.0...v0.8.0) (2019-12-19)
+
+
+### Features
+
+* **appcenter:** add source-version flag to appcenter command ([dca8060](https://github.com/LEGO/react-native-scripts/commit/dca806009a02d3451532a22eb918a33065aab1d2))
+
 # [0.7.0](https://github.com/LEGO/react-native-scripts/compare/v0.6.0...v0.7.0) (2019-12-06)
 
 
