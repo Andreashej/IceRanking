@@ -77,11 +77,14 @@ Next you can use it in your custom github action e.g.:
 By default this package uses the [Git Flow branch
 configuration](https://confluence.corp.lego.com/display/UXMP/Git+Workflow) with different
 environments.
-| | Dev | QA | Prod |
-| --- | --- | --- | --- |
-| Branches | develop </br> feature/ | release/ </br> hotfix/ | master |
-| Provisioning profile | com.lego.corp.teamName-appName-dev | com.lego.corp.teamName-appName-qa | com.lego.corp.teamName-appName |
-| Env file | .env.dev | .env.qa | .env.prod |
+
+|       |    Dev   |   QA    |    Prod   |
+|  ---  |  ---  |  ---  |  ---  |
+|   Branches    |   develop </br> feature/    |    release/ </br> hotfix/   |   master    |
+|   Provisioning profile    |    com.lego.corp.teamName-appName-dev   |   com.lego.corp.teamName-appName-qa    |   com.lego.corp.teamName-appName    |
+|   Env file    |   .env.dev    |    .env.qa   |   .env.prod    |
+
+
 
 Starting with `v 0.9.1`, if you have a different
 branch setup, it is possible to pass a custom configuration using
