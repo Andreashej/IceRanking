@@ -13,12 +13,6 @@ appcenter login --token $APPCENTER_API_TOKEN
 # remove the leading refs/heads/ string that github adds to the branch name
 BRANCH_NAME=${GITHUB_REF##*refs/heads/}
  
-# do not build on AppCenter if BRANCH_NAME if not starting with release, feature, develop, master or hotfix
-if [[ ("$BRANCH_NAME" != "release/"*) && ("$BRANCH_NAME" != "feature/"*) && ("$BRANCH_NAME" != "develop") && ("$BRANCH_NAME" != "master") && ("$BRANCH_NAME" != "hotfix/"*) ]]; then
-  # exit code 78 is neutral
-  exit 78
-fi
- 
 # queue a new build in APPCENTER for the current branch and get the id
 APPCENTER_BUILD_ID=$(appcenter build queue --app $APPCENTER_OWNER_NAME/$APPCENTER_APP_NAME --branch $BRANCH_NAME --source-version $GITHUB_SHA --output json | jq -r .buildId)
 echo "STARTED THE BUILD WITH ID $APPCENTER_BUILD_ID ON APPCENTER"
@@ -28,7 +22,7 @@ sleep 10
  
 # APPCENTER_STATUS_COMPLETED = "completed"
 # APPCENTER_STATUS_NOT_STARTED = "notStarted"
-# APPCENTER_BUILD_SUCCESSFULL = "succeeded"
+# APPCENTER_BUILD_SUCCESSFUL = "succeeded"
  
 while $RUNNING; do
   # use appcenter api to get the build status for a specific build id
@@ -38,7 +32,7 @@ while $RUNNING; do
     "https://api.appcenter.ms/v0.1/apps/${APPCENTER_OWNER_NAME}/${APPCENTER_APP_NAME}/builds/${APPCENTER_BUILD_ID}")
  
   # since the response is in JSON format, use jq to parse it (https://stedolan.github.io/jq/)
-  # jq -r for raw output, result wihout quotes
+  # jq -r for raw output, result without quotes
   APPCENTER_BUILD_STATUS=$(echo "$APPCENTER_BUILD_RESPONSE" | jq -r .status)
   echo $APPCENTER_BUILD_STATUS
  
