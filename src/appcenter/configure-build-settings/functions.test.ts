@@ -1,12 +1,9 @@
-/* eslint-disable no-console */
 import { FetchMock } from 'jest-fetch-mock';
 import { setBranchConfig } from './functions';
 import { expectedBody } from './testUtils';
 
 const fetchMock: FetchMock = global.fetch;
-const currentBranchName = decodeURIComponent(process.env.GITHUB_REF?.split('refs/heads/')[1]);
-console.log('original: ', process.env.GITHUB_REF?.split('refs/heads/')[1]);
-console.log('decoded: ', currentBranchName);
+const currentBranchName = encodeURIComponent(process.env.GITHUB_REF?.split('refs/heads/')[1]);
 
 afterEach(() => {
   fetchMock.resetMocks();
