@@ -1,6 +1,6 @@
 module.exports = {
   parserOptions: {
-    project: 'tsconfig.eslint.json',
+    project: './tsconfig.eslint.json',
   },
   extends: [
     '@lego/eslint-config-typescript',

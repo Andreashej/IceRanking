@@ -3,6 +3,7 @@ import { setBranchConfig } from './functions';
 import { expectedBody } from './testUtils';
 
 const fetchMock: FetchMock = global.fetch;
+const currentBranchName = decodeURIComponent(process.env.GITHUB_REF?.split('refs/heads/')[1]);
 
 afterEach(() => {
   fetchMock.resetMocks();
@@ -25,11 +26,8 @@ describe('setBranchConfig', () => {
       'POST'
     );
     expect(response).toStrictEqual({ success: true });
-
     expect(fetchMock.mock.calls[0]).toEqual([
-      `https://api.appcenter.ms/v0.1/apps/appcenterOwnerName/appcenterAppName/branches/${
-        process.env.GITHUB_REF?.split('refs/heads/')[1]
-      }/config`,
+      `https://api.appcenter.ms/v0.1/apps/appcenterOwnerName/appcenterAppName/branches/${currentBranchName}/config`,
       {
         body: expectedBody,
         headers: {
@@ -54,9 +52,7 @@ describe('setBranchConfig', () => {
       )
     ).rejects.toThrow('error');
     expect(fetchMock.mock.calls[0]).toEqual([
-      `https://api.appcenter.ms/v0.1/apps/appcenterOwnerName/appcenterAppName/branches/${
-        process.env.GITHUB_REF?.split('refs/heads/')[1]
-      }/config`,
+      `https://api.appcenter.ms/v0.1/apps/appcenterOwnerName/appcenterAppName/branches/${currentBranchName}/config`,
       {
         body: expectedBody,
         headers: {
