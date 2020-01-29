@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import fetch from 'node-fetch';
 import path from 'path';
-import { EnvType } from '../..';
+import { EnvType } from '../../main';
 
 if (process.env.NODE_ENV === 'test') {
   dotenv.config();

@@ -2,7 +2,7 @@
 // exit with specific codes instead of throwing errors
 /* eslint-disable no-process-exit */
 import fs from 'fs';
-import { EnvType } from '../..';
+import { EnvType } from '../../main';
 import { printMsg } from '../../utils/printMsg';
 import { decryptCerts, setBranchConfig } from './functions';
 

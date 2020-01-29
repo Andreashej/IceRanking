@@ -1,4 +1,7 @@
 module.exports = {
+  parserOptions: {
+    project: 'tsconfig.eslint.json',
+  },
   extends: [
     '@lego/eslint-config-typescript',
     '@lego/eslint-config-jest',
@@ -7,8 +10,5 @@ module.exports = {
   rules: {
     complexity: ['error', 14],
     'max-lines-per-function': 'off',
-  },
-  parserOptions: {
-    project: 'tsconfig.eslint.json',
   },
 };

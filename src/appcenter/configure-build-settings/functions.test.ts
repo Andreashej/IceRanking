@@ -1,4 +1,3 @@
-/* eslint-disable jest/no-try-expect */
 import { FetchMock } from 'jest-fetch-mock';
 import { setBranchConfig } from './functions';
 import { expectedBody } from './testUtils';
@@ -28,7 +27,9 @@ describe('setBranchConfig', () => {
     expect(response).toStrictEqual({ success: true });
 
     expect(fetchMock.mock.calls[0]).toEqual([
-      'https://api.appcenter.ms/v0.1/apps/appcenterOwnerName/appcenterAppName/branches/master/config',
+      `https://api.appcenter.ms/v0.1/apps/appcenterOwnerName/appcenterAppName/branches/${
+        process.env.GITHUB_REF?.split('refs/heads/')[1]
+      }/config`,
       {
         body: expectedBody,
         headers: {
@@ -43,31 +44,28 @@ describe('setBranchConfig', () => {
 
   it('should reject if there is an error', async () => {
     fetchMock.mockReject(new Error('error'));
-    expect.assertions(3);
-    try {
-      await setBranchConfig(
+    await expect(
+      setBranchConfig(
         'certEncoded',
         'certFilename',
         'profileEncoded',
         'provisioningProfileFilename',
         'PUT'
-      );
-    } catch (error) {
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toStrictEqual('error');
-
-      expect(fetchMock.mock.calls[0]).toEqual([
-        'https://api.appcenter.ms/v0.1/apps/appcenterOwnerName/appcenterAppName/branches/master/config',
-        {
-          body: expectedBody,
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            'X-API-Token': 'appcenterApiToken',
-          },
-          method: 'PUT',
+      )
+    ).rejects.toThrow('error');
+    expect(fetchMock.mock.calls[0]).toEqual([
+      `https://api.appcenter.ms/v0.1/apps/appcenterOwnerName/appcenterAppName/branches/${
+        process.env.GITHUB_REF?.split('refs/heads/')[1]
+      }/config`,
+      {
+        body: expectedBody,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'X-API-Token': 'appcenterApiToken',
         },
-      ]);
-    }
+        method: 'PUT',
+      },
+    ]);
   });
 });

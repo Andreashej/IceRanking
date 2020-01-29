@@ -1,12 +1,7 @@
-name: Build & Test
+name: Build, Test and Publish
 
-on:
-  pull_request:
-    branches-ignore:
-      - master
-  push:
-    branches-ignore:
-      - master
+on: [push, pull_request]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,4 +21,24 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
       - run: yarn build
-      # - run: yarn test
+      - run: yarn test
+        env:
+          APPCENTER_API_TOKEN: appcenterApiToken
+          APPCENTER_APP_NAME: appcenterAppName
+          APPCENTER_OWNER_NAME: appcenterOwnerName
+          BUNDLE_GIT__COM: bundleGitCom
+          MATCH_PASSWORD: matchPassword
+          GIT_USER: gitUser
+          GIT_TOKEN: gitToken
+          IOS_CERTIFICATES_GIT_URL: iosCertificatesGitUrl
+          GH_TOKEN: ghAuthToken
+          PROJECT_OR_WORKSPACE_PATH: projectOrWorkspacePath
+          XCODE_SCHEME_NAME: xcodeSchemeName
+      - run: echo @lego:registry=https://npm.pkg.github.com/ >> .npmrc
+        if: github.ref == 'refs/heads/master'
+      - run: yarn release:ci
+        if: github.ref == 'refs/heads/master'
+        env:
+          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}

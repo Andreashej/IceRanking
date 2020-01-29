@@ -42,8 +42,8 @@ Open package.json and add the following line to your scripts:
 \
 Next you can use it in your custom github action e.g.:
 
-```javascript
--  	name:  Set AppCenter build configuration
+```yml
+-   name:  Set AppCenter build configuration
 	uses:  actions/npm@master
 	env:
 		APPCENTER_API_TOKEN:  ${{ secrets.APPCENTER_API_TOKEN }}
@@ -69,13 +69,21 @@ Next you can use it in your custom github action e.g.:
 >
 > Example:
 >
-> ```javascript
+> ```yml
 > - name: Set AppCenter build configuration
 > 	if: "!contains(github.event.head_commit.message, '[skip-appcenter]')"
 > ```
 
 By default this package uses the [Git Flow branch
-configuration](https://confluence.corp.lego.com/display/UXMP/Git+Workflow). Starting with `v 0.9.1`, if you have a different
+configuration](https://confluence.corp.lego.com/display/UXMP/Git+Workflow) with different
+environments.
+| | Dev | QA | Prod |
+| --- | --- | --- | --- |
+|Branches | develop </br> feature/ | release/ </br> hotfix/ | master |
+|Provisioning profile | com.lego.corp.teamName-appName-dev | com.lego.corp.teamName-appName-qa | com.lego.corp.teamName-appName |
+|Env file | .env.dev | .env.qa | .env.prod |
+
+Starting with `v 0.9.1`, if you have a different
 branch setup, it is possible to pass a custom configuration using
 
 - a `legornscripts` property in `package.json`
@@ -89,20 +97,11 @@ Example:
 ```json
 "legornscripts": {
     "branchConfig": {
-      "qa": [
-		"release/",
-		"bugfix/",
-		"hotfix/"
-      ],
-      "dev": [
-		"develop",
-		"feature/"
-	  ],
-	  "prod": [
-		  "master"
-	  ]
-    }
+        "dev": ["develop", "feature/"],
+        "qa": ["release/", "bugfix/",	"hotfix/"],
+        "prod": ["master"]
   }
+}
 ```
 
 > When creating a custom branch configuration it is important that you specify all environments with
