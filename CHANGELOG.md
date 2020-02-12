@@ -1,3 +1,10 @@
+## [0.9.1](https://github.com/LEGO/react-native-scripts/compare/v0.9.0...v0.9.1) (2020-02-12)
+
+
+### Bug Fixes
+
+* add option to use a custom branch configuration ([0f9fec1](https://github.com/LEGO/react-native-scripts/commit/0f9fec1ed709075439366ddb0e16dd87dfc61b6b))
+
 # [0.9.0](https://github.com/LEGO/react-native-scripts/compare/v0.8.0...v0.9.0) (2020-01-07)
 
 
