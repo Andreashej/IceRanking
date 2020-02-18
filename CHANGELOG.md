@@ -1,3 +1,10 @@
+## [0.9.5](https://github.com/LEGO/react-native-scripts/compare/v0.9.4...v0.9.5) (2020-02-18)
+
+
+### Bug Fixes
+
+* improved check for whitelisted branches ([a0529ce](https://github.com/LEGO/react-native-scripts/commit/a0529ce258729c6354ea7507ecf2fbfbd3256fab))
+
 ## [0.9.4](https://github.com/LEGO/react-native-scripts/compare/v0.9.3...v0.9.4) (2020-02-18)
 
 
