@@ -1,3 +1,10 @@
+## [0.9.3](https://github.com/LEGO/react-native-scripts/compare/v0.9.2...v0.9.3) (2020-02-18)
+
+
+### Bug Fixes
+
+* cosmiconfig as a dependency instead of devdependency ([4faa654](https://github.com/LEGO/react-native-scripts/commit/4faa6547eac302555e48c657e34b4a33e4d002a5))
+
 ## [0.9.2](https://github.com/LEGO/react-native-scripts/compare/v0.9.1...v0.9.2) (2020-02-18)
 
 
