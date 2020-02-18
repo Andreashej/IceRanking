@@ -6,8 +6,7 @@ import minimist from 'minimist';
 import { join } from 'path';
 import { setBuildConfiguration } from './appcenter';
 import { localBuild } from './fastlane';
-import { printMsg } from './utils/printMsg';
-import { currentBranchIsWhitelisted } from './utils/utils';
+import { currentBranchIsWhitelisted, printMsg } from './utils';
 
 const args = minimist(process.argv.slice(2));
 
