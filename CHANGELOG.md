@@ -1,3 +1,10 @@
+## [0.9.2](https://github.com/LEGO/react-native-scripts/compare/v0.9.1...v0.9.2) (2020-02-18)
+
+
+### Bug Fixes
+
+* add node env to executable files ([8cbff40](https://github.com/LEGO/react-native-scripts/commit/8cbff40c68e0ae7fdbb23c321ded624c5be80c9f))
+
 ## [0.9.1](https://github.com/LEGO/react-native-scripts/compare/v0.9.0...v0.9.1) (2020-02-12)
 
 
