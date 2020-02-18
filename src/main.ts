@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { execSync } from 'child_process';
 import { cosmiconfig } from 'cosmiconfig';
+import flattenDeep from 'lodash.flattendeep';
 import minimist from 'minimist';
 import { join } from 'path';
 import { setBuildConfiguration } from './appcenter';
@@ -50,7 +51,7 @@ const getCustomConfig: () => Promise<{
       branchConfig = configResult.config.branchConfig;
     }
     //list of all branches that can should be built in appcenter
-    const validBranches = Object.values(branchConfig).flat();
+    const validBranches = flattenDeep(Object.values(branchConfig));
     let env: EnvType | undefined;
     // parse the branch configuration and extract the environment
     Object.keys(branchConfig).forEach((key) => {
