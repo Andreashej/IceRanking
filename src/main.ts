@@ -39,7 +39,7 @@ let branchConfig: IBranchConfig = {
 // if a custom config is found, parse the object and return an array of all the branches that should
 // be built in appcenter and an environment for the build
 const getCustomConfig: () => Promise<{
-  validBranches: string[];
+  whitelistedBranches: string[];
   env: EnvType | undefined;
 }> = async () => {
   try {
@@ -51,7 +51,7 @@ const getCustomConfig: () => Promise<{
       branchConfig = configResult.config.branchConfig;
     }
     //list of all branches that can should be built in appcenter
-    const validBranches = flattenDeep(Object.values(branchConfig));
+    const whitelistedBranches = flattenDeep(Object.values(branchConfig));
     let env: EnvType | undefined;
     // parse the branch configuration and extract the environment
     Object.keys(branchConfig).forEach((key) => {
@@ -66,15 +66,33 @@ const getCustomConfig: () => Promise<{
       }
     });
 
-    return { validBranches, env };
+    return { whitelistedBranches, env };
   } catch (error) {
     throw error;
   }
 };
 
+const currentBranchIsWhitelisted: (whitelistedBranches: string[]) => boolean = (
+  whitelistedBranches
+) => {
+  if (!currentBranchName) {
+    return false;
+  }
+
+  let branchIsValid = false;
+
+  whitelistedBranches.forEach((branchName: string) => {
+    if (currentBranchName.startsWith(branchName)) {
+      branchIsValid = true;
+    }
+  });
+
+  return branchIsValid;
+};
+
 const execAppcenter: () => Promise<void> = async () => {
   try {
-    const { env, validBranches } = await getCustomConfig();
+    const { env, whitelistedBranches } = await getCustomConfig();
 
     switch (action) {
       case 'configure-build-settings':
@@ -85,7 +103,7 @@ const execAppcenter: () => Promise<void> = async () => {
         setBuildConfiguration(env);
         break;
       case 'report-build-status':
-        if (currentBranchName && validBranches.includes(currentBranchName)) {
+        if (currentBranchIsWhitelisted(whitelistedBranches)) {
           execSync(join(__dirname, './appcenter/report-build-status/report-build-status.sh'), {
             stdio: 'inherit',
           });
