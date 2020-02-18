@@ -20,9 +20,7 @@ export enum EnvType {
 }
 type IBranchConfig = { [key in EnvType]: string[] };
 
-const currentBranchName = process.env.GITHUB_REF
-  ? process.env.GITHUB_REF.split('refs/heads/')[1].toLowerCase()
-  : undefined;
+const currentBranchName = process.env.GITHUB_REF?.split('refs/heads/')[1]?.toLowerCase();
 
 // use this name for cosmiconfig (https://github.com/davidtheclark/cosmiconfig)
 const moduleName = 'legornscripts';
