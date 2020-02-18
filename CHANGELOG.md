@@ -1,3 +1,10 @@
+## [0.9.4](https://github.com/LEGO/react-native-scripts/compare/v0.9.3...v0.9.4) (2020-02-18)
+
+
+### Bug Fixes
+
+* add lodash dep for flattening arrays ([7ad2b04](https://github.com/LEGO/react-native-scripts/commit/7ad2b04fbcb64b2d40606db729fce774bd29b8d2))
+
 ## [0.9.3](https://github.com/LEGO/react-native-scripts/compare/v0.9.2...v0.9.3) (2020-02-18)
 
 
