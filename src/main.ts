@@ -7,6 +7,7 @@ import { join } from 'path';
 import { setBuildConfiguration } from './appcenter';
 import { localBuild } from './fastlane';
 import { printMsg } from './utils/printMsg';
+import { currentBranchIsWhitelisted } from './utils/utils';
 
 const args = minimist(process.argv.slice(2));
 
@@ -70,24 +71,6 @@ const getCustomConfig: () => Promise<{
   }
 };
 
-const currentBranchIsWhitelisted: (whitelistedBranches: string[]) => boolean = (
-  whitelistedBranches
-) => {
-  if (!currentBranchName) {
-    return false;
-  }
-
-  let branchIsValid = false;
-
-  whitelistedBranches.forEach((branchName: string) => {
-    if (currentBranchName.startsWith(branchName)) {
-      branchIsValid = true;
-    }
-  });
-
-  return branchIsValid;
-};
-
 const execAppcenter: () => Promise<void> = async () => {
   try {
     const { env, whitelistedBranches } = await getCustomConfig();
@@ -101,7 +84,7 @@ const execAppcenter: () => Promise<void> = async () => {
         setBuildConfiguration(env);
         break;
       case 'report-build-status':
-        if (currentBranchIsWhitelisted(whitelistedBranches)) {
+        if (currentBranchIsWhitelisted(whitelistedBranches, currentBranchName)) {
           execSync(join(__dirname, './appcenter/report-build-status/report-build-status.sh'), {
             stdio: 'inherit',
           });
