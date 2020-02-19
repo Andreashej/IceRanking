@@ -3,7 +3,7 @@
 /* eslint-disable no-process-exit */
 import fs from 'fs';
 import { EnvType } from '../../main';
-import { printMsg } from '../../utils/printMsg';
+import { printMsg } from '../../utils';
 import { decryptCerts, setBranchConfig } from './functions';
 
 const appcenterAppName = process.env.APPCENTER_APP_NAME;

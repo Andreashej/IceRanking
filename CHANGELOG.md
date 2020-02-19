@@ -1,3 +1,38 @@
+## [0.9.5](https://github.com/LEGO/react-native-scripts/compare/v0.9.4...v0.9.5) (2020-02-18)
+
+
+### Bug Fixes
+
+* improved check for whitelisted branches ([a0529ce](https://github.com/LEGO/react-native-scripts/commit/a0529ce258729c6354ea7507ecf2fbfbd3256fab))
+
+## [0.9.4](https://github.com/LEGO/react-native-scripts/compare/v0.9.3...v0.9.4) (2020-02-18)
+
+
+### Bug Fixes
+
+* add lodash dep for flattening arrays ([7ad2b04](https://github.com/LEGO/react-native-scripts/commit/7ad2b04fbcb64b2d40606db729fce774bd29b8d2))
+
+## [0.9.3](https://github.com/LEGO/react-native-scripts/compare/v0.9.2...v0.9.3) (2020-02-18)
+
+
+### Bug Fixes
+
+* cosmiconfig as a dependency instead of devdependency ([4faa654](https://github.com/LEGO/react-native-scripts/commit/4faa6547eac302555e48c657e34b4a33e4d002a5))
+
+## [0.9.2](https://github.com/LEGO/react-native-scripts/compare/v0.9.1...v0.9.2) (2020-02-18)
+
+
+### Bug Fixes
+
+* add node env to executable files ([8cbff40](https://github.com/LEGO/react-native-scripts/commit/8cbff40c68e0ae7fdbb23c321ded624c5be80c9f))
+
+## [0.9.1](https://github.com/LEGO/react-native-scripts/compare/v0.9.0...v0.9.1) (2020-02-12)
+
+
+### Bug Fixes
+
+* add option to use a custom branch configuration ([0f9fec1](https://github.com/LEGO/react-native-scripts/commit/0f9fec1ed709075439366ddb0e16dd87dfc61b6b))
+
 # [0.9.0](https://github.com/LEGO/react-native-scripts/compare/v0.8.0...v0.9.0) (2020-01-07)
 
 

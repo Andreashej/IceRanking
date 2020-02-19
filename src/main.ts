@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 import { execSync } from 'child_process';
 import { cosmiconfig } from 'cosmiconfig';
+import flattenDeep from 'lodash.flattendeep';
 import minimist from 'minimist';
 import { join } from 'path';
 import { setBuildConfiguration } from './appcenter';
 import { localBuild } from './fastlane';
-import { printMsg } from './utils/printMsg';
+import { currentBranchIsWhitelisted, printMsg } from './utils';
 
 const args = minimist(process.argv.slice(2));
 
@@ -19,9 +20,7 @@ export enum EnvType {
 }
 type IBranchConfig = { [key in EnvType]: string[] };
 
-const currentBranchName = process.env.GITHUB_REF
-  ? process.env.GITHUB_REF.split('refs/heads/')[1].toLowerCase()
-  : undefined;
+const currentBranchName = process.env.GITHUB_REF?.split('refs/heads/')[1]?.toLowerCase();
 
 // use this name for cosmiconfig (https://github.com/davidtheclark/cosmiconfig)
 const moduleName = 'legornscripts';
@@ -38,7 +37,7 @@ let branchConfig: IBranchConfig = {
 // if a custom config is found, parse the object and return an array of all the branches that should
 // be built in appcenter and an environment for the build
 const getCustomConfig: () => Promise<{
-  validBranches: string[];
+  whitelistedBranches: string[];
   env: EnvType | undefined;
 }> = async () => {
   try {
@@ -50,7 +49,7 @@ const getCustomConfig: () => Promise<{
       branchConfig = configResult.config.branchConfig;
     }
     //list of all branches that can should be built in appcenter
-    const validBranches = Object.values(branchConfig).flat();
+    const whitelistedBranches = flattenDeep(Object.values(branchConfig));
     let env: EnvType | undefined;
     // parse the branch configuration and extract the environment
     Object.keys(branchConfig).forEach((key) => {
@@ -65,7 +64,7 @@ const getCustomConfig: () => Promise<{
       }
     });
 
-    return { validBranches, env };
+    return { whitelistedBranches, env };
   } catch (error) {
     throw error;
   }
@@ -73,7 +72,7 @@ const getCustomConfig: () => Promise<{
 
 const execAppcenter: () => Promise<void> = async () => {
   try {
-    const { env, validBranches } = await getCustomConfig();
+    const { env, whitelistedBranches } = await getCustomConfig();
 
     switch (action) {
       case 'configure-build-settings':
@@ -84,7 +83,7 @@ const execAppcenter: () => Promise<void> = async () => {
         setBuildConfiguration(env);
         break;
       case 'report-build-status':
-        if (currentBranchName && validBranches.includes(currentBranchName)) {
+        if (currentBranchIsWhitelisted(whitelistedBranches, currentBranchName)) {
           execSync(join(__dirname, './appcenter/report-build-status/report-build-status.sh'), {
             stdio: 'inherit',
           });

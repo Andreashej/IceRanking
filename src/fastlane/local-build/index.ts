@@ -1,7 +1,7 @@
 import { execSync } from 'child_process';
 import inquirer from 'inquirer';
 import minimist from 'minimist';
-import { printMsg } from '../../utils/printMsg';
+import { printMsg } from '../../utils';
 
 let buildConfig: string;
 let environment: string;
