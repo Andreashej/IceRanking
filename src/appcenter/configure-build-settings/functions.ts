@@ -207,12 +207,22 @@ export const setBranchConfig: (
       headers,
       method,
     })
+      //FIXME: fix the eslint error below
+      // eslint-disable-next-line consistent-return
       .then(async (res) => {
         if (res.status === 409 && res.statusText === 'Conflict') {
           reject(409);
         }
+        if (res.ok) {
+          return res.json();
+        }
 
-        return res.json();
+        res.text().then((text: string) => {
+          //TODO: remove this console.log
+          // eslint-disable-next-line no-console
+          console.log('error: ', text);
+          throw new Error(text);
+        });
       })
       .then((res) => {
         resolve(res);
