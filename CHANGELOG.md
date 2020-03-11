@@ -1,3 +1,15 @@
+# [0.10.0](https://github.com/LEGO/react-native-scripts/compare/v0.9.6...v0.10.0) (2020-03-11)
+
+
+### Bug Fixes
+
+* update node version in appcenter ([ca7c938](https://github.com/LEGO/react-native-scripts/commit/ca7c938695c991dc55822fa6342268417dc24a25))
+
+
+### Features
+
+* update node version in appcenter ([a1060fe](https://github.com/LEGO/react-native-scripts/commit/a1060feb006cbdff81c863cdfa3a6744a4e3fcb4))
+
 ## [0.9.6](https://github.com/LEGO/react-native-scripts/compare/v0.9.5...v0.9.6) (2020-03-05)
 
 
