@@ -183,7 +183,7 @@ export const setBranchConfig: (
           'package.json': paramObject,
         },
         javascript: {
-          nodeVersion: '8.x',
+          nodeVersion: '12.x',
           packageJsonPath: 'package.json',
           runTests: false,
         },

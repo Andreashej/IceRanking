@@ -32,7 +32,7 @@ export const expectedBody = JSON.stringify({
       'package.json': {},
     },
     javascript: {
-      nodeVersion: '8.x',
+      nodeVersion: '12.x',
       packageJsonPath: 'package.json',
       runTests: false,
     },
