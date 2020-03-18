@@ -3,11 +3,8 @@ import { setBranchConfig } from './functions';
 import { expectedBody } from './testUtils';
 
 const fetchMock: FetchMock = global.fetch;
-let branchName = process.env.GITHUB_REF?.split('refs/heads/')[1];
-if (!branchName) {
-  branchName = process.env.GITHUB_HEAD_REF;
-}
-const currentBranchName = encodeURIComponent(branchName);
+
+const currentBranchName = encodeURIComponent(process.env.GITHUB_REF?.split('refs/heads/')[1]);
 
 afterEach(() => {
   fetchMock.resetMocks();
