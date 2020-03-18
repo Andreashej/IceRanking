@@ -14,6 +14,7 @@ export const repoDispatch: (eventName: string) => Promise<void> = async (eventNa
         Authorization: `token ${GH_TOKEN}`,
         Accept: 'application/vnd.github.everest-preview+json',
       },
+      method: 'POST',
       // eslint-disable-next-line @typescript-eslint/camelcase
       body: JSON.stringify({ event_type: eventName }),
     });
