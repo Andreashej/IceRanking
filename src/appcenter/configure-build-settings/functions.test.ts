@@ -7,9 +7,12 @@ if (!process.env.GITHUB_REF) {
 }
 
 // eslint-disable-next-line no-console
-console.log('process.env', process.env);
 const fetchMock: FetchMock = global.fetch;
-const currentBranchName = encodeURIComponent(process.env.GITHUB_REF?.split('refs/heads/')[1]);
+let branchName = process.env.GITHUB_REF?.split('refs/heads/')[1];
+if (!branchName) {
+  branchName = process.env.GITHUB_HEAD_REF;
+}
+const currentBranchName = encodeURIComponent(branchName);
 
 afterEach(() => {
   fetchMock.resetMocks();
