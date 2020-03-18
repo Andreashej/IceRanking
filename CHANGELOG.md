@@ -1,3 +1,14 @@
+## [0.10.1](https://github.com/LEGO/react-native-scripts/compare/v0.10.0...v0.10.1) (2020-03-18)
+
+
+### Bug Fixes
+
+* add gh repo dispatch script ([f9128ad](https://github.com/LEGO/react-native-scripts/commit/f9128ad59695ce80a5f59609469b1d584d6c6742))
+* fix issue [#23](https://github.com/LEGO/react-native-scripts/issues/23) ([87865e7](https://github.com/LEGO/react-native-scripts/commit/87865e7f5e8e5f639c20a7bab24ff805ecc63e32))
+* fix PR issues ([44e4c7e](https://github.com/LEGO/react-native-scripts/commit/44e4c7e4e14cf2ee8167b3b6eaaffd15296756af))
+* fix test on PR ([a7061e0](https://github.com/LEGO/react-native-scripts/commit/a7061e0b672717ac5eac9369c11c4b6165841bf4))
+* fix test on PR ([bedc4a2](https://github.com/LEGO/react-native-scripts/commit/bedc4a29862daf916726ed5688bc0661c9a181a9))
+
 # [0.10.0](https://github.com/LEGO/react-native-scripts/compare/v0.9.6...v0.10.0) (2020-03-11)
 
 
