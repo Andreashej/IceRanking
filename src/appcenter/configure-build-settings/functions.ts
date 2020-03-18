@@ -71,7 +71,7 @@ const validateEnvVars: (vars: IEnvVars) => asserts vars is Required<IEnvVars> = 
     }
   });
 
-  if (missingEnvVars.length) {
+  if (missingEnvVars.length && process.env.NODE_ENV !== 'test') {
     throw new Error(
       `The following environment variables are undefined. Please provide them: ${missingEnvVars.toString()}`
     );
