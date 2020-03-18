@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-// exit with specific codes instead of throwing errors
-/* eslint-disable no-process-exit */
 import fs from 'fs';
 import { EnvType } from '../../main';
 import { printMsg } from '../../utils';
@@ -9,7 +7,7 @@ import { decryptCerts, setBranchConfig } from './functions';
 const appcenterAppName = process.env.APPCENTER_APP_NAME;
 
 // eslint-disable-next-line consistent-return
-export const setBuildConfiguration: (env: EnvType) => Promise<undefined> = async (env) => {
+export const setBuildConfiguration: (env: EnvType) => Promise<void> = async (env) => {
   let certEncoded;
   let ppEncoded;
   try {
@@ -22,7 +20,7 @@ export const setBuildConfiguration: (env: EnvType) => Promise<undefined> = async
     if (err === 409) {
       try {
         if (!certEncoded || !ppEncoded) {
-          return process.exit(1);
+          throw new Error('Certificate or provisioning profile could not be found');
         }
         await setBranchConfig(
           certEncoded,
@@ -33,11 +31,11 @@ export const setBuildConfiguration: (env: EnvType) => Promise<undefined> = async
         );
       } catch (error) {
         printMsg(['error after PUT', error]);
-        process.exit(1);
+        throw error;
       }
     } else {
       printMsg(['An error occurred: ', err]);
-      process.exit(1);
+      throw err;
     }
   }
 };

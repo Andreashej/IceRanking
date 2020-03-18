@@ -1,3 +1,10 @@
+## [0.9.6](https://github.com/LEGO/react-native-scripts/compare/v0.9.5...v0.9.6) (2020-03-05)
+
+
+### Bug Fixes
+
+* handle errors for the appcenter response ([8d35780](https://github.com/LEGO/react-native-scripts/commit/8d35780247999cacbd868d251badb85b3ed32b6b))
+
 ## [0.9.5](https://github.com/LEGO/react-native-scripts/compare/v0.9.4...v0.9.5) (2020-02-18)
 
 

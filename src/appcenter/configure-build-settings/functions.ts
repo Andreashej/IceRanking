@@ -71,7 +71,7 @@ const validateEnvVars: (vars: IEnvVars) => asserts vars is Required<IEnvVars> = 
     }
   });
 
-  if (missingEnvVars.length) {
+  if (missingEnvVars.length && process.env.NODE_ENV !== 'test') {
     throw new Error(
       `The following environment variables are undefined. Please provide them: ${missingEnvVars.toString()}`
     );
@@ -183,7 +183,7 @@ export const setBranchConfig: (
           'package.json': paramObject,
         },
         javascript: {
-          nodeVersion: '8.x',
+          nodeVersion: '12.x',
           packageJsonPath: 'package.json',
           runTests: false,
         },
@@ -208,14 +208,16 @@ export const setBranchConfig: (
       method,
     })
       .then(async (res) => {
-        if (res.status === 409 && res.statusText === 'Conflict') {
+        if (res.ok) {
+          const response = await res.json();
+          resolve(response);
+        } else if (res.status === 409 && res.statusText === 'Conflict') {
           reject(409);
+        } else {
+          res.text().then((text: string) => {
+            reject(text);
+          });
         }
-
-        return res.json();
-      })
-      .then((res) => {
-        resolve(res);
       })
       .catch((err) => {
         reject(err);
