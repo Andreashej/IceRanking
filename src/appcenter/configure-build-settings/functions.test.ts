@@ -5,6 +5,9 @@ import { expectedBody } from './testUtils';
 if (!process.env.GITHUB_REF) {
   process.env.GITHUB_REF = 'refs/heads/feature/branchName';
 }
+
+// eslint-disable-next-line no-console
+console.log('process.env', process.env);
 const fetchMock: FetchMock = global.fetch;
 const currentBranchName = encodeURIComponent(process.env.GITHUB_REF?.split('refs/heads/')[1]);
 
