@@ -3,6 +3,7 @@ import { setBranchConfig } from './functions';
 import { expectedBody } from './testUtils';
 
 const fetchMock: FetchMock = global.fetch;
+
 const currentBranchName = encodeURIComponent(process.env.GITHUB_REF?.split('refs/heads/')[1]);
 
 afterEach(() => {
