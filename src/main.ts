@@ -12,6 +12,7 @@ const args = minimist(process.argv.slice(2));
 
 const target = args._[0];
 const action = args._[1];
+const ghDispatchAction = args._[2];
 
 export enum EnvType {
   dev = 'dev',
@@ -99,6 +100,7 @@ const execAppcenter: () => Promise<void> = async () => {
     }
   } catch (error) {
     printMsg([error]);
+    throw error;
   }
 };
 
@@ -120,6 +122,17 @@ export const main: () => void = () => {
       switch (action) {
         default:
           printMsg(['no action found in sentry that matches your arguments']);
+      }
+      break;
+    case 'github':
+      switch (action) {
+        case 'repo-dispatch':
+          execSync(`${join(__dirname, './github/repo-dispatch.sh')} ${ghDispatchAction}`, {
+            stdio: 'inherit',
+          });
+          break;
+        default:
+          printMsg([`"${action}" not available for github`]);
       }
       break;
     default:
