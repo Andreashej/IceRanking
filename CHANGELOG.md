@@ -1,3 +1,10 @@
+## [0.10.2](https://github.com/LEGO/react-native-scripts/compare/v0.10.1...v0.10.2) (2020-03-18)
+
+
+### Bug Fixes
+
+* add method in fetch request ([9052545](https://github.com/LEGO/react-native-scripts/commit/9052545e7711a46c739d76432ef01b5a8ddd984c))
+
 ## [0.10.1](https://github.com/LEGO/react-native-scripts/compare/v0.10.0...v0.10.1) (2020-03-18)
 
 
