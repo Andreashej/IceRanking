@@ -1,1 +1,0 @@
-curl -v -H \"Accept: application/vnd.github.everest-preview+json\" -H \"Authorization: token ${GH_TOKEN}\" https://api.github.com/repos/${GITHUB_REPOSITORY}/dispatches -d '{ \"event_type\": \"$1\" }'

@@ -6,6 +6,7 @@ import minimist from 'minimist';
 import { join } from 'path';
 import { setBuildConfiguration } from './appcenter';
 import { localBuild } from './fastlane';
+import { repoDispatch } from './github/repoDispatch';
 import { currentBranchIsWhitelisted, printMsg } from './utils';
 
 const args = minimist(process.argv.slice(2));
@@ -127,9 +128,7 @@ export const main: () => void = () => {
     case 'github':
       switch (action) {
         case 'repo-dispatch':
-          execSync(`${join(__dirname, './github/repo-dispatch.sh')} ${ghDispatchAction}`, {
-            stdio: 'inherit',
-          });
+          repoDispatch(ghDispatchAction);
           break;
         default:
           printMsg([`"${action}" not available for github`]);
