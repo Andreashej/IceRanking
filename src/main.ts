@@ -4,6 +4,7 @@ import { cosmiconfig } from 'cosmiconfig';
 import flattenDeep from 'lodash.flattendeep';
 import minimist from 'minimist';
 import { join } from 'path';
+import { uploadAppToAirwatch } from './airwatch';
 import { setBuildConfiguration } from './appcenter';
 import { localBuild } from './fastlane';
 import { repoDispatch } from './github/repoDispatch';
@@ -132,6 +133,14 @@ export const main: () => void = () => {
           break;
         default:
           printMsg([`"${action}" not available for github`]);
+      }
+      break;
+    case 'airwatch':
+      switch (action) {
+        case 'upload-app':
+          uploadAppToAirwatch();
+          break;
+        default:
       }
       break;
     default:
