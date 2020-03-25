@@ -5,9 +5,9 @@ import { createWriteStream, existsSync, mkdirSync } from 'fs';
 import fetch from 'node-fetch';
 import { Stream } from 'stream';
 import {
+  appcenterAppName,
   appcenterHeaders,
   appcenterOwner,
-  appName,
   baseUrl,
   downloadLocation,
   logInfo,
@@ -44,7 +44,7 @@ export const getIPA: (buildId: string) => Promise<void> = async (buildId) => {
     logInfo('Getting the download uri from Appcenter');
 
     const { uri: downloadUri } = await getRequest(
-      `${baseUrl}/${appcenterOwner}/${appName}/builds/${buildId}/downloads/build`,
+      `${baseUrl}/${appcenterOwner}/${appcenterAppName}/builds/${buildId}/downloads/build`,
       appcenterHeaders
     );
 

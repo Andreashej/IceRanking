@@ -7,7 +7,7 @@ import { resolve as pathResolve } from 'path';
 dotenv.config();
 
 export const baseUrl = 'https://api.appcenter.ms/v0.1/apps';
-export const appName = process.env.APP_NAME;
+export const appcenterAppName = process.env.APPCENTER_APP_NAME;
 export const appcenterOwner = process.env.APPCENTER_OWNER_NAME;
 export const downloadLocation = pathResolve(__dirname, '../downloads');
 export const baseAkamaiFileUrl = 'https://it-mac-live-s.legocdn.com/ios';
