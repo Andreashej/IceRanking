@@ -1,5 +1,5 @@
+import { postRequest } from '../../../services/api';
 import { awBaseUrl, awHeaders, logInfo } from '../../../utils/airwatch';
-import { postRequest } from '../api/api';
 import { getAwUserGroup } from './getAwUserGroup';
 
 export const createAwSmartGroup: (adGroupName: string) => Promise<number> = async (adGroupName) => {

@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
+import { getRequest, postRequest } from '../../../services/api';
 import { downloadLocation, getAppDetails, logInfo } from '../../../utils/airwatch';
-import { getRequest, postRequest } from '../api/api';
 
 const { APP_NAME, GH_TOKEN } = process.env;
 if (!APP_NAME || !GH_TOKEN) {

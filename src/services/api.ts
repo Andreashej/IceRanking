@@ -14,7 +14,10 @@ const handleApiErrors: (res: Response) => Promise<Response> = async (res) => {
   });
 };
 
-const appendParamsToUrl: (path: string, params?: IGenericObject) => typeof URL = (path, params) => {
+export const appendParamsToUrl: (path: string, params?: IGenericObject) => typeof URL = (
+  path,
+  params
+) => {
   const url = new URL(path);
   if (!params) {
     return url;

@@ -4,6 +4,7 @@ import { exec } from 'child_process';
 import { createWriteStream, existsSync, mkdirSync } from 'fs';
 import fetch from 'node-fetch';
 import { Stream } from 'stream';
+import { getRequest } from '../../../services/api';
 import {
   appcenterAppName,
   appcenterHeaders,
@@ -12,7 +13,6 @@ import {
   downloadLocation,
   logInfo,
 } from '../../../utils/airwatch';
-import { getRequest } from '../api/api';
 
 const createFile: (fileData: Stream) => Promise<void> = (fileData) => {
   return new Promise((resolve, reject) => {

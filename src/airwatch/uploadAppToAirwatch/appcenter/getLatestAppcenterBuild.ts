@@ -1,10 +1,10 @@
+import { getRequest } from '../../../services/api';
 import {
   appcenterAppName,
   appcenterHeaders,
   appcenterOwner,
   baseUrl,
 } from '../../../utils/airwatch';
-import { getRequest } from '../api/api';
 
 export const getLatestAppcenterBuild: () => Promise<string> = async () => {
   try {

@@ -1,5 +1,5 @@
+import { getRequest } from '../../../services/api';
 import { awBaseUrl, awHeaders, IAwUserGroup, logInfo } from '../../../utils/airwatch';
-import { getRequest } from '../api/api';
 
 export const getAwUserGroup: (adGroupName: string) => Promise<IAwUserGroup> = async (
   adGroupName

@@ -10,7 +10,7 @@ export const getSmartGroupIds: (
   activeApps: IAwAppDetails[]
 ) => Promise<number[]> = async (adGroupName, bundleId, version, previousApps, activeApps) => {
   let smartGroupIds: number[] = [];
-  if (!previousApps) {
+  if (previousApps?.length === 0) {
     logInfo(`No app was found in Airwatch with the bundle id "${bundleId}"`);
     logInfo(`Searching in Airwatch for a smart group named "AD - ${adGroupName}"`);
     let groupId = await searchAwSmartGroup(adGroupName);

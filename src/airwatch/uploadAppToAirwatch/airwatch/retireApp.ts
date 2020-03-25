@@ -1,4 +1,4 @@
-import { postRequest } from '../api/api';
+import { postRequest } from '../../../services/api';
 import { awBaseUrl, awHeaders, IAwAppDetails, logInfo } from '../../../utils/airwatch';
 
 const retireAppById: (appId: number) => Promise<void> = async (appId) => {
