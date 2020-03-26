@@ -1,5 +1,7 @@
+#!/usr/bin/env node
+
 import { postRequest } from '../../../services/api';
-import { awBaseUrl, awHeaders, IAwAppDetails, logInfo } from '../../../utils/airwatch';
+import { awBaseUrl, awHeaders, IAwAppDetails, logInfo } from '../../../utils';
 
 const retireAppById: (appId: number) => Promise<void> = async (appId) => {
   try {

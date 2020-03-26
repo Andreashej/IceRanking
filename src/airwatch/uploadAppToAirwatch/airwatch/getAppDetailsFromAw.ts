@@ -1,5 +1,7 @@
+#!/usr/bin/env node
+
 import { getRequest } from '../../../services/api';
-import { awBaseUrl, awHeaders, IAwAppDetails, logInfo } from '../../../utils/airwatch';
+import { awBaseUrl, awHeaders, IAwAppDetails, logInfo } from '../../../utils';
 
 export const getAppDetailsFromAW: (appBundleId: string) => Promise<IAwAppDetails[]> = async (
   appBundleId

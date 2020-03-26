@@ -1,5 +1,7 @@
+#!/usr/bin/env node
+
 import { postRequest } from '../../../services/api';
-import { awBaseUrl, awHeaders } from '../../../utils/airwatch';
+import { awBaseUrl, awHeaders } from '../../../utils';
 
 const assignSmartGroup: (groupId: number, awAppId: number) => Promise<void> = async (
   groupId,

@@ -1,10 +1,5 @@
-// disable require imports rule because the module needs to be imported using 'require' in order to
-// be able to mock it's functions
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { fetchMock } from '../../../../utils';
 import { getSmartGroupIds } from '../getSmartGroupIds';
-//disabling the rule because this is not a jest.mock, but mocked data
-// eslint-disable-next-line jest/no-mocks-import
 import { mockAppDetails } from '../__mocks__/awAppDetails';
 
 const searchAwSmartGroup = require('../searchAwSmartGroup');

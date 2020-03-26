@@ -3,3 +3,5 @@ lib
 logs
 *.log
 package-lock.json
+downloads
+privateKey*

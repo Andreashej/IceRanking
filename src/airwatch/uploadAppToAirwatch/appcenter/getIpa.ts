@@ -7,12 +7,12 @@ import { Stream } from 'stream';
 import { getRequest } from '../../../services/api';
 import {
   appcenterAppName,
+  appcenterBaseUrl,
   appcenterHeaders,
   appcenterOwner,
-  baseUrl,
   downloadLocation,
   logInfo,
-} from '../../../utils/airwatch';
+} from '../../../utils';
 
 const createFile: (fileData: Stream) => Promise<void> = (fileData) => {
   return new Promise((resolve, reject) => {
@@ -44,7 +44,7 @@ export const getIPA: (buildId: string) => Promise<void> = async (buildId) => {
     logInfo('Getting the download uri from Appcenter');
 
     const { uri: downloadUri } = await getRequest(
-      `${baseUrl}/${appcenterOwner}/${appcenterAppName}/builds/${buildId}/downloads/build`,
+      `${appcenterBaseUrl}/${appcenterOwner}/${appcenterAppName}/builds/${buildId}/downloads/build`,
       appcenterHeaders
     );
 

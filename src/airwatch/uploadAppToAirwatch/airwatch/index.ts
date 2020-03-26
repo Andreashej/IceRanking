@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { getAppDetails, logInfo } from '../../../utils/airwatch';
+import { getAppDetails, logInfo } from '../../../utils';
 import { awAssignSmartgroup } from './awAssignSmartgroup';
 import { awBeginInstall } from './awBeginInstall';
 import { awUploadBlob } from './awUploadBlob';

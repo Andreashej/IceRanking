@@ -1,6 +1,3 @@
-// disable require imports rule because the module needs to be imported using 'require' in order to
-// be able to mock it's functions
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { appendParamsToUrl } from '../../../../services/api';
 import { awBaseUrl, awHeaders, fetchMock } from '../../../../utils';
 import { createAwSmartGroup } from '../createAwSmartGroup';

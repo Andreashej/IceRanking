@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { sync as rimrafSync } from 'rimraf';
-import { downloadLocation, logError, logInfo, logSuccess } from '../../utils/airwatch';
+import { downloadLocation, logError, logInfo, logSuccess } from '../../utils';
 import { uploadToAirwatch } from './airwatch';
 import { uploadToAkamai } from './akamai';
 import { getIPA, getLatestAppcenterBuild } from './appcenter';

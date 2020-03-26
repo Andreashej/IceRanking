@@ -1,5 +1,7 @@
+#!/usr/bin/env node
+
 import { postRequest } from '../../../services/api';
-import { awBaseUrl, awHeaders } from '../../../utils/airwatch';
+import { awBaseUrl, awHeaders } from '../../../utils';
 
 export const awBeginInstall: (
   blobId: number,

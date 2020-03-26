@@ -1,4 +1,6 @@
-import { IAwAppDetails, logInfo } from '../../../utils/airwatch';
+#!/usr/bin/env node
+
+import { IAwAppDetails, logInfo } from '../../../utils';
 import { createAwSmartGroup } from './createAwSmartGroup';
 import { searchAwSmartGroup } from './searchAwSmartGroup';
 

@@ -1,5 +1,7 @@
+#!/usr/bin/env node
+
 import { postRequest } from '../../../services/api';
-import { awBaseUrl, awHeaders, baseAkamaiFileUrl } from '../../../utils/airwatch';
+import { awBaseUrl, awHeaders, baseAkamaiFileUrl } from '../../../utils';
 
 export const awUploadBlob: (fileName: string) => Promise<number> = async (fileName) => {
   try {
