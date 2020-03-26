@@ -2,7 +2,17 @@
 
 A collection of scripts used for RN projects
 
-## INSTALLATION
+* [APPCENTER](#appcenter)
+  * [Configure Build Settings](#configure-build-settings)
+* [FASTLANE](#fastlane) 
+	* [Local Builds](#local-builds)
+* [GITHUB](#github) 
+	* [Repo Dispatch](#repo-dispatch)
+* [AIRWATCH](#airwatch)
+  * [Upload an app to Airwatch](#upload-an-app-to-airwatch)
+* [SENTRY](#sentry)
+
+## Installation
 
 ```bash
 yarn add -E -D @lego/react-native-scripts
@@ -10,14 +20,14 @@ yarn add -E -D @lego/react-native-scripts
 
 ## APPCENTER
 
-### CONFIGURE BUILD SETTINGS
+### Configure Build Settings
 
 Sets the environment variables and other settings in in the build configuration for a branch in appcenter.ms
 
 #### Mandatory environment variables
 
 | Environment Variable      | Description                                                                                                                                                                                                                     | Example                                                                                            |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+|---------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|
 | APPCENTER_API_TOKEN       | information about acquiring an appcenter api token [can be found here](https://docs.microsoft.com/en-us/appcenter/api-docs/), required by appcenter openapi                                                                     | digqwlbdlet8etqwyeq6wyadhsuasudtqw7et                                                              |
 | APPCENTER_APP_NAME        | the name of your app on appcenter, required by appcenter openapi, can be obtained by opening your app in appcenter.ms and extracting it from the url (appcenter.ms /orgs/{{APPCENTER_OWNER_NAME}}/apps/{{APPCENTER_APP_NAME}})  | Goods-Receipt-2.0                                                                                  |
 | APPCENTER_OWNER_NAME      | the name of your team on appcenter, required by appcenter openapi, can be obtained by opening your app in appcenter.ms and extracting it from the url (appcenter.ms /orgs/{{APPCENTER_OWNER_NAME}}/apps/{{APPCENTER_APP_NAME}}) | LEGOUXMP                                                                                           |
@@ -79,7 +89,7 @@ configuration](https://confluence.corp.lego.com/display/UXMP/Git+Workflow) with 
 environments.
 
 |                      | Dev                                | QA                                | Prod                           |
-| -------------------- | ---------------------------------- | --------------------------------- | ------------------------------ |
+|----------------------|------------------------------------|-----------------------------------|--------------------------------|
 | Branches             | develop </br> feature/             | release/ </br> hotfix/            | master                         |
 | Provisioning profile | com.lego.corp.teamName-appName-dev | com.lego.corp.teamName-appName-qa | com.lego.corp.teamName-appName |
 | Env file             | .env.dev                           | .env.qa                           | .env.prod                      |
@@ -111,7 +121,7 @@ Example:
 
 ## FASTLANE
 
-### LOCAL BUILDS
+### Local Builds
 
 Copies the right .env files based on the build type (Debug/Release), environment type (dev/qa/production) and destination (simulator/device) and builds the app.
 
@@ -150,7 +160,7 @@ If you want to target a specific device or simulator, parse the name as an argum
 
 ## GITHUB
 
-### REPO DISPATCH
+### Repo Dispatch
 
 A script to trigger the start of a workflow that runs on `repo_dispatch`
 
@@ -197,16 +207,24 @@ For executing the script run
 react-native-scripts airwatch upload-app
 ```
 
-If you want to retire all previous app versions append `force-publish`:
+By default, the script retires only the latest app version. If you want to retire all previous app versions append `force-publish`:
 
 ```bash
 react-native-scripts airwatch upload-app force-publish
 ```
 
+By default, the script only uploads the app to Airwatch and users can request the install from the
+LEGO App Store. If you want to automatically install the app to the assigned users append
+`push-mode-auto` when running the script:
+
+```bash
+react-native-scripts airwatch upload-app push-mode-auto
+```
+
 #### Mandatory environment variables
 
 | Environment Variable   | Description                                                                                                                                                                                                                     | Example                                          |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+|------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------|
 | APPCENTER_API_TOKEN    | information about acquiring an appcenter api token [can be found here](https://docs.microsoft.com/en-us/appcenter/api-docs/), required by appcenter openapi                                                                     | digqwlbdlet8etqwyeq6wyadhsuasudtqw7et            |
 | APPCENTER_APP_NAME     | the name of your app on appcenter, required by appcenter openapi, can be obtained by opening your app in appcenter.ms and extracting it from the url (appcenter.ms /orgs/{{APPCENTER_OWNER_NAME}}/apps/{{APPCENTER_APP_NAME}})  | Goods-Receipt-2.0                                |
 | APPCENTER_OWNER_NAME   | the name of your team on appcenter, required by appcenter openapi, can be obtained by opening your app in appcenter.ms and extracting it from the url (appcenter.ms /orgs/{{APPCENTER_OWNER_NAME}}/apps/{{APPCENTER_APP_NAME}}) | LEGOUXMP                                         |
