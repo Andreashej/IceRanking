@@ -1,7 +1,7 @@
 import { execSync } from 'child_process';
 import inquirer from 'inquirer';
 import minimist from 'minimist';
-import { printMsg } from '../../utils';
+import { logError } from '../../utils';
 
 let buildConfig: string;
 let environment: string;
@@ -163,7 +163,7 @@ export const localBuild: () => void = () => {
       );
     })
     .catch((err) => {
-      printMsg(['Oops, there was an error', err]);
+      logError(['Oops, there was an error', err]);
     });
 };
 

@@ -62,20 +62,20 @@ export const promiseTimeout: (delay: number) => Promise<void> = (delay) => {
   });
 };
 
-export const logError: (text: string | string[]) => void = (text) => {
-  // eslint-disable-next-line no-console
+/* eslint-disable no-console */
+export const logError: (text: string | string[] | typeof Error) => void = (text) => {
   console.log(chalk.bold.red(text));
 };
-
-export const logSuccess: (text: string | string[]) => void = (text) => {
-  // eslint-disable-next-line no-console
+export const logSuccess: (text: string | string[] | typeof Error) => void = (text) => {
   console.log(chalk.green(text));
 };
-
-export const logInfo: (text: string | string[]) => void = (text) => {
-  // eslint-disable-next-line no-console
+export const logInfo: (text: string | string[] | typeof Error) => void = (text) => {
   console.log(chalk.blue(text));
 };
+export const logWarning: (text: string | string[] | typeof Error) => void = (text) => {
+  console.log(chalk.hex('#e67e22')(text));
+};
+/* eslint-enable no-console */
 
 export interface IAwAppDetails {
   ApplicationName: string;
