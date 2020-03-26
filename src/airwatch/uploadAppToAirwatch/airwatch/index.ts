@@ -28,14 +28,14 @@ export const uploadToAirwatch: () => Promise<void> = async () => {
       previousApps,
       activeApps
     );
-    logInfo('Starting app retirement');
-    await retireApp(activeApps, previousApps);
-
     logInfo('Starting to upload the app to Airwatch');
     const blobId = await awUploadBlob(fileName);
 
     logInfo('Starting installing the app in Airwatch');
     const awAppId = await awBeginInstall(blobId, bundleId, version, appName);
+
+    logInfo('Starting app retirement');
+    await retireApp(activeApps, previousApps);
 
     logInfo('Assigning the smart group to the newly created app');
     await awAssignSmartgroup(awAppId, smartGroupIds);
