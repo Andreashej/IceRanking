@@ -1,3 +1,10 @@
+## [0.11.1](https://github.com/LEGO/react-native-scripts/compare/v0.11.0...v0.11.1) (2020-03-26)
+
+
+### Bug Fixes
+
+* remove 'uploadToGithub' script from Airwatch ([c7e3c3a](https://github.com/LEGO/react-native-scripts/commit/c7e3c3ab0040b7dc59a11aabed85ce593a53702c))
+
 # [0.11.0](https://github.com/LEGO/react-native-scripts/compare/v0.10.2...v0.11.0) (2020-03-26)
 
 
