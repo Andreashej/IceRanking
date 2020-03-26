@@ -1,9 +1,10 @@
+import { FetchMock } from 'jest-fetch-mock';
 import { appendParamsToUrl } from '../../../../services/api';
-import { awBaseUrl, awHeaders, fetchMock } from '../../../../utils';
+import { awBaseUrl, awHeaders } from '../../../../utils';
 import { retireApp } from '../retireApp';
-//disabling the rule because this is not a jest.mock, but mocked data
-// eslint-disable-next-line jest/no-mocks-import
 import { mockAppDetails } from '../__mocks__/awAppDetails';
+
+const fetchMock: FetchMock = global.fetch;
 
 afterEach(() => {
   jest.resetAllMocks();

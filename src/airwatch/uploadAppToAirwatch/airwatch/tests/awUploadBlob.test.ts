@@ -1,6 +1,9 @@
+import { FetchMock } from 'jest-fetch-mock';
 import { appendParamsToUrl } from '../../../../services/api';
-import { awBaseUrl, awHeaders, baseAkamaiFileUrl, fetchMock } from '../../../../utils';
+import { awBaseUrl, awHeaders, baseAkamaiFileUrl } from '../../../../utils';
 import { awUploadBlob } from '../awUploadBlob';
+
+const fetchMock: FetchMock = global.fetch;
 
 afterEach(() => {
   jest.resetAllMocks();

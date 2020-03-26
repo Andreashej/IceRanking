@@ -1,12 +1,14 @@
+import { FetchMock } from 'jest-fetch-mock';
 import { appendParamsToUrl } from '../../../services/api';
 import {
   appcenterAppName,
   appcenterBaseUrl,
   appcenterHeaders,
   appcenterOwner,
-  fetchMock,
 } from '../../../utils';
 import { getLatestAppcenterBuild } from './getLatestAppcenterBuild';
+
+const fetchMock: FetchMock = global.fetch;
 
 const mockUrl = appendParamsToUrl(
   `${appcenterBaseUrl}/${appcenterOwner}/${appcenterAppName}/branches/master/builds`

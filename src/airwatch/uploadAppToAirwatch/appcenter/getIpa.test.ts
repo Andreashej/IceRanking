@@ -1,12 +1,14 @@
+import { FetchMock } from 'jest-fetch-mock';
 import { appendParamsToUrl } from '../../../services/api';
 import {
   appcenterAppName,
   appcenterBaseUrl,
   appcenterHeaders,
   appcenterOwner,
-  fetchMock,
 } from '../../../utils';
 import { getIPA } from './getIpa';
+
+const fetchMock: FetchMock = global.fetch;
 
 const buildId = '1';
 const mockBuildUrl = appendParamsToUrl(

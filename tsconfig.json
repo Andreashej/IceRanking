@@ -16,6 +16,6 @@
     "target": "es5",
     "types": ["jest"]
   },
-  "exclude": ["node_modules", "lib", "jest", "**/*.test.ts"],
+  "exclude": ["node_modules", "lib", "jest", "**/*.test.ts", "**/__mocks__"],
   "include": ["src"]
 }

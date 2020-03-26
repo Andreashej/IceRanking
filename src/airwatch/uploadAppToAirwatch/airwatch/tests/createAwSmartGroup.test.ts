@@ -1,6 +1,9 @@
+import { FetchMock } from 'jest-fetch-mock';
 import { appendParamsToUrl } from '../../../../services/api';
-import { awBaseUrl, awHeaders, fetchMock } from '../../../../utils';
+import { awBaseUrl, awHeaders } from '../../../../utils';
 import { createAwSmartGroup } from '../createAwSmartGroup';
+
+const fetchMock: FetchMock = global.fetch;
 
 const getAwUserGroup = require('../getAwUserGroup');
 

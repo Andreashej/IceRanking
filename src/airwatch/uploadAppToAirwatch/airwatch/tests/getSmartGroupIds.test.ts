@@ -1,6 +1,8 @@
-import { fetchMock } from '../../../../utils';
+import { FetchMock } from 'jest-fetch-mock';
 import { getSmartGroupIds } from '../getSmartGroupIds';
 import { mockAppDetails } from '../__mocks__/awAppDetails';
+
+const fetchMock: FetchMock = global.fetch;
 
 const searchAwSmartGroup = require('../searchAwSmartGroup');
 const createAwSmartGroup = require('../createAwSmartGroup');

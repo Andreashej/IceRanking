@@ -1,5 +1,7 @@
-import { fetchMock } from '../utils';
+import { FetchMock } from 'jest-fetch-mock';
 import { appendParamsToUrl, getRequest, postRequest } from './api';
+
+const fetchMock: FetchMock = global.fetch;
 
 const postTestUrl = 'https://some.url';
 const getTestUrl = 'https://some.url/search';

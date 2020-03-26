@@ -1,6 +1,9 @@
+import { FetchMock } from 'jest-fetch-mock';
 import { appendParamsToUrl } from '../../../../services/api';
-import { awBaseUrl, awHeaders, fetchMock } from '../../../../utils';
+import { awBaseUrl, awHeaders } from '../../../../utils';
 import { searchAwSmartGroup } from '../searchAwSmartGroup';
+
+const fetchMock: FetchMock = global.fetch;
 
 afterEach(() => {
   jest.resetAllMocks();
