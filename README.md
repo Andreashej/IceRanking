@@ -2,7 +2,17 @@
 
 A collection of scripts used for RN projects
 
-## INSTALLATION
+* [APPCENTER](#appcenter)
+  * [Configure Build Settings](#configure-build-settings)
+* [FASTLANE](#fastlane) 
+	* [Local Builds](#local-builds)
+* [GITHUB](#github) 
+	* [Repo Dispatch](#repo-dispatch)
+* [AIRWATCH](#airwatch)
+  * [Upload an app to Airwatch](#upload-an-app-to-airwatch)
+* [SENTRY](#sentry)
+
+## Installation
 
 ```bash
 yarn add -E -D @lego/react-native-scripts
@@ -10,14 +20,14 @@ yarn add -E -D @lego/react-native-scripts
 
 ## APPCENTER
 
-### CONFIGURE BUILD SETTINGS
+### Configure Build Settings
 
 Sets the environment variables and other settings in in the build configuration for a branch in appcenter.ms
 
 #### Mandatory environment variables
 
 | Environment Variable      | Description                                                                                                                                                                                                                     | Example                                                                                            |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+|---------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|
 | APPCENTER_API_TOKEN       | information about acquiring an appcenter api token [can be found here](https://docs.microsoft.com/en-us/appcenter/api-docs/), required by appcenter openapi                                                                     | digqwlbdlet8etqwyeq6wyadhsuasudtqw7et                                                              |
 | APPCENTER_APP_NAME        | the name of your app on appcenter, required by appcenter openapi, can be obtained by opening your app in appcenter.ms and extracting it from the url (appcenter.ms /orgs/{{APPCENTER_OWNER_NAME}}/apps/{{APPCENTER_APP_NAME}})  | Goods-Receipt-2.0                                                                                  |
 | APPCENTER_OWNER_NAME      | the name of your team on appcenter, required by appcenter openapi, can be obtained by opening your app in appcenter.ms and extracting it from the url (appcenter.ms /orgs/{{APPCENTER_OWNER_NAME}}/apps/{{APPCENTER_APP_NAME}}) | LEGOUXMP                                                                                           |
@@ -79,7 +89,7 @@ configuration](https://confluence.corp.lego.com/display/UXMP/Git+Workflow) with 
 environments.
 
 |                      | Dev                                | QA                                | Prod                           |
-| -------------------- | ---------------------------------- | --------------------------------- | ------------------------------ |
+|----------------------|------------------------------------|-----------------------------------|--------------------------------|
 | Branches             | develop </br> feature/             | release/ </br> hotfix/            | master                         |
 | Provisioning profile | com.lego.corp.teamName-appName-dev | com.lego.corp.teamName-appName-qa | com.lego.corp.teamName-appName |
 | Env file             | .env.dev                           | .env.qa                           | .env.prod                      |
@@ -111,7 +121,7 @@ Example:
 
 ## FASTLANE
 
-### LOCAL BUILDS
+### Local Builds
 
 Copies the right .env files based on the build type (Debug/Release), environment type (dev/qa/production) and destination (simulator/device) and builds the app.
 
@@ -147,6 +157,84 @@ If you want to target a specific device or simulator, parse the name as an argum
 "ios-device-dev":  "yarn ios-build -b Debug -e dev -d device -t iPhone",
 "ios-simulator-dev":  "yarn ios-build -b Debug -e dev -d simulator -t 'iPhone Xʀ'",
 ```
+
+## GITHUB
+
+### Repo Dispatch
+
+A script to trigger the start of a workflow that runs on `repo_dispatch`
+
+#### Usage
+
+Create a Github workflow file and have that workflow run on repository_dispatch:
+
+```yaml
+on:
+  repository_dispatch:
+    types: [eventName]
+```
+
+Trigger the workflow run by executing:
+
+```bash
+react-native-scripts github repo-dispatch eventName
+```
+
+## AIRWATCH
+
+### Upload an app to Airwatch
+
+A script that takes the `.ipa` file from Appcenter, uploads it to Akamai CDN and then creates a new
+app in Airwatch.
+
+#### Usage
+
+If there is at least one previous version of the app, it retires that version and
+creates a new version, assigning it to the same smart groups. There is also an option to retire all
+the previous versions of the app by passing `force-publish` as the last argument when executing the
+script.
+
+If there are no previous versions of
+the app, it creates a smart group for you, using the same name as the AD group name provided to the
+script in the environment variables. This scenario requires to have an AD assignment group created for your app
+and linked in the Airwatch Console ([more info here](https://confluence.corp.lego.com/display/UXMP/Airwatch+Group+Assignment)).
+
+> The script must run on a machine connected to a LEGO internal network
+
+For executing the script run
+
+```bash
+react-native-scripts airwatch upload-app
+```
+
+By default, the script retires only the latest app version. If you want to retire all previous app versions append `force-publish`:
+
+```bash
+react-native-scripts airwatch upload-app force-publish
+```
+
+By default, the script only uploads the app to Airwatch and users can request the install from the
+LEGO App Store. If you want to automatically install the app to the assigned users append
+`push-mode-auto` when running the script:
+
+```bash
+react-native-scripts airwatch upload-app push-mode-auto
+```
+
+#### Mandatory environment variables
+
+| Environment Variable   | Description                                                                                                                                                                                                                     | Example                                          |
+|------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------|
+| APPCENTER_API_TOKEN    | information about acquiring an appcenter api token [can be found here](https://docs.microsoft.com/en-us/appcenter/api-docs/), required by appcenter openapi                                                                     | digqwlbdlet8etqwyeq6wyadhsuasudtqw7et            |
+| APPCENTER_APP_NAME     | the name of your app on appcenter, required by appcenter openapi, can be obtained by opening your app in appcenter.ms and extracting it from the url (appcenter.ms /orgs/{{APPCENTER_OWNER_NAME}}/apps/{{APPCENTER_APP_NAME}})  | Goods-Receipt-2.0                                |
+| APPCENTER_OWNER_NAME   | the name of your team on appcenter, required by appcenter openapi, can be obtained by opening your app in appcenter.ms and extracting it from the url (appcenter.ms /orgs/{{APPCENTER_OWNER_NAME}}/apps/{{APPCENTER_APP_NAME}}) | LEGOUXMP                                         |
+| GH_TOKEN               | A personal access token generated in GitHub with at least `read:packages` permissions. [More information here](https://help.github.com/en/github/managing-packages-with-github-packages/about-github-packages#about-tokens)     | 234yhdkjfhsdjf7ewr6wehrjkjhsduf                  |
+| AD_GROUP               | the name of the AD distribution group to be used with the app. [More info here](https://confluence.corp.lego.com/display/UXMP/Airwatch+Group+Assignment)                                                                        | g1.aw.sw_published_appName                       |
+| AW_TENANT_CODE         | the tenant code for publishing to Airwatch                                                                                                                                                                                      | 1ASDJH123H3148                                   |
+| AW_USERNAME            | the username used for Airwatch login                                                                                                                                                                                            | LEGO\dkusername                                  |
+| AW_PWD                 | the password used to authenticate the above username in Airwatch                                                                                                                                                                | aVerySecurePassword                              |
+| PRIVATE_KEY_PASSPHRASE | the private key passphrase for accessing Akamai CDN                                                                                                                                                                             | mySecurePassphrase                               |
+| PRIVATE_KEY            | the contents of the private key file used to access Akamai CDN. It needs to be written on a single line, with `\n` as line separator                                                                                            | "-----BEGIN RSA PRIVATE KEY-----\nProc-Type:..." |
 
 ## SENTRY
 

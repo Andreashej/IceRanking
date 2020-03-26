@@ -4,10 +4,11 @@ import { cosmiconfig } from 'cosmiconfig';
 import flattenDeep from 'lodash.flattendeep';
 import minimist from 'minimist';
 import { join } from 'path';
+import { uploadAppToAirwatch } from './airwatch';
 import { setBuildConfiguration } from './appcenter';
 import { localBuild } from './fastlane';
 import { repoDispatch } from './github/repoDispatch';
-import { currentBranchIsWhitelisted, printMsg } from './utils';
+import { currentBranchIsWhitelisted, logError, logInfo, logWarning } from './utils';
 
 const args = minimist(process.argv.slice(2));
 
@@ -45,7 +46,7 @@ const getCustomConfig: () => Promise<{
   try {
     const configResult = await configExplorer.search(moduleName);
     if (!configResult) {
-      printMsg(['no custom configuration found, using default config']);
+      logInfo('no custom configuration found, using default config');
     }
     if (configResult?.config?.branchConfig) {
       branchConfig = configResult.config.branchConfig;
@@ -79,7 +80,7 @@ const execAppcenter: () => Promise<void> = async () => {
     switch (action) {
       case 'configure-build-settings':
         if (!env) {
-          printMsg(['no environment matches your current branch']);
+          logError('no environment matches your current branch');
           break;
         }
         setBuildConfiguration(env);
@@ -90,17 +91,17 @@ const execAppcenter: () => Promise<void> = async () => {
             stdio: 'inherit',
           });
         } else {
-          printMsg([
-            'We only want whitelisted git flow branches building in appcenter. For more information regarding the default branch configuration visit https://confluence.corp.lego.com/display/UXMP/Git+Workflow. You can also create a custom configuration file (see the documentation at https://github.com/LEGO/react-native-scripts)',
-          ]);
+          logWarning(
+            'We only want whitelisted git flow branches building in appcenter. For more information regarding the default branch configuration visit https://confluence.corp.lego.com/display/UXMP/Git+Workflow. You can also create a custom configuration file (see the documentation at https://github.com/LEGO/react-native-scripts)'
+          );
         }
 
         break;
       default:
-        printMsg(['no action found in appcenter that matches your arguments']);
+        logError('no action found in appcenter that matches your arguments');
     }
   } catch (error) {
-    printMsg([error]);
+    logError(error);
     throw error;
   }
 };
@@ -116,13 +117,13 @@ export const main: () => void = () => {
           localBuild();
           break;
         default:
-          printMsg(['no action found in fastlane that matches your arguments']);
+          logError('no action found in fastlane that matches your arguments');
       }
       break;
     case 'sentry':
       switch (action) {
         default:
-          printMsg(['no action found in sentry that matches your arguments']);
+          logError(`"${action}" not available for sentry`);
       }
       break;
     case 'github':
@@ -131,10 +132,18 @@ export const main: () => void = () => {
           repoDispatch(ghDispatchAction);
           break;
         default:
-          printMsg([`"${action}" not available for github`]);
+          logError(`"${action}" not available for github`);
+      }
+      break;
+    case 'airwatch':
+      switch (action) {
+        case 'upload-app':
+          uploadAppToAirwatch();
+          break;
+        default:
       }
       break;
     default:
-      printMsg(['no valid target found, pass using appcenter | fastlane']);
+      logError(`${target} not found, valid options are appcenter, fastlane, github or airwatch`);
   }
 };

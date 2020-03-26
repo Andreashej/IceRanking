@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import fs from 'fs';
 import { EnvType } from '../../main';
-import { printMsg } from '../../utils';
+import { logError } from '../../utils';
 import { decryptCerts, setBranchConfig } from './functions';
 
 const appcenterAppName = process.env.APPCENTER_APP_NAME;
@@ -30,11 +30,11 @@ export const setBuildConfiguration: (env: EnvType) => Promise<void> = async (env
           'PUT'
         );
       } catch (error) {
-        printMsg(['error after PUT', error]);
+        logError(['error after PUT', error]);
         throw error;
       }
     } else {
-      printMsg(['An error occurred: ', err]);
+      logError(['An error occurred: ', err]);
       throw err;
     }
   }
