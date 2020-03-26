@@ -1,3 +1,18 @@
+# [0.11.0](https://github.com/LEGO/react-native-scripts/compare/v0.10.2...v0.11.0) (2020-03-26)
+
+
+### Bug Fixes
+
+* fix fetchMock imports ([5ba7221](https://github.com/LEGO/react-native-scripts/commit/5ba72217d8d1b385872ace4bc552a4687c8ff792))
+* minor changes and documentation foor Airwatch ([63a42dc](https://github.com/LEGO/react-native-scripts/commit/63a42dcd69313463405a8e345f3d27dfccdce7b7))
+* replace logging messages ([d74821d](https://github.com/LEGO/react-native-scripts/commit/d74821d48ee483764dbc472a3869890c3063f512))
+* upload app before retiring previous apps ([355879e](https://github.com/LEGO/react-native-scripts/commit/355879e97aba85fd5b62f25360e13fd3765e5b3c))
+
+
+### Features
+
+* add script for uploading app to airwatch ([bdf0e9c](https://github.com/LEGO/react-native-scripts/commit/bdf0e9cc54b1ae854ef31f496b4ee6406c89fb15))
+
 ## [0.10.2](https://github.com/LEGO/react-native-scripts/compare/v0.10.1...v0.10.2) (2020-03-18)
 
 
