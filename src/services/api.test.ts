@@ -32,7 +32,10 @@ describe('appendParamsToUrl', () => {
 
 describe('post request', () => {
   it('returns data if the request is successful', async () => {
-    fetchMock.mockResponseOnce(JSON.stringify({ data: { mockData: 'test' } }));
+    fetchMock.mockResponseOnce(JSON.stringify({ data: { mockData: 'test' } }), {
+      status: 200,
+      headers: { 'content-type': 'application/json' },
+    });
     const fetchUrl = appendParamsToUrl(postTestUrl);
     const header = await postRequest(fetchUrl, testHeaders, testBody);
     expect(header.data.mockData).toStrictEqual('test');
@@ -63,7 +66,10 @@ describe('post request', () => {
 
 describe('get request', () => {
   it('returns data if the request is successful', async () => {
-    fetchMock.mockResponseOnce(JSON.stringify({ data: { mockData: 'test' } }));
+    fetchMock.mockResponseOnce(JSON.stringify({ data: { mockData: 'test' } }), {
+      status: 200,
+      headers: { 'content-type': 'application/json' },
+    });
     const mockFetchUrl = appendParamsToUrl(getTestUrl, testParams);
     const header = await getRequest(getTestUrl, testHeaders, testParams);
     expect(header.data.mockData).toStrictEqual('test');

@@ -16,7 +16,10 @@ const mockParams = {
 };
 
 it('returns the app details if the request is successful', async () => {
-  fetchMock.mockResponseOnce(JSON.stringify({ Application: [{ ApplicationName: 'appName' }] }));
+  fetchMock.mockResponseOnce(JSON.stringify({ Application: [{ ApplicationName: 'appName' }] }), {
+    status: 200,
+    headers: { 'content-type': 'application/json' },
+  });
   const mockUrl = appendParamsToUrl(`${awBaseUrl}/mam/apps/search`, mockParams);
   const data = await getAppDetailsFromAW(bundleId);
   expect(data[0].ApplicationName).toStrictEqual('appName');

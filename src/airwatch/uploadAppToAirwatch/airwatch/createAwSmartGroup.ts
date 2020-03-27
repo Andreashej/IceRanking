@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { postRequest } from '../../../services/api';
-import { awBaseUrl, awHeaders, logInfo } from '../../../utils';
+import { awBaseUrl, awHeaders, awOrganizationGroupId, logInfo } from '../../../utils';
 import { getAwUserGroup } from './getAwUserGroup';
 
 export const createAwSmartGroup: (adGroupName: string) => Promise<number> = async (adGroupName) => {
@@ -16,7 +16,7 @@ export const createAwSmartGroup: (adGroupName: string) => Promise<number> = asyn
 
     const body = {
       Name: `AD - ${adGroupName}`,
-      ManagedByOrganizationGroupId: 593,
+      ManagedByOrganizationGroupId: awOrganizationGroupId,
       UserGroups: [
         {
           Id: awUserGroup.id,

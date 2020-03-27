@@ -11,10 +11,7 @@ const retireAppById: (appId: number) => Promise<void> = async (appId) => {
   }
 };
 
-export const retireApp: (
-  activeApps: IAwAppDetails[],
-  previousApps: IAwAppDetails[]
-) => Promise<void> = async (activeApps, previousApps) => {
+export const retireApp: (activeApps: IAwAppDetails[]) => Promise<void> = async (activeApps) => {
   try {
     const forcePublish = process.argv.some((arg) => arg === 'force-publish');
     if (!forcePublish) {
@@ -23,7 +20,12 @@ export const retireApp: (
           'There are more active versions of the app. Retiring the latest version. If you want to retire all previous versions you can do that manually or by passing "force-publish" when you run this script'
         );
       }
-      const latestAppVersionId = previousApps[previousApps.length - 1].Id.Value;
+      if (activeApps.length === 0) {
+        logInfo('There are no active versions of the app in Airwatch');
+
+        return;
+      }
+      const latestAppVersionId = activeApps[activeApps.length - 1].Id.Value;
       await retireAppById(latestAppVersionId);
     } else {
       const retirePromises: Promise<void>[] = [];

@@ -8,6 +8,22 @@ import {
   appcenterOwner,
 } from '../../../utils';
 
+export interface IBuildInfo {
+  id: number;
+  buildNumber: string;
+  queueTime: string;
+  startTime: string;
+  finishTime: string;
+  lastChangedDate: string;
+  status: string;
+  result: string;
+  reason: string;
+  sourceBranch: string;
+  sourceVersion: string;
+  tags: string[];
+  properties: object;
+}
+
 export const getLatestAppcenterBuild: () => Promise<string> = async () => {
   try {
     const data = await getRequest(
@@ -15,7 +31,11 @@ export const getLatestAppcenterBuild: () => Promise<string> = async () => {
       appcenterHeaders
     );
 
-    return `${data[0].id}`;
+    const lastSucceededBuild = data.filter(
+      (build: IBuildInfo) => build.status === 'completed' && build.result === 'succeeded'
+    )[0];
+
+    return `${lastSucceededBuild.id}`;
   } catch (error) {
     throw error;
   }

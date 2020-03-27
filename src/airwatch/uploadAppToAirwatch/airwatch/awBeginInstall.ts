@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { postRequest } from '../../../services/api';
-import { awBaseUrl, awHeaders } from '../../../utils';
+import { awBaseUrl, awHeaders, awOrganizationGroupId } from '../../../utils';
 
 export const awBeginInstall: (
   blobId: number,
@@ -21,7 +21,7 @@ export const awBeginInstall: (
       DeviceType: '2',
       BundleId: bundleId,
       ActualFileVersion: version,
-      LocationGroupId: 593,
+      LocationGroupId: awOrganizationGroupId,
       PushMode: pushMode,
       UploadViaLink: true,
       SupportedModels: {

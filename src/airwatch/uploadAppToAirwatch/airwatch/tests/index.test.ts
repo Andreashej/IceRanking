@@ -31,17 +31,32 @@ it('retires all the previous apps except for the one that was recently uploaded'
 
   fetchMock.mockResponses(
     // getAppDetailsFromAW
-    [JSON.stringify({ Application: previousApps }), { status: 200 }],
+    [
+      JSON.stringify({ Application: previousApps }),
+      { status: 200, headers: { 'content-type': 'application/json' } },
+    ],
     // awUploadBlob
-    [JSON.stringify({ Value: 1 }), { status: 200 }],
+    [
+      JSON.stringify({ Value: 1 }),
+      { status: 200, headers: { 'content-type': 'application/json' } },
+    ],
     // awBeginInstall
-    [JSON.stringify({ Id: { Value: 10 } }), { status: 200 }],
+    [
+      JSON.stringify({ Id: { Value: 10 } }),
+      { status: 200, headers: { 'content-type': 'application/json' } },
+    ],
     // retireApp
-    [JSON.stringify({ ok: true }), { status: 200 }],
+    [
+      JSON.stringify({ ok: true }),
+      { status: 200, headers: { 'content-type': 'application/json' } },
+    ],
     // retireApp
-    [JSON.stringify({ ok: true }), { status: 200 }],
+    [
+      JSON.stringify({ ok: true }),
+      { status: 200, headers: { 'content-type': 'application/json' } },
+    ],
     // assignSmartGroup
-    [JSON.stringify({ ok: true }), { status: 200 }]
+    [JSON.stringify({ ok: true }), { status: 200, headers: { 'content-type': 'application/json' } }]
   );
 
   process.argv.push('force-publish');

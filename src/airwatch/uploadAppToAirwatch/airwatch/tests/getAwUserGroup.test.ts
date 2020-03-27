@@ -16,7 +16,10 @@ const mockParams = {
 };
 
 it('returns the user group if the request is successful', async () => {
-  fetchMock.mockResponseOnce(JSON.stringify({ ResultSet: [{ groupName: 'mockGroupName' }] }));
+  fetchMock.mockResponseOnce(JSON.stringify({ ResultSet: [{ groupName: 'mockGroupName' }] }), {
+    status: 200,
+    headers: { 'content-type': 'application/json' },
+  });
   const mockUrl = appendParamsToUrl(`${awBaseUrl}/v1/system/usergroups/search`, mockParams);
   const data = await getAwUserGroup(adGroupName);
   expect(data.groupName).toStrictEqual('mockGroupName');
