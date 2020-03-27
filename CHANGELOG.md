@@ -1,3 +1,10 @@
+## [0.11.2](https://github.com/LEGO/react-native-scripts/compare/v0.11.1...v0.11.2) (2020-03-27)
+
+
+### Bug Fixes
+
+* minor fixes for the airwatch module ([89409ad](https://github.com/LEGO/react-native-scripts/commit/89409adf5d0990515c67966c3fcb1161d51c1ffa))
+
 ## [0.11.1](https://github.com/LEGO/react-native-scripts/compare/v0.11.0...v0.11.1) (2020-03-26)
 
 
