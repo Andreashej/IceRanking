@@ -202,10 +202,6 @@ export const setBranchConfig: (
       },
       trigger: 'manual',
     };
-    console.log('appcenter body: ', body);
-    console.log('appcenter url: ', uri);
-    console.log('appcenter method: ', method);
-    console.log('appcenter headers: ', headers);
 
     fetch(uri, {
       body: JSON.stringify(body),
