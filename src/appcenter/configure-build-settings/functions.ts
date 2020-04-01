@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
 
 import { execSync } from 'child_process';
 import dotenv from 'dotenv';
@@ -201,6 +202,10 @@ export const setBranchConfig: (
       },
       trigger: 'manual',
     };
+    console.log('appcenter body: ', body);
+    console.log('appcenter url: ', uri);
+    console.log('appcenter method: ', method);
+    console.log('appcenter headers: ', headers);
 
     fetch(uri, {
       body: JSON.stringify(body),
@@ -215,11 +220,13 @@ export const setBranchConfig: (
           reject(409);
         } else {
           res.text().then((text: string) => {
+            console.log('res.text: ', text);
             reject(text);
           });
         }
       })
       .catch((err) => {
+        console.log('reject err', err);
         reject(err);
       });
   });
