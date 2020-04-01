@@ -1,3 +1,10 @@
+## [0.11.4](https://github.com/LEGO/react-native-scripts/compare/v0.11.3...v0.11.4) (2020-04-01)
+
+
+### Bug Fixes
+
+* remove debug logs ([e670983](https://github.com/LEGO/react-native-scripts/commit/e67098379fa2f0dc4d479f3d7ac4db82e97571df))
+
 ## [0.11.3](https://github.com/LEGO/react-native-scripts/compare/v0.11.2...v0.11.3) (2020-04-01)
 
 
