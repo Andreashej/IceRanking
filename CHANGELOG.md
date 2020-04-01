@@ -1,3 +1,10 @@
+## [0.11.3](https://github.com/LEGO/react-native-scripts/compare/v0.11.2...v0.11.3) (2020-04-01)
+
+
+### Bug Fixes
+
+* debug appcenter build config ([84fe3de](https://github.com/LEGO/react-native-scripts/commit/84fe3de75d17de10a0213d7a21571bdba80b7556))
+
 ## [0.11.2](https://github.com/LEGO/react-native-scripts/compare/v0.11.1...v0.11.2) (2020-03-27)
 
 
