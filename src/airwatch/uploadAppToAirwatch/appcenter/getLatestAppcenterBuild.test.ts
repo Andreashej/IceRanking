@@ -20,9 +20,19 @@ afterEach(() => {
 });
 
 it('returns the build id if the request succeeds', async () => {
-  fetchMock.mockResponseOnce(JSON.stringify([{ id: 1 }]));
+  fetchMock.mockResponseOnce(
+    JSON.stringify([
+      { id: 1, status: 'completed', result: 'failed' },
+      { id: 2, status: 'inProgress' },
+      { id: 3, status: 'completed', result: 'succeeded' },
+    ]),
+    {
+      status: 200,
+      headers: { 'content-type': 'application/json' },
+    }
+  );
   const data = await getLatestAppcenterBuild();
-  expect(data).toStrictEqual('1');
+  expect(data).toStrictEqual('3');
   expect(fetchMock.mock.calls[0]).toEqual([
     mockUrl,
     {

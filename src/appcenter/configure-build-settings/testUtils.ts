@@ -25,6 +25,11 @@ export const expectedBody = JSON.stringify({
       name: 'APPCENTER_API_TOKEN',
       value: 'appcenterApiToken',
     },
+    {
+      isSecret: true,
+      name: 'SENTRY_AUTH_TOKEN',
+      value: 'sentryAuthToken',
+    },
   ],
   signed: true,
   toolsets: {

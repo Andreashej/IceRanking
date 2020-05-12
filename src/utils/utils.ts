@@ -15,6 +15,7 @@ export const downloadLocation = pathResolve(__dirname, '../../downloads');
 export const baseAkamaiFileUrl = 'https://it-mac-live-s.legocdn.com/ios';
 export const privateKeyLocation = pathResolve(__dirname, '../../privateKey_rsa');
 export const awBaseUrl = 'https://awconsole.corp.lego.com/API';
+export const awOrganizationGroupId = process.env.AW_ORGANIZATION_GROUP_ID || 593;
 
 export const appcenterHeaders = {
   Accept: 'application/json',
@@ -29,6 +30,7 @@ export const awHeaders = {
   'aw-tenant-code': process.env.AW_TENANT_CODE || '',
   Accept: 'application/json',
   Authorization: awAuth,
+  'Content-Type': 'application/json',
 };
 
 export const getAppDetails: () => Promise<{

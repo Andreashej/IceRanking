@@ -14,9 +14,12 @@ afterEach(() => {
 const appId = 1;
 
 it('retires the app if the request succeeds', async () => {
-  fetchMock.mockResponse(JSON.stringify({ Application: [{ ApplicationName: 'appName' }] }));
+  fetchMock.mockResponse(JSON.stringify({ Application: [{ ApplicationName: 'appName' }] }), {
+    status: 200,
+    headers: { 'content-type': 'application/json' },
+  });
   const mockUrl = appendParamsToUrl(`${awBaseUrl}/mam/apps/internal/${appId}/retire`);
-  await retireApp([mockAppDetails], [mockAppDetails]);
+  await retireApp([mockAppDetails]);
   expect(fetchMock.mock.calls[0]).toEqual([
     mockUrl,
     {
@@ -30,7 +33,7 @@ it('throws if the request fails', async () => {
   fetchMock.mockReject(new Error('test'));
   const mockUrl = appendParamsToUrl(`${awBaseUrl}/mam/apps/internal/${appId}/retire`);
 
-  await expect(retireApp([mockAppDetails], [mockAppDetails])).rejects.toThrow('test');
+  await expect(retireApp([mockAppDetails])).rejects.toThrow('test');
 
   expect(fetchMock.mock.calls[0]).toEqual([
     mockUrl,

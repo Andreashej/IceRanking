@@ -1,6 +1,6 @@
 import { FetchMock } from 'jest-fetch-mock';
 import { appendParamsToUrl } from '../../../../services/api';
-import { awBaseUrl, awHeaders } from '../../../../utils';
+import { awBaseUrl, awHeaders, awOrganizationGroupId } from '../../../../utils';
 import { createAwSmartGroup } from '../createAwSmartGroup';
 
 const fetchMock: FetchMock = global.fetch;
@@ -19,7 +19,7 @@ const adGroupName = 'adGroupName';
 
 const mockBody = {
   Name: `AD - ${adGroupName}`,
-  ManagedByOrganizationGroupId: 593,
+  ManagedByOrganizationGroupId: awOrganizationGroupId,
   UserGroups: [
     {
       Id: 10,
@@ -28,7 +28,10 @@ const mockBody = {
 };
 
 it('returns the smart group id if the request succeeds', async () => {
-  fetchMock.mockResponse(JSON.stringify({ Value: 1 }));
+  fetchMock.mockResponse(JSON.stringify({ Value: 1 }), {
+    status: 200,
+    headers: { 'content-type': 'application/json' },
+  });
   const mockUrl = appendParamsToUrl(`${awBaseUrl}/mdm/smartgroups`);
   const data = await createAwSmartGroup(adGroupName);
   expect(data).toStrictEqual(1);

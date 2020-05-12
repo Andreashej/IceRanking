@@ -1,3 +1,39 @@
+## [0.11.3](https://github.com/LEGO/react-native-scripts/compare/v0.11.2...v0.11.3) (2020-04-01)
+
+
+### Bug Fixes
+
+* debug appcenter build config ([84fe3de](https://github.com/LEGO/react-native-scripts/commit/84fe3de75d17de10a0213d7a21571bdba80b7556))
+
+## [0.11.2](https://github.com/LEGO/react-native-scripts/compare/v0.11.1...v0.11.2) (2020-03-27)
+
+
+### Bug Fixes
+
+* minor fixes for the airwatch module ([89409ad](https://github.com/LEGO/react-native-scripts/commit/89409adf5d0990515c67966c3fcb1161d51c1ffa))
+
+## [0.11.1](https://github.com/LEGO/react-native-scripts/compare/v0.11.0...v0.11.1) (2020-03-26)
+
+
+### Bug Fixes
+
+* remove 'uploadToGithub' script from Airwatch ([c7e3c3a](https://github.com/LEGO/react-native-scripts/commit/c7e3c3ab0040b7dc59a11aabed85ce593a53702c))
+
+# [0.11.0](https://github.com/LEGO/react-native-scripts/compare/v0.10.2...v0.11.0) (2020-03-26)
+
+
+### Bug Fixes
+
+* fix fetchMock imports ([5ba7221](https://github.com/LEGO/react-native-scripts/commit/5ba72217d8d1b385872ace4bc552a4687c8ff792))
+* minor changes and documentation foor Airwatch ([63a42dc](https://github.com/LEGO/react-native-scripts/commit/63a42dcd69313463405a8e345f3d27dfccdce7b7))
+* replace logging messages ([d74821d](https://github.com/LEGO/react-native-scripts/commit/d74821d48ee483764dbc472a3869890c3063f512))
+* upload app before retiring previous apps ([355879e](https://github.com/LEGO/react-native-scripts/commit/355879e97aba85fd5b62f25360e13fd3765e5b3c))
+
+
+### Features
+
+* add script for uploading app to airwatch ([bdf0e9c](https://github.com/LEGO/react-native-scripts/commit/bdf0e9cc54b1ae854ef31f496b4ee6406c89fb15))
+
 ## [0.10.2](https://github.com/LEGO/react-native-scripts/compare/v0.10.1...v0.10.2) (2020-03-18)
 
 

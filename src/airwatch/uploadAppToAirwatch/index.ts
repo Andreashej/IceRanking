@@ -5,7 +5,6 @@ import { downloadLocation, logError, logInfo, logSuccess } from '../../utils';
 import { uploadToAirwatch } from './airwatch';
 import { uploadToAkamai } from './akamai';
 import { getIPA, getLatestAppcenterBuild } from './appcenter';
-import { uploadToGithub } from './github';
 
 export const uploadAppToAirwatch: () => Promise<void> = async () => {
   try {
@@ -14,9 +13,9 @@ export const uploadAppToAirwatch: () => Promise<void> = async () => {
     logInfo(`Downloading .ipa file for build id ${buildId}`);
     await getIPA(buildId);
     logSuccess('.ipa file downloaded successfully');
-    logInfo('Uploading .ipa file to the latest Github release assets');
-    await uploadToGithub();
-    logSuccess('Github upload successful');
+    // logInfo('Uploading .ipa file to the latest Github release assets');
+    // await uploadToGithub();
+    // logSuccess('Github upload successful');
     logInfo('Starting the upload to Akamai CDN');
     await uploadToAkamai();
     logSuccess('The file is successfully uploaded to Akamai CDN');

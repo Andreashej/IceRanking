@@ -77,7 +77,14 @@ export const postRequest: (
 
     fetch(url, fetchParams)
       .then(handleApiErrors)
-      .then((res) => res.json())
+      .then((res) => {
+        const contentType = res.headers.get('content-type');
+        if (!contentType) {
+          return resolve();
+        }
+
+        return res.json();
+      })
       .then((data) => resolve(data))
       .catch((err) => reject(err));
   });

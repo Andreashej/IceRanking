@@ -45,7 +45,8 @@ export const uploadToAkamai: () => Promise<void> = () => {
               {
                 host: 'legomac.upload.akamai.com',
                 username: 'sshacs',
-                path: `/439410/ios`,
+                path: `./`,
+                // path: `/439410/ios`,
                 //IMPORTANT: use node 8.11.3
                 privateKey: readFileSync(privateKeyLocation),
                 passphrase: PRIVATE_KEY_PASSPHRASE,

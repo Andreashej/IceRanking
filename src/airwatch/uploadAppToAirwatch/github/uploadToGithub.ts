@@ -4,12 +4,12 @@ import { readFileSync } from 'fs';
 import { getRequest, postRequest } from '../../../services/api';
 import { downloadLocation, getAppDetails, logInfo } from '../../../utils';
 
-const { APP_NAME, GH_TOKEN } = process.env;
-if (!APP_NAME || !GH_TOKEN) {
+const { GITHUB_REPOSITORY, GH_TOKEN } = process.env;
+if (!GITHUB_REPOSITORY || !GH_TOKEN) {
   throw new Error(`missing environment variables`);
 }
 
-const ghApiBaseUrl = `https://api.github.com/repos/LEGO/${APP_NAME}`;
+const ghApiBaseUrl = `https://api.github.com/repos/${GITHUB_REPOSITORY}`;
 export const uploadToGithub: () => Promise<void> = async () => {
   try {
     const { fileName } = await getAppDetails();

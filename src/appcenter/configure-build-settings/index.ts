@@ -6,7 +6,6 @@ import { decryptCerts, setBranchConfig } from './functions';
 
 const appcenterAppName = process.env.APPCENTER_APP_NAME;
 
-// eslint-disable-next-line consistent-return
 export const setBuildConfiguration: (env: EnvType) => Promise<void> = async (env) => {
   let certEncoded;
   let ppEncoded;

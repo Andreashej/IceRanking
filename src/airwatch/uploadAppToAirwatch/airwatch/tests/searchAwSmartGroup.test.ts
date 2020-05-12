@@ -17,7 +17,10 @@ const mockParams = {
 };
 
 it('returns the smart group id if the request is successful', async () => {
-  fetchMock.mockResponseOnce(JSON.stringify({ SmartGroups: [{ SmartGroupID: 1 }] }));
+  fetchMock.mockResponseOnce(JSON.stringify({ SmartGroups: [{ SmartGroupID: 1 }] }), {
+    status: 200,
+    headers: { 'content-type': 'application/json' },
+  });
   const mockUrl = appendParamsToUrl(`${awBaseUrl}/mdm/smartgroups/search`, mockParams);
   const data = await searchAwSmartGroup(adGroupName);
   expect(data).toStrictEqual(1);
