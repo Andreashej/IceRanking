@@ -26,6 +26,7 @@ interface IEnvVars {
   GH_TOKEN?: string;
   PROJECT_OR_WORKSPACE_PATH?: string;
   XCODE_SCHEME_NAME?: string;
+  SENTRY_AUTH_TOKEN?: string;
 }
 
 interface IBodyEnvVars {
@@ -53,6 +54,7 @@ const envVars: IEnvVars = {
   MATCH_PASSWORD: process.env.MATCH_PASSWORD,
   PROJECT_OR_WORKSPACE_PATH: process.env.PROJECT_OR_WORKSPACE_PATH,
   XCODE_SCHEME_NAME: process.env.XCODE_SCHEME_NAME,
+  SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
 };
 
 const fileExists: (fileName: string) => boolean = (fileName) => {
@@ -111,6 +113,7 @@ export const setBranchConfig: (
       XCODE_SCHEME_NAME,
       GH_TOKEN,
       BUNDLE_GIT__COM,
+      SENTRY_AUTH_TOKEN,
     } = envVars;
 
     const encodedBranchName = encodeURIComponent(GITHUB_REF);
@@ -155,6 +158,11 @@ export const setBranchConfig: (
         isSecret: true,
         name: 'APPCENTER_API_TOKEN',
         value: APPCENTER_API_TOKEN,
+      },
+      {
+        isSecret: true,
+        name: 'SENTRY_AUTH_TOKEN',
+        value: SENTRY_AUTH_TOKEN,
       },
     ]);
 
