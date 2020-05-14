@@ -26,7 +26,7 @@ interface IEnvVars {
   GH_TOKEN?: string;
   PROJECT_OR_WORKSPACE_PATH?: string;
   XCODE_SCHEME_NAME?: string;
-  SENTRY_AUTH_TOKEN?: string;
+  SENTRY_AUTH_TOKEN: string;
 }
 
 interface IBodyEnvVars {
@@ -54,7 +54,7 @@ const envVars: IEnvVars = {
   MATCH_PASSWORD: process.env.MATCH_PASSWORD,
   PROJECT_OR_WORKSPACE_PATH: process.env.PROJECT_OR_WORKSPACE_PATH,
   XCODE_SCHEME_NAME: process.env.XCODE_SCHEME_NAME,
-  SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
+  SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN || '',
 };
 
 const fileExists: (fileName: string) => boolean = (fileName) => {
