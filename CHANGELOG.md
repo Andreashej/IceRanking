@@ -1,3 +1,11 @@
+## [0.11.5](https://github.com/LEGO/react-native-scripts/compare/v0.11.4...v0.11.5) (2020-05-14)
+
+
+### Bug Fixes
+
+* add sentry auth token as env variable ([f851648](https://github.com/LEGO/react-native-scripts/commit/f85164860ea0e5707b11b2c4b99d68aec624e29a))
+* optional SENTRY_AUTH_TOKEN ([ad534b2](https://github.com/LEGO/react-native-scripts/commit/ad534b29ef418efcc56e22b6f9907aac225f2718))
+
 ## [0.11.4](https://github.com/LEGO/react-native-scripts/compare/v0.11.3...v0.11.4) (2020-04-01)
 
 
