@@ -1,0 +1,123 @@
+.results-table.p-datatable {
+    .p-datatable-wrapper {
+        border-radius: 0;
+        width: 100vw;
+        margin-left: calc(-15px - 0.5rem);
+        
+        @include respond-above(sm) {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+            border-radius: .25rem;
+            width: 100%;
+            margin-left: 0;
+        }
+
+        table {
+            > thead.p-datatable-thead {
+                > tr {
+                    > th {
+                        text-align: left;
+                        background: $dark;
+                        color: white;
+                        border: none;
+
+                        &.mark {
+                            text-align: right;
+                        }
+
+                        &.competition {
+                            @include respond-below(sm) {
+                                display: none;
+                            }
+                        }
+
+                        &.rankings {
+                            @include respond-below(md) {
+                                display: none;
+                            }
+                        }
+
+                        &.expander {
+                            @include respond-above(sm) {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+    
+            > tbody.p-datatable-tbody {
+                > tr {
+                    border-bottom: 1px $dark solid;
+
+                    &:last-of-type {
+                        @include respond-above(sm) {
+                            border-bottom: none;
+                        }
+                    }
+
+                    > td {
+                        border: none;
+                        background-color: white;
+
+                        &.mark {
+                            text-align: right;
+                            font-weight: bold;
+                        }
+
+                        &.submark {
+                            text-align: right;
+                            font-style: italic;
+                            white-space: nowrap;
+                        }
+
+                        &.minimize {
+                            width: 1px;
+                            white-space: nowrap;
+                        }
+
+                        &.rank {
+                            font-weight: bold;
+                        }
+
+                        &.rankings {
+                            .p-button {
+                                background-color: $blue;
+                                border-color: $blue;
+
+                                .p-button-text {
+                                    padding: .25rem .5rem;
+                                }
+                            }
+
+                            @include respond-below(md) {
+                                display: none;
+                            }
+                        }
+
+                        &.horse {
+                            white-space: nowrap;
+                        }
+
+                        &.competition {
+                            @include respond-below(sm) {
+                                display: none;
+                            }
+                        }
+
+                        &.expander {
+                            width: 1px;
+                            padding-left: .25rem;
+                            padding-right: 0;
+                            white-space: nowrap;
+
+
+                            @include respond-above(sm) {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

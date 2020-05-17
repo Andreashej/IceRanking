@@ -1,12 +1,15 @@
 import React from 'react';
 
-const RankingCard = ({title, description, style}) => {
+import { Card } from 'primereact/card';
+
+const RankingCard = ({ranking, style}) => {
+    const header = (
+        <img src="https://via.placeholder.com/300x150" alt={`${ranking.listname}`} style={{borderTopLeftRadius: ".5rem", borderTopRightRadius: ".5rem"}} />
+    );
+    
     return (
-        <div className="card shadow" style={style}>
-            <div className="card-body">
-                <h5 className="card-title">{title}</h5>
-            </div>
-        </div>
+        <Card title={ranking.shortname} subTitle={ranking.listname} style={{borderRadius: ".5rem"}} header={header}>
+        </Card>
     );
 }
 

@@ -1,6 +1,7 @@
 import rankingApi from '../apis/ranking';
-import { GET_RANKINGS, GET_RANKING, GET_RANKING_TESTS, GET_RANKING_TEST, GET_RANKING_TEST_RESULTS, LOGIN, LOGOUT, GET_PROFILE, NO_USER } from './types';
+import { GET_RANKINGS, GET_RANKING, GET_RANKING_TESTS, GET_RANKING_TEST, GET_RANKING_TEST_RESULTS, LOGIN, LOGOUT, GET_PROFILE, NO_USER, GET_RIDER, GET_RIDER_RESULTS } from './types';
 
+// Ranking actions
 
 export const getRankings = () => async dispatch => {
     const response = await rankingApi.get('/rankings');
@@ -47,6 +48,9 @@ export const getRankingTestResult = (shortname, testcode) => async dispatch => {
     })   
 }
 
+
+// User actions
+
 export const login = ({username, password}) => async dispatch => {
     const response = await rankingApi.post('/login', {}, {
         auth: {
@@ -81,4 +85,33 @@ export const getProfile = () => async dispatch => {
             type: NO_USER
         });
     }
+}
+
+// Rider actions
+
+export const getRider = (id) => async dispatch => {
+    const response = await rankingApi.get(`/riders/${id}`);
+
+    dispatch({
+        type: GET_RIDER,
+        payload: response.data.data
+    });
+}
+
+export const getRiderResults = (id, testcode) => async dispatch => {
+    try {
+        const response = await rankingApi.get(`/riders/${id}/results/${testcode}`);
+
+        dispatch({
+            type: GET_RIDER_RESULTS,
+            payload: {
+                id: id,
+                testcode: testcode,
+                results: response.data.data,
+            }
+        });
+    } catch (error) {
+        console.log(error);
+    }
+
 }

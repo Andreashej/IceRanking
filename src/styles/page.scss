@@ -1,0 +1,32 @@
+.page-header {
+    padding: 8rem 0 2rem 0;
+    background: linear-gradient(to right, $dark, $blue, $info);
+
+    h1 {
+        color: white;
+    }
+
+    .pretitle {
+        color: $info;
+
+        svg {
+            color: $pink;
+        }
+    }
+
+    .subtitle {
+        color: $info;
+        font-size: 2rem;;
+    }
+}
+
+.page-container {
+    padding: 1.75rem .5rem;
+}
+
+.stylish-line {
+    border-color: rgba($pink,1);
+    border-width: .25rem;
+    max-width: 15rem;
+    margin: 1rem 0;
+}

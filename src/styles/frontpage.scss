@@ -1,0 +1,54 @@
+.frontpage-branding {
+    background-image: url("/assets/img/header-branding-padded.jpg");
+    background-repeat: no-repeat;
+    background-position-y: -.5rem;
+    background-size: 260%;
+
+    .jumbotron {
+        background: transparent;
+        padding: 10rem 0 4rem 0;
+        // background: linear-gradient(rgba($blue, .2), rgba($blue, .5));
+        background: rgba($blue, .5);
+
+        .display-3, .lead {
+            text-shadow: rgba($darkgray, .5) 5px 5px 10px;
+        }
+
+        @include respond-below(lg) {
+            .display-3 {
+                font-size: 3rem;
+            }
+
+            .lead {
+                font-size: 2rem!important;
+            }
+        }
+
+        @include respond-below(sm) {
+            .display-3 {
+                font-size: 2rem;
+            }
+
+            .lead {
+                font-size: 1.5rem!important;
+            }
+        }
+
+        .lead {
+            color: $info;
+        }
+
+    }
+
+    @include respond-above(sm) {
+        background-position-y: 0;
+        background-size: 180%;
+    }
+
+    @include respond-above(lg) {
+        background-position-y: -3rem;
+        background-size: 100%;
+    }
+
+    color: white;
+}

@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import { LOGIN, GET_PROFILE, NO_USER, LOGOUT } from '../actions/types';
 
 export default ( state = {}, action) => {

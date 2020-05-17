@@ -1,13 +1,11 @@
 import React from 'react';
-import Alert from './Alert';
+import { Message } from 'primereact/message';
 
-const EventList = ({events}) => {
+const EventList = ({events, noEventsText = "There are no events in the list."}) => {
 
     if (events.length < 1) {
         return (
-            <Alert type="primary" className="py-2">
-                There are no events in the list.
-            </Alert>
+            <Message severity="info" text={noEventsText} style={{width: "100%"}}></Message>
         )
     }
 

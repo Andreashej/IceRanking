@@ -1,13 +1,18 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const Header = ({title, subtitle}) => {
+const Header = ({title, subtitle, pretitle, icon}) => {
+    const i = icon ? <FontAwesomeIcon className="mr-2" icon={icon} size="2x" /> : null;
+
     return (
-        <div className="jumbotron jumbotron-fluid mb-0">
+        <div className="page-header jumbotron jumbotron-fluid mb-0">
             <div className="container">
                 <div className="row">
                     <div className="col">
+                        {pretitle ? <h2 className="pretitle muted">{i}{pretitle}</h2> : i ? <h2 className="pretitle muted">{i}</h2> : null}
                         <h1 className="display-4">{title}</h1>
-                        {subtitle ? <p className="lead">{subtitle}</p> : null}
+                        <hr className="stylish-line" />
+                        {subtitle ? <p className="lead subtitle">{subtitle}</p> : null}
                     </div>
                 </div>
             </div>

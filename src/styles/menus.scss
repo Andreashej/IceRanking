@@ -1,0 +1,95 @@
+.submenu {
+    
+    .p-menu {
+        background-color: $lightgray;
+        height: fit-content;
+        margin-top: 2rem;
+        margin-right: 1rem;
+
+        .p-menuitem {
+            .p-menuitem-link {
+                &:hover {
+                    background-color: $info;
+                }
+            }
+
+            &.active {
+                .p-menuitem-link {
+                    background-color: $info;
+                }
+            }
+        }
+    }
+
+    .mobile-menu-button {
+        background-color: $dark;
+
+        &:hover {
+            background-color: $blue!important;
+        }
+    }
+}
+
+body .p-menubar {
+
+    &.topnav {
+        background-color: $dark;
+        border: none;
+        border-radius: 0;
+    }
+
+    .p-menuitem {
+        &.p-menuitem-active {
+            .p-menuitem-link {
+                background-color: $blue;
+
+                .p-menuitem-text, .p-menuitem-icon, .p-submenu-icon  {
+                    color: white;
+                }
+            }
+        }
+
+        .p-menuitem-link {
+            &:hover {
+                background-color: $blue;
+            }
+    
+            .p-menuitem-text, .p-menuitem-icon, .p-submenu-icon {
+                color: white;
+            }
+        }
+
+        .p-submenu-list {
+            .p-menuitem {
+                .p-menuitem-link {
+                    background-color: white;
+
+                    &:hover {
+                        background-color: $lightgray;
+                    }
+                    
+                    .p-menuitem-text, .p-menuitem-icon, .p-submenu-icon {
+                        color: $darkgray;
+                    }
+                }
+            }
+        }
+    }
+
+    .p-menu-list {
+        .p-menuitem {
+            .p-menuitem-link {
+                background-color: white;
+
+                &:hover {
+                    background-color: $lightgray;
+                }
+                
+                .p-menuitem-text, .p-menuitem-icon, .p-submenu-icon {
+                    color: $darkgray;
+                }
+            }
+        }
+    }
+    
+}

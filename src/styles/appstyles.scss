@@ -9,192 +9,28 @@ $darkgray: #343a40;
 $lightgray: #f8f9fa;
 
 @import 'media-queries';
-
 @import '~bootstrap/scss/bootstrap';
 
-.frontpage-branding {
-    background-image: url("/assets/img/header-branding.jpg");
-    background-repeat: no-repeat;
-    background-size: 100%;
+@import 'footer';
+@import 'forms';
+@import 'menus';
+@import 'navbar';
+@import 'overlays';
+@import 'search-bar';
+@import 'message';
+@import 'tables';
 
-    .jumbotron {
-        background: transparent;
-        padding: 6rem 0;
-        background: linear-gradient(rgba($info, .1), rgba($blue, .5));
+@import 'frontpage';
+@import 'page';
 
-        .display-3, .lead {
-            text-shadow: rgba($darkgray, .5) 5px 5px 10px;
-        }
 
-        @include respond-below(md) {
-            .display-3 {
-                font-size: 3rem;
-            }
-
-            .lead {
-                font-size: 2rem!important;
-            }
-        }
-
-        @include respond-below(sm) {
-            .display-3 {
-                font-size: 2rem;
-            }
-
-            .lead {
-                font-size: 1.5rem!important;
-            }
-        }
-
+body {
+    .featured-number {
+        color: $dark;
     }
 
-    @include respond-below(sm) {
-        background-size: 250%;
+    a {
+        color: $blue;
     }
 
-    color: white;
-}
-
-.submenu {
-    
-    .p-menu {
-        background-color: $lightgray;
-        border: none;
-        border-radius: 0;
-
-        .p-menuitem {
-            .p-menuitem-link {
-                &:hover {
-                    background-color: $pink;
-                }
-            }
-
-            &.active {
-                .p-menuitem-link {
-                    background-color: $pink;
-                }
-            }
-        }
-    }
-
-    .mobile-menu-button {
-        background-color: $dark;
-
-        &:hover {
-            background-color: $blue!important;
-        }
-    }
-}
-
-.footer {
-    background-color: $blue;
-    color: white;
-}
-
-nav.navigation {
-    background-color: $dark;
-}
-
-body .p-menubar {
-
-    &.topnav {
-        background-color: $dark;
-        border: none;
-        border-radius: 0;
-    }
-
-    .p-menuitem {
-        &.p-menuitem-active {
-            .p-menuitem-link {
-                background-color: $blue;
-
-                .p-menuitem-text, .p-menuitem-icon, .p-submenu-icon  {
-                    color: white;
-                }
-            }
-        }
-
-        .p-menuitem-link {
-            &:hover {
-                background-color: $blue;
-            }
-    
-            .p-menuitem-text, .p-menuitem-icon, .p-submenu-icon {
-                color: white;
-            }
-        }
-
-        .p-submenu-list {
-            .p-menuitem {
-                .p-menuitem-link {
-                    background-color: white;
-
-                    &:hover {
-                        background-color: $lightgray;
-                    }
-                    
-                    .p-menuitem-text, .p-menuitem-icon, .p-submenu-icon {
-                        color: $darkgray;
-                    }
-                }
-            }
-        }
-    }
-
-    .p-menu-list {
-        .p-menuitem {
-            .p-menuitem-link {
-                background-color: white;
-
-                &:hover {
-                    background-color: $lightgray;
-                }
-                
-                .p-menuitem-text, .p-menuitem-icon, .p-submenu-icon {
-                    color: $darkgray;
-                }
-            }
-        }
-    }
-    
-}
-.logo-container {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    
-    .brand-logo {
-        margin-top: 3px;
-    }
-}
-
-.login-button {
-    &.p-button, & .p-button {
-        & {
-            background-color: $pink;
-            border-color: $pink;
-        
-            &:enabled:hover {
-                background-color: darken($color: $pink, $amount: 10);
-                border-color: darken($color: $pink, $amount: 10);
-            }
-        }
-    }
-}
-
-form {
-    input {
-        width: 100%;
-    }
-
-    .p-float-label {
-        margin-top: 1em;
-        margin-bottom: 1.5em;
-    }
-}
-
-.loginbox {
-    min-width: 30rem;
 }

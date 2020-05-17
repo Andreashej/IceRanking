@@ -1,0 +1,86 @@
+nav.navigation {
+    background-color: transparent;
+    position: absolute;
+    transition: all .5s ease-in-out;
+
+    > .container {
+        height: 100%;
+        padding-top: 1rem;
+        padding-bottom: .5rem;
+
+        > .row {
+            height: 100%;
+
+            > [class^="col"] {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                max-height: 100%;
+                transition: opacity .5s ease-in-out;
+
+                &:first-of-type {
+                    justify-content: flex-start;
+                }
+
+                &:last-of-type {
+                    justify-content: flex-end;
+                }
+
+                &.hide {
+                    opacity: 0;
+                }
+            }
+        }
+    }
+
+    .logo-container {
+        .logo {
+            height: 100%;
+        }
+        .branding-text {
+            font-size: 1.4rem;
+            color: $white;
+            transition: all .5s ease-in-out;
+            text-decoration: none;
+        }
+    }
+
+    
+
+    &.sticky {
+        background-color: $dark;
+        position: fixed;
+        z-index: 999;
+
+        .container {
+            padding-top: .5rem;
+        }
+
+        .logo-container {
+            .branding-text {
+                color: white;
+            }
+        }
+    }
+}
+
+.login-button {
+    &.p-button, & .p-button {
+        & {
+            background-color: $pink;
+            border-color: $pink;
+        
+            &:enabled:hover {
+                background-color: darken($color: $pink, $amount: 10);
+                border-color: darken($color: $pink, $amount: 10);
+            }
+        }
+    }
+}
+
+.search-button {
+    &.p-button {
+        background: none!important;
+        border: none!important;
+    }
+}

@@ -18,6 +18,7 @@ class UserLogin extends React.Component {
     submitForm(event) {
         event.preventDefault()
         this.props.login(this.state);
+        this.props.onHide();
     }
 
     render() {

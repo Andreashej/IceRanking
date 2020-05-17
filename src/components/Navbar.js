@@ -3,88 +3,32 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 
-import { Menubar } from 'primereact/menubar'
-import { SplitButton } from 'primereact/splitbutton'
+import { SplitButton } from 'primereact/splitbutton';
 import { Button } from 'primereact/button';
 
 import UserLogin from './User/UserLogin';
 
 import { getRankings, getProfile, logout } from '../actions';
 
-import history from '../history';
+import SearchBar from "./Search/SearchBar";
 
 class Navbar extends React.Component {
     state = {
-        showRankingDropdown: false,
-        activeItem: '',
-        showLogin: false
+        showLogin: false,
+        isSticky: false,
+        show: false
     }
-
-    menuItems = [
-        {
-            label: "Home",
-            icon: "pi pi-home",
-            command: () => this.props.history.push('/')
-        },
-        {
-            label: "Rankings",
-            icon: "pi pi-sort-numeric-down",
-            items: []
-        },
-        // {
-        //     label: "About",
-        //     icon: "pi pi-info",
-        //     command: () => this.props.history.push('/about')
-        // }
-    ]
 
     componentDidMount() {
         this.props.getRankings();
         this.props.getProfile();
-    }
 
-    componentDidUpdate() {
-        if (this.state.activeItem !== history.location.pathname) {
-            this.setState({
-                activeItem: history.location.pathname
-            });
-        }
-    }
-
-    renderRankingItems() {
-
-        const items = this.props.rankings.map(ranking => {
-            const link = `/rankings/${ranking.shortname}`;
-            const active = (link === this.state.activeItem) ? 'active' : '';
-            console.log(link, active);
-
-            return <Link key={ranking.id} className={`dropdown-item ${active}`} to={link} onClick={() => this.onDropdownClick()}>{ranking.listname}</Link>
-        })
-
-        const show = this.state.showRankingDropdown ? 'show' : ''
-
-        return (
-            <div className={`dropdown-menu ${show}`} ref={this.rankingDropdown}>
-                {items}
-            </div>
-        )
-    }
-
-    passRankingsToModel() {
-        return this.props.rankings.map(ranking => {
-            const link = `/rankings/${ranking.shortname}`;
-            return {
-                label: ranking.listname,
-                command: () => {
-                    this.props.history.push(link)
-                }
+        document.addEventListener("scroll", () => {
+            if (window.scrollY < 6) {
+                this.setState({isSticky: false});
+            } else {
+                this.setState({isSticky: true});
             }
-        });
-    }
-
-    onDropdownClick() {
-        this.setState({
-            showRankingDropdown: !this.state.showRankingDropdown
         });
     }
 
@@ -108,41 +52,29 @@ class Navbar extends React.Component {
                 <>
                     <UserLogin show={this.state.showLogin} onHide={() => this.setState({showLogin: false})}></UserLogin>
                     <Button label="Login" icon="pi pi-sign-in" className="p-button-raised p-button-rounded login-button" onClick={(e) => this.setState({showLogin: true})} />
+                    <Button icon="pi pi-search" className="search-button d-block d-md-none" onClick={() => {
+                        this.setState({show: true});
+                        console.log("hey");
+                    }} />
                 </>
             );
         }
     }
 
     render() {
-        this.menuItems[1].items = this.passRankingsToModel();
-        // return (
-        //     <nav className="navbar navbar-expand navbar-dark bg-dark" style={{boxShadow: "rgba(0,0,0,0.4) 0 5px 5px"}}>
-        //         <Link className="navbar-brand" to="/">IceRanking</Link>
-        //         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-        //             <span className="navbar-toggler-icon"></span>
-        //         </button>
-    
-        //         <div className="collapse navbar-collapse" id="navbarContent">
-        //             <ul className="navbar-nav mr-auto">
-        //                 <li className={`nav-item dropdown ${this.state.activeItem.includes('rankings') ? 'active' : ''}`}>
-        //                     <button className="nav-link dropdown-toggle" href="#" id="rankingsDropdown" data-toggle="dropdown" onClick={() => this.onDropdownClick()}>
-        //                         Rankings
-        //                     </button>
-        //                     {this.renderRankingItems()}
-        //                 </li>
-        //             </ul>
-        //         </div>
-        //     </nav>
-        // );
 
         return (
-            <nav className="navigation container-fluid">
+            <nav className={`navigation container-fluid ${this.state.isSticky ? 'sticky' : ''}`}>
                 <div className="container">
                     <div className="row">
-                        <div className="col">
-                            <Menubar model={this.menuItems} className="topnav">
-                                {this.getUserSection()}
-                            </Menubar>
+                        <div className={`col-6 col-md-3 logo-container order-1 ${this.state.show ? 'hide' : ''}`}>
+                            <Link to="/" className="branding-text">IceRanking</Link>
+                        </div>
+                        <div className="col-12 col-md-6 order-3 order-md-2">
+                            <SearchBar show={this.state.show} onHide={() => this.setState({show: false})} />
+                        </div>
+                        <div className={`col-6 col-md-3 order-2 order-md-3 ${this.state.show ? 'hide' : ''}`}>
+                            {this.getUserSection()}
                         </div>
                     </div>
                 </div>

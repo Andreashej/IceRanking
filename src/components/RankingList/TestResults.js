@@ -39,15 +39,11 @@ class RankingResultList extends React.Component {
         fromDate.setTime(new Date().getTime() - (this.props.ranking.results_valid_days * 24 * 60 * 60 * 1000));
 
         return (
-            <div className="container-fluid mt-3">
-                <div className="row">
-                    <div className="col">
-                        <h2 className="display-4">{this.props.test.testcode} results</h2>
-                        <p>This ranking is based on the best {this.props.test.included_marks} marks per {this.props.test.grouping} in {this.props.test.testcode}. The results are valid from {fromDate.toLocaleDateString()} to today. Only marks above {this.props.test.min_mark} are taken into account.</p>
-                    </div>
-                </div>
-            </div>
-        )
+            <>
+                <h2 className="subheader">{this.props.test.testcode} results</h2>
+                <p>This ranking is based on the best {this.props.test.included_marks} marks per {this.props.test.grouping} in {this.props.test.testcode}. The results are valid from {fromDate.toLocaleDateString()} to today. Only marks above {this.props.test.min_mark} are taken into account.</p>
+            </>
+        );
 
     }
 
@@ -57,7 +53,7 @@ class RankingResultList extends React.Component {
         }
 
         return (
-            <ResultList results={this.props.test.results} rounding_precision={this.props.test.rounding_precision} type={this.props.test.grouping} />
+            <ResultList results={this.props.test.results} rounding_precision={this.props.test.rounding_precision} type={this.props.test.grouping} testcode={this.props.test.testcode} />
         );
     }
 
@@ -66,10 +62,12 @@ class RankingResultList extends React.Component {
         const list = this.renderList();
         if (description && list) {
             return (
-                <>
-                    {description}
-                    {list}
-                </>
+                <div className="row">
+                    <div className="col">
+                        {description}
+                        {list}
+                    </div>
+                </div>
             );
         } else {
             return <ProgressSpinner style={{display: "flex"}} />
