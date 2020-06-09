@@ -77,5 +77,8 @@
   "publishConfig": {
     "access": "restricted",
     "registry": "https://npm.pkg.github.com"
+  },
+  "resolutions": {
+    "lodash": "4.17.15"
   }
 }
