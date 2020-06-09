@@ -1,3 +1,11 @@
+## [0.11.6](https://github.com/LEGO/react-native-scripts/compare/v0.11.5...v0.11.6) (2020-06-09)
+
+
+### Bug Fixes
+
+* add lodash resolution ([7f3fca9](https://github.com/LEGO/react-native-scripts/commit/7f3fca96d537b152c227614ed08f343984b52640))
+* update minimist ([c7bc30f](https://github.com/LEGO/react-native-scripts/commit/c7bc30fcdaf645bb7d42b7615c06676a5ccf7bd4))
+
 ## [0.11.5](https://github.com/LEGO/react-native-scripts/compare/v0.11.4...v0.11.5) (2020-05-14)
 
 
