@@ -1,3 +1,10 @@
+## [0.11.7](https://github.com/LEGO/react-native-scripts/compare/v0.11.6...v0.11.7) (2020-08-12)
+
+
+### Bug Fixes
+
+* report-build-status remove bash line ([b3b0a83](https://github.com/LEGO/react-native-scripts/commit/b3b0a83e2e981beaffb80ddacf7d4084c4456690))
+
 ## [0.11.6](https://github.com/LEGO/react-native-scripts/compare/v0.11.5...v0.11.6) (2020-06-09)
 
 
