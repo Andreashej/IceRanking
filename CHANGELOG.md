@@ -1,3 +1,33 @@
+## [0.11.7](https://github.com/LEGO/react-native-scripts/compare/v0.11.6...v0.11.7) (2020-08-12)
+
+
+### Bug Fixes
+
+* report-build-status remove bash line ([b3b0a83](https://github.com/LEGO/react-native-scripts/commit/b3b0a83e2e981beaffb80ddacf7d4084c4456690))
+
+## [0.11.6](https://github.com/LEGO/react-native-scripts/compare/v0.11.5...v0.11.6) (2020-06-09)
+
+
+### Bug Fixes
+
+* add lodash resolution ([7f3fca9](https://github.com/LEGO/react-native-scripts/commit/7f3fca96d537b152c227614ed08f343984b52640))
+* update minimist ([c7bc30f](https://github.com/LEGO/react-native-scripts/commit/c7bc30fcdaf645bb7d42b7615c06676a5ccf7bd4))
+
+## [0.11.5](https://github.com/LEGO/react-native-scripts/compare/v0.11.4...v0.11.5) (2020-05-14)
+
+
+### Bug Fixes
+
+* add sentry auth token as env variable ([f851648](https://github.com/LEGO/react-native-scripts/commit/f85164860ea0e5707b11b2c4b99d68aec624e29a))
+* optional SENTRY_AUTH_TOKEN ([ad534b2](https://github.com/LEGO/react-native-scripts/commit/ad534b29ef418efcc56e22b6f9907aac225f2718))
+
+## [0.11.4](https://github.com/LEGO/react-native-scripts/compare/v0.11.3...v0.11.4) (2020-04-01)
+
+
+### Bug Fixes
+
+* remove debug logs ([e670983](https://github.com/LEGO/react-native-scripts/commit/e67098379fa2f0dc4d479f3d7ac4db82e97571df))
+
 ## [0.11.3](https://github.com/LEGO/react-native-scripts/compare/v0.11.2...v0.11.3) (2020-04-01)
 
 

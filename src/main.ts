@@ -107,43 +107,51 @@ const execAppcenter: () => Promise<void> = async () => {
 };
 
 export const main: () => void = () => {
-  switch (target) {
-    case 'appcenter':
-      execAppcenter();
-      break;
-    case 'fastlane':
-      switch (action) {
-        case 'local-build':
-          localBuild();
-          break;
-        default:
-          logError('no action found in fastlane that matches your arguments');
-      }
-      break;
-    case 'sentry':
-      switch (action) {
-        default:
-          logError(`"${action}" not available for sentry`);
-      }
-      break;
-    case 'github':
-      switch (action) {
-        case 'repo-dispatch':
-          repoDispatch(ghDispatchAction);
-          break;
-        default:
-          logError(`"${action}" not available for github`);
-      }
-      break;
-    case 'airwatch':
-      switch (action) {
-        case 'upload-app':
-          uploadAppToAirwatch();
-          break;
-        default:
-      }
-      break;
-    default:
-      logError(`${target} not found, valid options are appcenter, fastlane, github or airwatch`);
+  try {
+    switch (target) {
+      case 'appcenter':
+        execAppcenter();
+        break;
+      case 'fastlane':
+        switch (action) {
+          case 'local-build':
+            localBuild();
+            break;
+          default:
+            logError(`"${action}" not available for fastlane`);
+            throw new Error(`"${action}" not available for fastlane`);
+        }
+        break;
+      case 'sentry':
+        switch (action) {
+          default:
+            logError(`"${action}" not available for sentry`);
+            throw new Error(`"${action}" not available for sentry`);
+        }
+      case 'github':
+        switch (action) {
+          case 'repo-dispatch':
+            repoDispatch(ghDispatchAction);
+            break;
+          default:
+            logError(`"${action}" not available for github`);
+            throw new Error(`"${action}" not available for github`);
+        }
+        break;
+      case 'airwatch':
+        switch (action) {
+          case 'upload-app':
+            uploadAppToAirwatch();
+            break;
+          default:
+        }
+        break;
+      default:
+        throw new Error(
+          `${target} not found, valid options are appcenter, fastlane, github or airwatch`
+        );
+    }
+  } catch (error) {
+    throw error;
   }
 };
