@@ -1,3 +1,24 @@
+## [0.11.10](https://github.com/LEGO/react-native-scripts/compare/v0.11.9...v0.11.10) (2020-09-16)
+
+
+### Bug Fixes
+
+* use method from gh actions package to set step as failed ([1dec2e6](https://github.com/LEGO/react-native-scripts/commit/1dec2e612f49cab38dac6c8b8ee4293f268a4e70))
+
+## [0.11.9](https://github.com/LEGO/react-native-scripts/compare/v0.11.8...v0.11.9) (2020-09-16)
+
+
+### Bug Fixes
+
+* trycatch in index ([42f95aa](https://github.com/LEGO/react-native-scripts/commit/42f95aa01fe1d96a69e6c4f201965233996c080a))
+
+## [0.11.8](https://github.com/LEGO/react-native-scripts/compare/v0.11.7...v0.11.8) (2020-09-16)
+
+
+### Bug Fixes
+
+* trycatch for the main entry point ([3a69aa0](https://github.com/LEGO/react-native-scripts/commit/3a69aa0743ee0353274f753190409c4aac3ae540))
+
 ## [0.11.7](https://github.com/LEGO/react-native-scripts/compare/v0.11.6...v0.11.7) (2020-08-12)
 
 
