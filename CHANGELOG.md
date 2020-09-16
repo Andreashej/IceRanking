@@ -1,3 +1,10 @@
+## [0.11.8](https://github.com/LEGO/react-native-scripts/compare/v0.11.7...v0.11.8) (2020-09-16)
+
+
+### Bug Fixes
+
+* trycatch for the main entry point ([3a69aa0](https://github.com/LEGO/react-native-scripts/commit/3a69aa0743ee0353274f753190409c4aac3ae540))
+
 ## [0.11.7](https://github.com/LEGO/react-native-scripts/compare/v0.11.6...v0.11.7) (2020-08-12)
 
 
