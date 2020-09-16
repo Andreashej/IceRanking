@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-
-import { setFailed as ghSetFailed } from '@actions/core';
+import { execSync } from 'child_process';
 import { main } from './main';
+import { logError } from './utils';
 
 main().catch((error) => {
-  ghSetFailed(error);
+  logError(error);
+  execSync('exit 1');
 });
