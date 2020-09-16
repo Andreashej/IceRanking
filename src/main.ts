@@ -106,11 +106,11 @@ const execAppcenter: () => Promise<void> = async () => {
   }
 };
 
-export const main: () => void = () => {
+export const main: () => Promise<void> = async () => {
   try {
     switch (target) {
       case 'appcenter':
-        execAppcenter();
+        await execAppcenter();
         break;
       case 'fastlane':
         switch (action) {
@@ -131,7 +131,7 @@ export const main: () => void = () => {
       case 'github':
         switch (action) {
           case 'repo-dispatch':
-            repoDispatch(ghDispatchAction);
+            await repoDispatch(ghDispatchAction);
             break;
           default:
             logError(`"${action}" not available for github`);
@@ -141,7 +141,7 @@ export const main: () => void = () => {
       case 'airwatch':
         switch (action) {
           case 'upload-app':
-            uploadAppToAirwatch();
+            await uploadAppToAirwatch();
             break;
           default:
         }
