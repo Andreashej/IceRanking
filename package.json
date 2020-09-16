@@ -16,7 +16,7 @@
   },
   "scripts": {
     "build": "yarn clean && tsc -b ./tsconfig.json && yarn copy-sh-files",
-    "copy-sh-files": "yarn copyfiles src/**/*.sh src/**/**/*.sh lib -u 1 -E",
+    "copy-sh-files": "yarn copyfiles **/*.sh lib -u 1 -E",
     "clean": "rimraf ./lib",
     "lint": "eslint src/**/*.ts",
     "prepublishOnly": "yarn build",

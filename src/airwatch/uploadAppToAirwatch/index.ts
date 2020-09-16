@@ -26,5 +26,6 @@ export const uploadAppToAirwatch: () => Promise<void> = async () => {
     );
   } catch (error) {
     logError(error);
+    throw error;
   }
 };
