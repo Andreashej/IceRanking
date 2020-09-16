@@ -1,3 +1,17 @@
+## [0.11.12](https://github.com/LEGO/react-native-scripts/compare/v0.11.11...v0.11.12) (2020-09-16)
+
+
+### Bug Fixes
+
+* re-add @actions/core dependency ([6990d9e](https://github.com/LEGO/react-native-scripts/commit/6990d9e0b145bbff4c0330e02bd5f9beca7cbb12))
+
+## [0.11.11](https://github.com/LEGO/react-native-scripts/compare/v0.11.10...v0.11.11) (2020-09-16)
+
+
+### Bug Fixes
+
+* remove gh dependency and use node child_process ([7c0933b](https://github.com/LEGO/react-native-scripts/commit/7c0933b9119228d9eec0a652da7720297ed70eba))
+
 ## [0.11.10](https://github.com/LEGO/react-native-scripts/compare/v0.11.9...v0.11.10) (2020-09-16)
 
 
