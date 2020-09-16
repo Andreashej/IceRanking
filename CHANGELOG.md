@@ -1,3 +1,10 @@
+## [0.11.10](https://github.com/LEGO/react-native-scripts/compare/v0.11.9...v0.11.10) (2020-09-16)
+
+
+### Bug Fixes
+
+* use method from gh actions package to set step as failed ([1dec2e6](https://github.com/LEGO/react-native-scripts/commit/1dec2e612f49cab38dac6c8b8ee4293f268a4e70))
+
 ## [0.11.9](https://github.com/LEGO/react-native-scripts/compare/v0.11.8...v0.11.9) (2020-09-16)
 
 
