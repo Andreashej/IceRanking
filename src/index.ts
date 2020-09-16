@@ -2,4 +2,6 @@
 
 import { main } from './main';
 
-main();
+main().catch((error) => {
+  throw error;
+});
