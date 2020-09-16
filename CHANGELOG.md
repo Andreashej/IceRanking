@@ -1,3 +1,10 @@
+## [0.11.9](https://github.com/LEGO/react-native-scripts/compare/v0.11.8...v0.11.9) (2020-09-16)
+
+
+### Bug Fixes
+
+* trycatch in index ([42f95aa](https://github.com/LEGO/react-native-scripts/commit/42f95aa01fe1d96a69e6c4f201965233996c080a))
+
 ## [0.11.8](https://github.com/LEGO/react-native-scripts/compare/v0.11.7...v0.11.8) (2020-09-16)
 
 
