@@ -27,6 +27,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@actions/core": "1.2.5",
     "chalk": "3.0.0",
     "cosmiconfig": "6.0.0",
     "dotenv": "8.0.0",
