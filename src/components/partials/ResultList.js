@@ -7,40 +7,18 @@ import { Link } from 'react-router-dom';
 
 class ResultList extends React.Component {
 
-// } = ({ results, rounding_precision, type }) => {
-//     const items = results.map(result => {
-//         return <li key={result.id} className="list-group-item py-1">
-//             <div className="container-fluid">
-//                 <div className="row">
-//                     <div className="d-flex" style={{width: "1.5rem"}}>
-//                         {result.rank}
-//                     </div>
-//                     <div className="col">
-//                         {getDisplayName(result, type)}
-//                     </div>
-//                     <div className="col-3 text-right">
-//                         <span className="mr-2">{markToDouble(result.final_mark, rounding_precision)}</span>
-//                         <i className="d-none d-md-inline">
-//                             {}
-//                         </i>
-//                     </div>
-//                 </div>
-//             </div>
-//             </li>
-//     });
     getSubmarks = (result, col) => {
-        return result.results.map((result, index, arr) => {
+        return result.marks.map((result, index, arr) => {
             let mark = markToDouble(result.mark, this.props.rounding_precision);
             return (index !== arr.length - 1) ? mark + ", " : mark;
         });
     }
 
     getDisplayName = (result) => {
-        console.log(result);
         if (this.props.type === 'rider') {
-            return <Link to={`/rider/${result.id}/results/${this.props.testcode}`}>{result.firstname + " " + result.lastname}</Link>;
+            return <Link to={`/rider/${result.riders[0].id}/results/${this.props.testcode}`}>{result.riders[0].fullname}</Link>;
         } else if (this.props.type === 'horse') {
-            return `${result.horse_name} (${result.feif_id})`;
+            return <Link to={`/horse/${result.horses[0].id}/results/${this.props.testcode}`}>{`${result.horses[0].horse_name} (${result.horses[0].feif_id})`}</Link>;
         }
     }
 
@@ -55,7 +33,7 @@ class ResultList extends React.Component {
                 <Column field="rank" header="" className="minimize rank" />
                 <Column field="name" body={(result, col) => this.getDisplayName(result)} header={this.getDisplayHeader()} />
                 <Column field="submarks" className="submark" body={this.getSubmarks} header="" />
-                <Column field="final_mark" className="mark minimize" header="Mark" body={(result, col) => markToDouble(result.final_mark, this.props.rounding_precision)} />
+                <Column field="mark" className="mark minimize" header="Mark" body={(result, col) => markToDouble(result.mark, this.props.rounding_precision)} />
             </DataTable>
         );
     }

@@ -1,5 +1,5 @@
 import rankingApi from '../apis/ranking';
-import { GET_RANKINGS, GET_RANKING, GET_RANKING_TESTS, GET_RANKING_TEST, GET_RANKING_TEST_RESULTS, LOGIN, LOGOUT, GET_PROFILE, NO_USER, GET_RIDER, GET_RIDER_RESULTS } from './types';
+import { GET_RANKINGS, GET_RANKING, GET_RANKING_TESTS, GET_RANKING_TEST, UPDATE_RANKING_TEST, GET_RANKING_TEST_RESULTS, LOGIN, LOGOUT, GET_PROFILE, NO_USER, GET_RIDER, GET_RIDER_RESULTS, UPDATE_RANKING, GET_HORSE, GET_HORSE_RESULTS, CREATE_RANKING_TEST, SET_CURRENT_PAGE } from './types';
 
 // Ranking actions
 
@@ -21,6 +21,15 @@ export const getRanking = shortname => async dispatch => {
     });
 }
 
+export const updateRanking = (shortname, atts) => async dispatch => {
+    const response = await rankingApi.patch(`/rankings/${shortname}`, atts);
+
+    dispatch({
+        type: UPDATE_RANKING,
+        payload: response.data
+    });
+}
+
 export const getRankingTests = shortname => async dispatch => {
     const response = await rankingApi.get(`/rankings/${shortname}/tests`);
 
@@ -36,6 +45,24 @@ export const getRankingTest = (shortname, testcode) => async dispatch => {
     dispatch({
         type: GET_RANKING_TEST,
         payload: {test: response.data.data, shortname: shortname}
+    });
+}
+
+export const createRankingTest = (shortname, atts) => async dispatch => {
+    const response = await rankingApi.post(`/rankings/${shortname}/tests`, atts);
+
+    dispatch({
+        type: CREATE_RANKING_TEST,
+        payload: {test: response.data.data, shortname: shortname}
+    });
+}
+
+export const updateRankingTest = (id, atts) => async dispatch => {
+    const response = await rankingApi.patch(`/rankingtest/${id}`, atts);
+
+    dispatch({
+        type: UPDATE_RANKING_TEST,
+        payload: {test: response.data.data, shortname: response.data.data.shortname}
     });
 }
 
@@ -114,4 +141,42 @@ export const getRiderResults = (id, testcode) => async dispatch => {
         console.log(error);
     }
 
+}
+
+// Horse actions
+
+export const getHorse = (id) => async (dispatch) => {
+    const response = await rankingApi.get(`/horses/${id}`);
+
+    dispatch({
+        type: GET_HORSE,
+        payload: response.data.data
+    });
+}
+
+export const getHorseResults = (id, testcode) => async (dispatch) => {
+    try {
+        const response = await rankingApi.get(`/horses/${id}/results/${testcode}`);
+    
+        dispatch({
+            type: GET_HORSE_RESULTS,
+            payload: {
+                id: id,
+                testcode: testcode,
+                result: response.data.data
+            }
+        });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// Navigation
+export const setCurrentPage = page => async dispatch => {
+    dispatch({
+        type: SET_CURRENT_PAGE,
+        payload: {
+            currentPage: page
+        }
+    })
 }

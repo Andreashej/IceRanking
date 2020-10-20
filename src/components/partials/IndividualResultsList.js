@@ -3,10 +3,8 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
-import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import { markToDouble } from '../../tools';
-import { getRiderResults } from '../../actions';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
 class RiderResults extends React.Component {
@@ -14,21 +12,9 @@ class RiderResults extends React.Component {
         expandedRows: []
     }
 
-    componentDidMount() {
-        console.log("mounted");
-        this.props.getRiderResults(this.props.riderId, this.props.testcode);
-    }
-
-    componentDidUpdate(prevProps) {
-        if (prevProps.testcode !== this.props.testcode) {
-            this.props.getRiderResults(this.props.riderId, this.props.testcode)
-        }
-    }
-
-    renderHorse(rowData, column) {
-        console.log(rowData);
+    renderLink(rowData, column) {
         return (
-            <Link to={`/horse/${rowData.horse.id}/results/${this.props.testcode}`} >{rowData.horse.horse_name}<span className="horse-id d-none d-md-inline"> ({rowData.horse.feif_id})</span></Link>
+            <Link to={`/horse/${rowData.horse.id}/tests/${this.props.testcode}`} >{rowData.horse.horse_name}<span className="horse-id d-none d-md-inline"> ({rowData.horse.feif_id})</span></Link>
         );
     }
 
@@ -42,7 +28,7 @@ class RiderResults extends React.Component {
         }
         const best = this.props.best;
         return (
-            <Card title="Personal best" className="featured-card">
+            <Card title="Personal best">
                 <h4 className="display-4 featured-number">{markToDouble(best.mark, best.test.rounding_precision)}</h4>
                 <p className="lead mb-0">{best.horse.horse_name}</p>
             </Card>
@@ -55,7 +41,7 @@ class RiderResults extends React.Component {
         }
 
         return (
-            <Card title="Best rank" className="featured-card">
+            <Card title="Best rank" style={{height: "100%"}} >
                 <h4 className="display-4 featured-number">1</h4>
                 <p className="lead mb-0">Den Danske Rangliste</p>
             </Card>
@@ -68,7 +54,7 @@ class RiderResults extends React.Component {
         }
 
         return (
-            <Card title="Activity" className="featured-card">
+            <Card title="Activity">
                 <h4 className="display-4 featured-number">{this.props.results.length}</h4>
                 <p className="lead mb-0">results</p>
             </Card>
@@ -115,6 +101,17 @@ class RiderResults extends React.Component {
         );
     }
 
+    getColumns() {
+        return this.props.columns.map(column => {
+            switch(column.type) {
+                case 'text':
+                    return <Column field={column.field} className={`${column.type} ${column.className}`} header={column.header} />
+                case 'link':
+                    return <Column field={column.field} className={`${column.type} ${column.className}`} header={column.header} body={(rowData, col) => this.renderLink(rowData, col)} />
+            }
+        })
+    }
+
     render() {
         return (
             <>
@@ -141,11 +138,4 @@ class RiderResults extends React.Component {
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
-    return {
-        results: state.riders[ownProps.riderId].results[ownProps.testcode].history,
-        best: state.riders[ownProps.riderId].results[ownProps.testcode].best,
-    };
-};
-
-export default withRouter(connect(mapStateToProps, { getRiderResults } )(RiderResults))
+export default withRouter(RiderResults);

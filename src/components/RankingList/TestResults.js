@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getRanking, getRankingTests, getRankingTestResult } from '../../actions';
+import { getRanking, getRankingTests, getRankingTestResult, setCurrentPage } from '../../actions';
 
 import { ProgressSpinner } from 'primereact/progressspinner';
 
@@ -10,24 +10,30 @@ import ResultList from '../partials/ResultList';
 class RankingResultList extends React.Component {
 
     componentDidMount() {
-        const { shortname } = this.props;
+        const { shortname, testcode } = this.props.match.params;
 
-        this.props.getRanking(shortname);
+        this.props.getRanking(shortname).then(() => {
+            this.props.getRankingTests(shortname).then(() => {
+                this.props.getRankingTestResult(shortname, testcode);
+            });
+        });
+
+        this.props.setCurrentPage(this.props.location.pathname);
+
     }
 
-    componentDidUpdate() {
-        const { shortname, testcode } = this.props;
+    componentDidUpdate(prevProps) {
+        const { shortname, testcode } = this.props.match.params;
 
-        if(!this.props.ranking.tests[testcode]) {
-            this.props.getRankingTests(shortname);
-        } else if (this.props.ranking.tests[testcode]) {
-            if(!this.props.test.results) {
+        if (prevProps.match.params.testcode !== this.props.match.params.testcode) {
+            // test was changed
+
+            this.props.getRankingTests(shortname).then(() => {
                 this.props.getRankingTestResult(shortname, testcode);
-            }
-
+            });
+            
+            this.props.setCurrentPage(this.props.location.pathname);
         }
-
-
     }
 
     renderDescription() {
@@ -51,7 +57,7 @@ class RankingResultList extends React.Component {
         if (!this.props.test || !this.props.test.results) {
             return false;
         }
-
+        
         return (
             <ResultList results={this.props.test.results} rounding_precision={this.props.test.rounding_precision} type={this.props.test.grouping} testcode={this.props.test.testcode} />
         );
@@ -77,14 +83,14 @@ class RankingResultList extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     let props = {
-        ranking: state.rankings[ownProps.shortname],
+        ranking: state.rankings[ownProps.match.params.shortname],
     }
 
     if (props.ranking) {
-        props = {...props, test: props.ranking.tests[ownProps.testcode]}
+        props = {...props, test: props.ranking.tests[ownProps.match.params.testcode]}
     }
 
     return props;
 }
 
-export default connect(mapStateToProps, { getRanking, getRankingTests, getRankingTestResult })(RankingResultList);
+export default connect(mapStateToProps, { getRanking, getRankingTests, getRankingTestResult, setCurrentPage })(RankingResultList);

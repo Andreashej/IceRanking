@@ -11,17 +11,13 @@ import RiderResults from './RiderResults';
 
 
 class RiderProfile extends React.Component {
-    state = {
-        riderId: null
-    }
-
+    
     componentDidMount() {
-        this.setState({});
+        this.props.getRider(this.props.match.params.id);
     }
 
-    componentDidUpdate() {
-        if (this.state.riderId !== this.props.match.params.id) {
-            this.setState({riderId: this.props.match.params.id});
+    componentDidUpdate(prevProps) {
+        if (prevProps.match.params.id !== this.props.match.params.id) {
             this.props.getRider(this.props.match.params.id);
         }
     }
@@ -53,22 +49,6 @@ class RiderProfile extends React.Component {
         return this.props.rider ? `${this.props.rider.firstname} ${this.props.rider.lastname}` : null;
     }
 
-    getResults() {
-        if (!this.props.rider && this.props.match.params.testcode) {
-            return <ProgressSpinner />
-        }
-
-        const lines = this.props.rider.results[this.props.match.params.testcode].map(result => {
-            return <li key={result.id} className="list-group-item">{result.test.testcode} | {result.horse.horse_name} | {result.mark}</li>;
-        });
-
-        return (
-            <ul className="list-group list-group-flush">
-                {lines}
-            </ul>
-        );
-    }
-
     getTitle() {
         switch(this.props.match.params.page) {
             case "results":
@@ -91,7 +71,7 @@ class RiderProfile extends React.Component {
 
     render() {
         return (
-            <Page title={this.getFullName()} icon="user" menuItems={this.getMenuItems()} subtitle="Rider">
+            <Page title={this.getFullName()} icon="user" menuItems={this.getMenuItems()}>
                 <div className="row">
                     <div className="col">
                         <h2 className="subtitle">{this.getTitle()}</h2>

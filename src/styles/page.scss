@@ -4,6 +4,15 @@
 
     h1 {
         color: white;
+        font-size: 1.5rem;
+
+        @include respond-above(sm) {
+            font-size: 2.5rem;
+        }
+
+        @include respond-above(md) {
+            font-size: 3.5rem;
+        }
     }
 
     .pretitle {
@@ -16,12 +25,51 @@
 
     .subtitle {
         color: $info;
-        font-size: 2rem;;
+        font-size: 1.2rem;
+
+        @include respond-above(md) {
+            font-size: 1.5rem;
+        }
     }
 }
 
 .page-container {
-    padding: 1.75rem .5rem;
+    padding: 0 .5rem;
+}
+
+.page-content {
+    padding-top: 1.75rem;
+    padding-bottom: 1.75rem;
+    position: relative;
+
+    .admin-menu-container {
+        position: absolute;
+        right: 0;
+        top: 0;
+        margin-right: 15px;
+        margin-top: -1.5rem;
+
+        .admin-button {
+            width: 3rem!important;
+            height: 3rem;
+            border-radius: 100rem;
+    
+            .p-button-icon-left {
+                margin-top: -1em;
+                margin-left: -1em;
+    
+                &:before {
+                    font-size: 2em;
+                }
+            }
+        }
+
+        .p-menu.p-menu-dynamic {
+            top: 3.5rem!important;
+            right: 0!important;
+            left: unset!important;
+        }
+    }
 }
 
 .stylish-line {
@@ -29,4 +77,8 @@
     border-width: .25rem;
     max-width: 15rem;
     margin: 1rem 0;
+}
+
+.featured-card {
+    height: 100%;
 }

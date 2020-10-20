@@ -1,9 +1,8 @@
-.submenu {
+.submenu, .admin-menu-container {
     
     .p-menu {
         background-color: $lightgray;
         height: fit-content;
-        margin-top: 2rem;
         margin-right: 1rem;
 
         .p-menuitem {
