@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import { setCurrentPage } from '../../actions';
 
-import EventList from '../partials/EventList';
+import EventList from '../../components/partials/EventList';
 
 class RankingEvents extends React.Component {
     componentDidMount() {

@@ -42,7 +42,7 @@ class SearchBar extends React.Component {
                         listName: result.horse_name,
                         secondaryText: result.feif_id,
                         type: "horse",
-                        link: `/horse/${result.feif_id}`
+                        link: `/horse/${result.id}`
                     }
                 }
                 if (result._links.self.includes("competitions")) {
@@ -72,7 +72,7 @@ class SearchBar extends React.Component {
                     className={`${this.props.show ? 'show' : ''}`}
                     field="listName" 
                     placeholder="Search for rankings, horses, riders and competitions..." 
-                    scrollHeight={"400px"}
+                    scrollHeight={"50%"}
                     minLength={3}
                     itemTemplate={SearchItem}
                     suggestions={this.state.suggestions} 

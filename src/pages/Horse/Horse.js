@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Page from '../partials/Page';
+import Page from '../../components/partials/Page';
 import HorseResults from './HorseResults';
+import HorseInfo from './HorseInfo';
 
 import {getHorse} from '../../actions';
+import { Route, Switch } from 'react-router-dom';
 
-class HorseProfile extends React.Component {
+class Horse extends React.Component {
 
     componentDidMount() {
         this.props.getHorse(this.props.match.params.id);
@@ -42,37 +44,19 @@ class HorseProfile extends React.Component {
 
         return [
             {
-                label: "Overview",
-                className: !this.props.match.params.testcode ? "active" : null,
-                command: () => this.props.history.push(`/horse/${this.props.horse.id}`)
-            },
-            {
                 label: "Results",
                 items: tests
             }
         ];
     }
 
-    getContent() {
-        if (this.props.horse) {
-            switch (this.props.match.params.page) {
-                case 'results':
-                    return <HorseResults testcode={this.props.match.params.testcode} horseId={this.props.match.params.id} />;
-                default:
-                    return <p>Overview</p>
-            }
-        }
-    }
-
     render() {
         return (
             <Page title={this.getFullName()} icon="horse-head" menuItems={this.getMenuItems()}>
-                <div className="row">
-                    <div className="col">
-                        <h2 className="subtitle">{this.getTitle()}</h2>
-                        {this.getContent()}
-                    </div>
-                </div>
+                <Switch>
+                    <Route exact path="/horse/:id" component={HorseInfo} />
+                    <Route path="/horse/:id/results/:testcode" component={HorseResults} />
+                </Switch>
             </Page>
         );
     }
@@ -84,4 +68,4 @@ const mapStateToProps = (state, ownProps) => {
     }
 }
 
-export default connect(mapStateToProps, { getHorse })(HorseProfile);
+export default connect(mapStateToProps, { getHorse })(Horse);

@@ -5,7 +5,7 @@ import { getRanking, getRankingTests, getRankingTestResult, setCurrentPage } fro
 
 import { ProgressSpinner } from 'primereact/progressspinner';
 
-import ResultList from '../partials/ResultList';
+import ResultList from '../../components/partials/ResultList';
 
 class RankingResultList extends React.Component {
 

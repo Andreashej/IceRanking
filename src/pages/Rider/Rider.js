@@ -1,16 +1,16 @@
 import React from 'react';
 
 
-import Page from '../partials/Page';
+import Page from '../../components/partials/Page';
 import { connect } from 'react-redux';
 
 import { getRider } from '../../actions';
-import { ProgressSpinner } from 'primereact/progressspinner';
-import { withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import RiderResults from './RiderResults';
+import RiderInfo from './RiderInfo';
 
 
-class RiderProfile extends React.Component {
+class Rider extends React.Component {
     
     componentDidMount() {
         this.props.getRider(this.props.match.params.id);
@@ -33,11 +33,6 @@ class RiderProfile extends React.Component {
 
         return [
             {
-                label: "Overview",
-                className: !this.props.match.params.testcode ? "active" : null,
-                command: () => this.props.history.push(`/rider/${this.props.rider.id}`)
-            },
-            {
                 label: "Results",
                 items: tests
             }
@@ -58,26 +53,13 @@ class RiderProfile extends React.Component {
         }
     }
 
-    getContent() {
-        if (this.props.rider) {
-            switch(this.props.match.params.page) {
-                case 'results':
-                    return <RiderResults testcode={this.props.match.params.testcode} riderId={this.props.match.params.id} />;
-                default:
-                    return <p>Overview</p>
-            }
-        }
-    }
-
     render() {
         return (
             <Page title={this.getFullName()} icon="user" menuItems={this.getMenuItems()}>
-                <div className="row">
-                    <div className="col">
-                        <h2 className="subtitle">{this.getTitle()}</h2>
-                        {this.getContent()}
-                    </div>
-                </div>
+                <Switch>
+                    <Route exact path="/rider/:id" component={RiderInfo} />
+                    <Route path="/rider/:id/results/:testcode" component={RiderResults} />
+                </Switch>
            </Page>
         );
     }
@@ -89,4 +71,4 @@ const mapStateToProps = (state, ownProps) => {
     }
 }
 
-export default withRouter(connect(mapStateToProps, { getRider })(RiderProfile));
+export default withRouter(connect(mapStateToProps, { getRider })(Rider));

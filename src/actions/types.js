@@ -22,5 +22,9 @@ export const GET_RIDER_RESULTS = 'GET_RIDER_RESULTS'
 export const GET_HORSE = 'GET_HORSE';
 export const GET_HORSE_RESULTS = 'GET_HORSE_RESULTS';
 
+// Competition
+export const GET_COMPETITION = 'GET_COMPETITION';
+export const GET_COMPETITION_RESULTS = 'GET_COMPETITION_RESULTS';
+
 // Navigation
 export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';

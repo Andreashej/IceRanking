@@ -6,29 +6,29 @@ import { Button } from 'primereact/button';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import { markToDouble } from '../../tools';
-import { getRiderResults } from '../../actions';
+import { getHorseResults, getHorse } from '../../actions';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
-class RiderResults extends React.Component {
+class HorseResults extends React.Component {
     state = {
         expandedRows: []
     }
 
     componentDidMount() {
-        console.log("mounted");
-        this.props.getRiderResults(this.props.riderId, this.props.testcode);
+        this.props.getHorse(this.props.match.params.id).then(() => {
+            this.props.getHorseResults(this.props.match.params.id, this.props.match.params.testcode);
+        });
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.testcode !== this.props.testcode) {
-            this.props.getRiderResults(this.props.riderId, this.props.testcode)
+        if (prevProps.match.params.testcode !== this.props.match.params.testcode) {
+            this.props.getHorseResults(this.props.match.params.id, this.props.match.params.testcode)
         }
     }
 
     renderHorse(rowData, column) {
-        console.log(rowData);
         return (
-            <Link to={`/horse/${rowData.horse.id}/results/${this.props.testcode}`} >{rowData.horse.horse_name}<span className="horse-id d-none d-md-inline"> ({rowData.horse.feif_id})</span></Link>
+            <Link to={`/rider/${rowData.rider.id}/results/${this.props.match.params.testcode}`} >{rowData.rider.fullname}</Link>
         );
     }
 
@@ -42,10 +42,10 @@ class RiderResults extends React.Component {
         }
         const best = this.props.best;
         return (
-            <Card title="Personal best" className="featured-card">
+            <>
                 <h4 className="display-4 featured-number">{markToDouble(best.mark, best.test.rounding_precision)}</h4>
-                <p className="lead mb-0">{best.horse.horse_name}</p>
-            </Card>
+                <p className="lead mb-0">{best.rider.fullname}</p>
+            </>
         )
     }
 
@@ -55,10 +55,10 @@ class RiderResults extends React.Component {
         }
 
         return (
-            <Card title="Best rank" className="featured-card">
+            <>
                 <h4 className="display-4 featured-number">1</h4>
                 <p className="lead mb-0">Den Danske Rangliste</p>
-            </Card>
+            </>
         )
     }
 
@@ -68,15 +68,14 @@ class RiderResults extends React.Component {
         }
 
         return (
-            <Card title="Activity" className="featured-card">
+            <>
                 <h4 className="display-4 featured-number">{this.props.results.length}</h4>
                 <p className="lead mb-0">results</p>
-            </Card>
+            </>
         );
     }
 
     getValidity(rowData, column) {
-        console.log(rowData);
         return rowData.test.competition.include_in_ranking.map(ranking => {
             const expiryDate = new Date()
             expiryDate.setTime(new Date(rowData.test.competition.last_date).getTime() + ranking.results_valid_days * 24 * 60 * 60 * 1000);
@@ -90,7 +89,7 @@ class RiderResults extends React.Component {
                     className="p-button-raised p-button-rounded" 
                     tooltip={tooltip} 
                     tooltipOptions={{position: "top"}}
-                    onClick={() => this.props.history.push(`/rankings/${ranking.shortname}/tests/${this.props.testcode}`)}
+                    onClick={() => this.props.history.push(`/rankings/${ranking.shortname}/tests/${this.props.match.params.testcode}`)}
                     disabled={!isValid}
                 />
             )
@@ -119,19 +118,30 @@ class RiderResults extends React.Component {
         return (
             <>
             <div className="row">
+                <div className="col">
+                    <h2 className="subtitle">{this.props.match.params.testcode} results</h2>
+                </div>
+            </div>
+            <div className="row">
                 <div className="col-12 col-md-4 pb-3 pb-md-0">
-                    {this.bestResult()}
+                    <Card title="Personal best" className="featured-card">
+                        {this.bestResult()}
+                    </Card>
                 </div>
                 <div className="col-12 col-md-4 pb-3 pb-md-0">
-                    {this.bestRank()}
+                    <Card title="Best rank" className="featured-card">
+                        {this.bestRank()}
+                    </Card>
                 </div>
                 <div className="col-12 col-md-4 pb-3 pb-md-0">
-                    {this.activity()}
+                    <Card title="Activity"  className="featured-card">
+                        {this.activity()}
+                    </Card>
                 </div>
             </div>
             <DataTable className="results-table mt-4" value={this.props.results} autoLayout={true} rowExpansionTemplate={(row) => this.rowExtraTemplate(row)} expandedRows={this.state.expandedRows} onRowToggle={(e) => this.setState({expandedRows:e.data})} dataKey="id">
                 <Column expander={true} className="expander" />
-                <Column field="horse.horse_name" className="horse" header="Horse" body={(rowData, col) => this.renderHorse(rowData, col)} />
+                <Column field="rider.fullname" className="rider" header="Rider" body={(rowData, col) => this.renderHorse(rowData, col)} />
                 <Column field="test.competition.name" className="competition" header="Competition" />
                 <Column field="mark" header="Mark" className="mark" body={this.renderMark} />
                 <Column field="test.competition.include_in_ranking.shortname" className="rankings" header="" body={(r, c) => this.getValidity(r, c)} />
@@ -142,10 +152,14 @@ class RiderResults extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
+    if (!state.horses[ownProps.match.params.id]) {
+        return {};
+    }
+
     return {
-        results: state.riders[ownProps.riderId].results[ownProps.testcode].history,
-        best: state.riders[ownProps.riderId].results[ownProps.testcode].best,
+        results: state.horses[ownProps.match.params.id].results[ownProps.match.params.testcode].history,
+        best: state.horses[ownProps.match.params.id].results[ownProps.match.params.testcode].best,
     };
 };
 
-export default withRouter(connect(mapStateToProps, { getRiderResults } )(RiderResults))
+export default withRouter(connect(mapStateToProps, { getHorseResults, getHorse } )(HorseResults))

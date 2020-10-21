@@ -7,7 +7,7 @@ import { getRanking, getRankingTests, getProfile } from '../../actions';
 
 import TestResults from './TestResults';
 import RankingEvents from './RankingEvents';
-import Page from '../partials/Page';
+import Page from '../../components/partials/Page';
 import RankingOptions from './admin/RankingOptions';
 import RankingTestDefinitions from './admin/RankingTestDefinitions';
 

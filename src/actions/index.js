@@ -1,5 +1,5 @@
 import rankingApi from '../apis/ranking';
-import { GET_RANKINGS, GET_RANKING, GET_RANKING_TESTS, GET_RANKING_TEST, UPDATE_RANKING_TEST, GET_RANKING_TEST_RESULTS, LOGIN, LOGOUT, GET_PROFILE, NO_USER, GET_RIDER, GET_RIDER_RESULTS, UPDATE_RANKING, GET_HORSE, GET_HORSE_RESULTS, CREATE_RANKING_TEST, SET_CURRENT_PAGE } from './types';
+import { GET_RANKINGS, GET_RANKING, GET_RANKING_TESTS, GET_RANKING_TEST, UPDATE_RANKING_TEST, GET_RANKING_TEST_RESULTS, LOGIN, LOGOUT, GET_PROFILE, NO_USER, GET_RIDER, GET_RIDER_RESULTS, UPDATE_RANKING, GET_HORSE, GET_HORSE_RESULTS, CREATE_RANKING_TEST, SET_CURRENT_PAGE, GET_COMPETITION } from './types';
 
 // Ranking actions
 
@@ -165,6 +165,21 @@ export const getHorseResults = (id, testcode) => async (dispatch) => {
                 testcode: testcode,
                 result: response.data.data
             }
+        });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// Competition actions
+
+export const getCompetition = (id) => async (dispatch) => {
+    try {
+        const response = await rankingApi.get(`/competitions/${id}`);
+
+        dispatch({
+            type: GET_COMPETITION,
+            payload: response.data.data,
         });
     } catch (error) {
         console.log(error);

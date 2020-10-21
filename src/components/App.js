@@ -3,11 +3,12 @@ import { HashRouter, Route, Switch } from 'react-router-dom';
 
 // Components
 import Navbar from "./Navbar";
-import Frontpage from "./Frontpage";
+import Frontpage from "../pages/Frontpage";
 import Footer from './Footer';
-import Ranking from './RankingList/RankingList';
-import RiderProfile from './Rider/RiderProfile';
-import HorseProfile from './Horse/HorseProfile';
+import RankingList from '../pages/RankingList';
+import Rider from '../pages/Rider';
+import Horse from '../pages/Horse';
+import Competition from '../pages/Competition';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
@@ -22,11 +23,10 @@ const App = () => {
             <Navbar />
             <Switch>
                 <Route path="/" exact component={Frontpage} />
-                <Route path="/rankings/:shortname" component={Ranking} />
-                <Route path="/rider/:id/:page/:testcode" component={RiderProfile} />
-                <Route path="/rider/:id" component={RiderProfile} />
-                <Route path="/horse/:id/:page/:testcode" component={HorseProfile} />
-                <Route path="/horse/:id" component={HorseProfile} />
+                <Route path="/rankings/:shortname" component={RankingList} />
+                <Route path="/rider/:id" component={Rider} />
+                <Route path="/horse/:id" component={Horse} />
+                <Route path="/competition/:id" component={Competition} />
             </Switch>
             <Footer />
         </HashRouter>
