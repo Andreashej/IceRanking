@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import fetch from 'node-fetch';
 import path from 'path';
-import { EnvType } from '../../main';
+import { Config, EnvType } from '../../main';
 
 if (process.env.NODE_ENV === 'test') {
   dotenv.config();
@@ -81,19 +81,14 @@ const validateEnvVars: (vars: IEnvVars) => asserts vars is Required<IEnvVars> = 
   }
 };
 
-export const setBranchConfig: (
+export const setBranchConfig = (
+  config: Pick<Config, 'nodeVersion' | 'xcodeVersion'>,
   certificateEncoded: string,
   certificateFilename: string,
   profileEncoded: string,
   provisioningProfileFilename: string,
   method: 'POST' | 'PUT'
-) => Promise<object> = (
-  certificateEncoded,
-  certificateFilename,
-  profileEncoded,
-  provisioningProfileFilename,
-  method
-) => {
+): Promise<object> => {
   // disable consistent-return because the function has a different return behavior depending on
   // code branching https://eslint.org/docs/rules/consistent-return#when-not-to-use-it
   // eslint-disable-next-line consistent-return
@@ -184,6 +179,8 @@ export const setBranchConfig: (
       paramObject.postBuild = 'appcenter-post-build.sh';
     }
 
+    const { xcodeVersion, nodeVersion } = config;
+
     const body: IBodyObject = {
       environmentVariables,
       signed: true,
@@ -192,7 +189,7 @@ export const setBranchConfig: (
           'package.json': paramObject,
         },
         javascript: {
-          nodeVersion: '12.x',
+          nodeVersion,
           packageJsonPath: 'package.json',
           runTests: false,
         },
@@ -201,6 +198,7 @@ export const setBranchConfig: (
           certificateEncoded,
           certificateFilename,
           certificatePassword: MATCH_PASSWORD,
+          xcodeVersion,
           forceLegacyBuildSystem: true,
           projectOrWorkspacePath: PROJECT_OR_WORKSPACE_PATH,
           provisioningProfileEncoded: profileEncoded,

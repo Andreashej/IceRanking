@@ -46,6 +46,7 @@ export const expectedBody = JSON.stringify({
       certificateEncoded: 'certEncoded',
       certificateFilename: 'certFilename',
       certificatePassword: 'matchPassword',
+      xcodeVersion: '12.1',
       forceLegacyBuildSystem: true,
       projectOrWorkspacePath: 'projectOrWorkspacePath',
       provisioningProfileEncoded: 'profileEncoded',

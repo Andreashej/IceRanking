@@ -2,15 +2,13 @@
 
 A collection of scripts used for RN projects
 
-* [APPCENTER](#appcenter)
-  * [Configure Build Settings](#configure-build-settings)
-* [FASTLANE](#fastlane) 
-	* [Local Builds](#local-builds)
-* [GITHUB](#github) 
-	* [Repo Dispatch](#repo-dispatch)
-* [AIRWATCH](#airwatch)
-  * [Upload an app to Airwatch](#upload-an-app-to-airwatch)
-* [SENTRY](#sentry)
+- [APPCENTER](#appcenter)
+  - [Configure Build Settings](#configure-build-settings)
+- [FASTLANE](#fastlane) \* [Local Builds](#local-builds)
+- [GITHUB](#github) \* [Repo Dispatch](#repo-dispatch)
+- [AIRWATCH](#airwatch)
+  - [Upload an app to Airwatch](#upload-an-app-to-airwatch)
+- [SENTRY](#sentry)
 
 ## Installation
 
@@ -27,7 +25,7 @@ Sets the environment variables and other settings in in the build configuration 
 #### Mandatory environment variables
 
 | Environment Variable      | Description                                                                                                                                                                                                                     | Example                                                                                            |
-|---------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | APPCENTER_API_TOKEN       | information about acquiring an appcenter api token [can be found here](https://docs.microsoft.com/en-us/appcenter/api-docs/), required by appcenter openapi                                                                     | digqwlbdlet8etqwyeq6wyadhsuasudtqw7et                                                              |
 | APPCENTER_APP_NAME        | the name of your app on appcenter, required by appcenter openapi, can be obtained by opening your app in appcenter.ms and extracting it from the url (appcenter.ms /orgs/{{APPCENTER_OWNER_NAME}}/apps/{{APPCENTER_APP_NAME}})  | Goods-Receipt-2.0                                                                                  |
 | APPCENTER_OWNER_NAME      | the name of your team on appcenter, required by appcenter openapi, can be obtained by opening your app in appcenter.ms and extracting it from the url (appcenter.ms /orgs/{{APPCENTER_OWNER_NAME}}/apps/{{APPCENTER_APP_NAME}}) | LEGOUXMP                                                                                           |
@@ -90,7 +88,7 @@ configuration](https://confluence.corp.lego.com/display/UXMP/Git+Workflow) with 
 environments.
 
 |                      | Dev                                | QA                                | Prod                           |
-|----------------------|------------------------------------|-----------------------------------|--------------------------------|
+| -------------------- | ---------------------------------- | --------------------------------- | ------------------------------ |
 | Branches             | develop </br> feature/             | release/ </br> hotfix/            | master                         |
 | Provisioning profile | com.lego.corp.teamName-appName-dev | com.lego.corp.teamName-appName-qa | com.lego.corp.teamName-appName |
 | Env file             | .env.dev                           | .env.qa                           | .env.prod                      |
@@ -108,11 +106,13 @@ Example:
 
 ```json
 "legornscripts": {
-    "branchConfig": {
-        "dev": ["develop", "feature/"],
-        "qa": ["release/", "bugfix/",	"hotfix/"],
-        "prod": ["master"]
-  }
+  "branchConfig": {
+    "dev": ["develop", "feature/"],
+    "qa": ["release/", "bugfix/",	"hotfix/"],
+    "prod": ["master"]
+	},
+	"nodeVersion": "12.x",
+	"xcodeVersion": "12.1"
 }
 ```
 
@@ -225,7 +225,7 @@ react-native-scripts airwatch upload-app push-mode-auto
 #### Mandatory environment variables
 
 | Environment Variable     | Description                                                                                                                                                                                                                     | Example                               |
-|--------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------|
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
 | APPCENTER_API_TOKEN      | information about acquiring an appcenter api token [can be found here](https://docs.microsoft.com/en-us/appcenter/api-docs/), required by appcenter openapi                                                                     | digqwlbdlet8etqwyeq6wyadhsuasudtqw7et |
 | APPCENTER_APP_NAME       | the name of your app on appcenter, required by appcenter openapi, can be obtained by opening your app in appcenter.ms and extracting it from the url (appcenter.ms /orgs/{{APPCENTER_OWNER_NAME}}/apps/{{APPCENTER_APP_NAME}})  | Goods-Receipt-2.0                     |
 | APPCENTER_OWNER_NAME     | the name of your team on appcenter, required by appcenter openapi, can be obtained by opening your app in appcenter.ms and extracting it from the url (appcenter.ms /orgs/{{APPCENTER_OWNER_NAME}}/apps/{{APPCENTER_APP_NAME}}) | LEGOUXMP                              |

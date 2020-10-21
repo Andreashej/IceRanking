@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import { openSync, readdirSync } from 'fs';
 import ipaExtractInfo from 'ipa-extract-info';
 import { resolve as pathResolve } from 'path';
+import { Config } from '../main';
 
 if (process.env.NODE_ENV === 'test') {
   dotenv.config();
@@ -165,10 +166,10 @@ export interface IAwUserGroup {
   id: number;
 }
 
-export const currentBranchIsWhitelisted: (
-  whitelistedBranches: string[],
+export const currentBranchIsWhitelisted = (
+  { whitelistedBranches }: Pick<Config, 'whitelistedBranches'>,
   currentBranchName?: string
-) => boolean = (whitelistedBranches, currentBranchName) => {
+): boolean => {
   if (!currentBranchName) {
     return false;
   }

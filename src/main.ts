@@ -21,7 +21,6 @@ export enum EnvType {
   qa = 'qa',
   prod = 'prod',
 }
-type IBranchConfig = { [key in EnvType]: string[] };
 
 const currentBranchName = process.env.GITHUB_REF?.split('refs/heads/')[1]?.toLowerCase();
 
@@ -29,45 +28,54 @@ const currentBranchName = process.env.GITHUB_REF?.split('refs/heads/')[1]?.toLow
 const moduleName = 'legornscripts';
 const configExplorer = cosmiconfig(moduleName);
 
-// the default branch configuration for each environment
-let branchConfig: IBranchConfig = {
-  qa: ['release/', 'hotfix/'],
-  prod: ['master'],
-  dev: ['develop', 'feature/'],
+export type Config = {
+  whitelistedBranches: string[];
+  xcodeVersion: string;
+  nodeVersion: string;
+  env: EnvType | undefined;
+};
+
+export const defaultConfig = {
+  xcodeVersion: '12.1',
+  nodeVersion: '12.x',
+  branchConfig: {
+    dev: ['develop', 'feature/'],
+    qa: ['release/', 'hotfix/'],
+    prod: ['master'],
+  },
 };
 
 // check if there is a custom configuration defined in the project for RNScripts
 // if a custom config is found, parse the object and return an array of all the branches that should
 // be built in appcenter and an environment for the build
-const getCustomConfig: () => Promise<{
-  whitelistedBranches: string[];
-  env: EnvType | undefined;
-}> = async () => {
+const getCustomConfig: () => Promise<Config> = async () => {
   try {
     const configResult = await configExplorer.search(moduleName);
+    const config = {
+      ...defaultConfig,
+      ...(configResult?.config || {}),
+    };
     if (!configResult) {
       logInfo('no custom configuration found, using default config');
     }
-    if (configResult?.config?.branchConfig) {
-      branchConfig = configResult.config.branchConfig;
-    }
     //list of all branches that can should be built in appcenter
-    const whitelistedBranches = flattenDeep(Object.values(branchConfig));
+    const whitelistedBranches = flattenDeep(Object.values(config.branchConfig));
     let env: EnvType | undefined;
     // parse the branch configuration and extract the environment
-    Object.keys(branchConfig).forEach((key) => {
+    Object.keys(config.branchConfig).forEach((key) => {
       const objectKey = key as EnvType;
       if (
         currentBranchName &&
-        branchConfig[objectKey].some((branchName: string) =>
+        config.branchConfig[objectKey].some((branchName: string) =>
           currentBranchName.startsWith(branchName)
         )
       ) {
         env = objectKey;
       }
     });
+    const { xcodeVersion, nodeVersion } = config;
 
-    return { whitelistedBranches, env };
+    return { whitelistedBranches, env, xcodeVersion, nodeVersion };
   } catch (error) {
     throw error;
   }
@@ -75,18 +83,14 @@ const getCustomConfig: () => Promise<{
 
 const execAppcenter: () => Promise<void> = async () => {
   try {
-    const { env, whitelistedBranches } = await getCustomConfig();
+    const config = await getCustomConfig();
 
     switch (action) {
       case 'configure-build-settings':
-        if (!env) {
-          logError('no environment matches your current branch');
-          break;
-        }
-        setBuildConfiguration(env);
+        setBuildConfiguration(config);
         break;
       case 'report-build-status':
-        if (currentBranchIsWhitelisted(whitelistedBranches, currentBranchName)) {
+        if (currentBranchIsWhitelisted(config, currentBranchName)) {
           execSync(join(__dirname, './appcenter/report-build-status/report-build-status.sh'), {
             stdio: 'inherit',
           });
