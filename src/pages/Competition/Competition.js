@@ -18,9 +18,26 @@ class Competition extends React.Component {
         }
     }
 
+    getMenuItems() {
+        const tests = this.props.competition ? Object.values(this.props.competition.tests).map( test => {
+            return {
+                label: test.testcode,
+                className: this.props.match.params.testcode === test.testcode ? 'active' : null,
+                command: () => this.props.history.push(`/competition/${this.props.competition.id}/test/${test.testcode}`)
+            };
+        }) : [];
+
+        return [
+            {
+                label: "Results",
+                items: tests
+            }
+        ];
+    }
+
     render() {
         return (
-            <Page title={this.getTitle()} icon="calendar-alt">
+            <Page title={this.getTitle()} icon="calendar-alt" menuItems={this.getMenuItems()}>
                 <Switch>
                     <Route exact path="/competition/:id" component={CompetitionInfo} />
                     <Route path="/competition/:id/test/:testcode" component={CompetitionResults} /> 

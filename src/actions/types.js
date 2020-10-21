@@ -24,7 +24,9 @@ export const GET_HORSE_RESULTS = 'GET_HORSE_RESULTS';
 
 // Competition
 export const GET_COMPETITION = 'GET_COMPETITION';
-export const GET_COMPETITION_RESULTS = 'GET_COMPETITION_RESULTS';
+
+// Tests
+export const GET_TEST = 'GET_TEST';
 
 // Navigation
 export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
