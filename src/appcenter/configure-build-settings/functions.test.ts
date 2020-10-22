@@ -5,6 +5,10 @@ import { expectedBody } from './testUtils';
 const fetchMock: FetchMock = global.fetch;
 
 const currentBranchName = encodeURIComponent(process.env.GITHUB_REF?.split('refs/heads/')[1]);
+const testConfig = {
+  xcodeVersion: '12.1',
+  nodeVersion: '12.x',
+};
 
 afterEach(() => {
   fetchMock.resetMocks();
@@ -20,6 +24,7 @@ describe('setBranchConfig', () => {
     });
     expect.assertions(2);
     const response = await setBranchConfig(
+      testConfig,
       'certEncoded',
       'certFilename',
       'profileEncoded',
@@ -45,6 +50,7 @@ describe('setBranchConfig', () => {
     fetchMock.mockReject(new Error('error'));
     await expect(
       setBranchConfig(
+        testConfig,
         'certEncoded',
         'certFilename',
         'profileEncoded',
