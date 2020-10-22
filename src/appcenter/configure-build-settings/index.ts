@@ -6,7 +6,7 @@ import { decryptCerts, setBranchConfig } from './functions';
 
 const appcenterAppName = process.env.APPCENTER_APP_NAME;
 
-export const setBuildConfiguration = async (config: Required<Config>): Promise<void> => {
+export const setBuildConfiguration = async (config: Config): Promise<void> => {
   if (!config.env) {
     logError('no environment matches your current branch');
 

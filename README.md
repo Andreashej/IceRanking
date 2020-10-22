@@ -4,8 +4,10 @@ A collection of scripts used for RN projects
 
 - [APPCENTER](#appcenter)
   - [Configure Build Settings](#configure-build-settings)
-- [FASTLANE](#fastlane) \* [Local Builds](#local-builds)
-- [GITHUB](#github) \* [Repo Dispatch](#repo-dispatch)
+- [FASTLANE](#fastlane)
+  - [Local Builds](#local-builds)
+- [GITHUB](#github)
+  - [Repo Dispatch](#repo-dispatch)
 - [AIRWATCH](#airwatch)
   - [Upload an app to Airwatch](#upload-an-app-to-airwatch)
 - [SENTRY](#sentry)
@@ -53,19 +55,19 @@ Next you can use it in your custom github action e.g.:
 
 ```yml
 -   name:  Set AppCenter build configuration
-	uses:  actions/npm@master
-	env:
-		APPCENTER_API_TOKEN:  ${{ secrets.APPCENTER_API_TOKEN }}
-		APPCENTER_APP_NAME:  Goods-Receipt-2.0
-		APPCENTER_OWNER_NAME:  LEGOUXMP
-		BUNDLE_GIT__COM:  ${{ secrets.BUNDLE_GIT__COM }}
-		IOS_CERTIFICATES_GIT_URL:  ${{ secrets.IOS_CERTIFICATES_GIT_URL }}
-		MATCH_PASSWORD:  ${{ secrets.MATCH_PASSWORD }}
-		NPM_AUTH_TOKEN:  ${{ secrets.NPM_AUTH_TOKEN }}
-		PROJECT_OR_WORKSPACE_PATH:  ios/lbrgoodsreceipt.xcworkspace
-		XCODE_SCHEME_NAME:  lbrgoodsreceipt
-	with:
-		args:  '"run appcenter-configure-build-settings"'
+  uses:  actions/npm@master
+  env:
+    APPCENTER_API_TOKEN:  ${{ secrets.APPCENTER_API_TOKEN }}
+    APPCENTER_APP_NAME:  Goods-Receipt-2.0
+    APPCENTER_OWNER_NAME:  LEGOUXMP
+    BUNDLE_GIT__COM:  ${{ secrets.BUNDLE_GIT__COM }}
+    IOS_CERTIFICATES_GIT_URL:  ${{ secrets.IOS_CERTIFICATES_GIT_URL }}
+    MATCH_PASSWORD:  ${{ secrets.MATCH_PASSWORD }}
+    NPM_AUTH_TOKEN:  ${{ secrets.NPM_AUTH_TOKEN }}
+    PROJECT_OR_WORKSPACE_PATH:  ios/lbrgoodsreceipt.xcworkspace
+    XCODE_SCHEME_NAME:  lbrgoodsreceipt
+  with:
+    args:  '"run appcenter-configure-build-settings"'
 ```
 
 > We build in 2 phases, in the first phase we execute our simple tests with github actions, in the
@@ -80,7 +82,7 @@ Next you can use it in your custom github action e.g.:
 >
 > ```yml
 > - name: Set AppCenter build configuration
-> 	if: "!contains(github.event.head_commit.message, '[skip-appcenter]')"
+>   if: "!contains(github.event.head_commit.message, '[skip-appcenter]')"
 > ```
 
 By default this package uses the [Git Flow branch
@@ -108,11 +110,11 @@ Example:
 "legornscripts": {
   "branchConfig": {
     "dev": ["develop", "feature/"],
-    "qa": ["release/", "bugfix/",	"hotfix/"],
+    "qa": ["release/", "bugfix/", "hotfix/"],
     "prod": ["master"]
-	},
-	"nodeVersion": "12.x",
-	"xcodeVersion": "12.1"
+  },
+  "nodeVersion": "12.x",
+  "xcodeVersion": "12.1"
 }
 ```
 

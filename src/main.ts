@@ -30,13 +30,13 @@ const configExplorer = cosmiconfig(moduleName);
 
 export type Config = {
   whitelistedBranches: string[];
-  xcodeVersion: string;
+  xcodeVersion?: string;
   nodeVersion: string;
   env: EnvType | undefined;
 };
 
 export const defaultConfig = {
-  xcodeVersion: '12.1',
+  xcodeVersion: undefined,
   nodeVersion: '12.x',
   branchConfig: {
     dev: ['develop', 'feature/'],
