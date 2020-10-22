@@ -1,3 +1,15 @@
+# [0.12.0](https://github.com/LEGO/react-native-scripts/compare/v0.11.12...v0.12.0) (2020-10-22)
+
+
+### Bug Fixes
+
+* pr changes ([0c7de7a](https://github.com/LEGO/react-native-scripts/commit/0c7de7a73beb48b7d169b3162f2f6b99620b0db9))
+
+
+### Features
+
+* expose xcode version in config ([e97dd75](https://github.com/LEGO/react-native-scripts/commit/e97dd7541a9ec577318a40a81525184884161417))
+
 ## [0.11.12](https://github.com/LEGO/react-native-scripts/compare/v0.11.11...v0.11.12) (2020-09-16)
 
 
