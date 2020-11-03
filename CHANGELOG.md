@@ -1,3 +1,15 @@
+# [1.0.0](https://github.com/LEGO/react-native-scripts/compare/v0.12.0...v1.0.0) (2020-11-03)
+
+
+### Bug Fixes
+
+* do not force legacy build ([a5a0371](https://github.com/LEGO/react-native-scripts/commit/a5a0371b36f55dee11a3c17a1aeda4426851c9d4))
+
+
+### BREAKING CHANGES
+
+* removes default legacy build
+
 # [0.12.0](https://github.com/LEGO/react-native-scripts/compare/v0.11.12...v0.12.0) (2020-10-22)
 
 
