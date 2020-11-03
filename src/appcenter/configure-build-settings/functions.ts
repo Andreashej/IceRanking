@@ -199,7 +199,6 @@ export const setBranchConfig = (
           certificateFilename,
           certificatePassword: MATCH_PASSWORD,
           xcodeVersion,
-          forceLegacyBuildSystem: true,
           projectOrWorkspacePath: PROJECT_OR_WORKSPACE_PATH,
           provisioningProfileEncoded: profileEncoded,
           provisioningProfileFilename,
