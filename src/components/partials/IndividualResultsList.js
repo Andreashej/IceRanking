@@ -62,7 +62,6 @@ class RiderResults extends React.Component {
     }
 
     getValidity(rowData, column) {
-        console.log(rowData);
         return rowData.test.competition.include_in_ranking.map(ranking => {
             const expiryDate = new Date()
             expiryDate.setTime(new Date(rowData.test.competition.last_date).getTime() + ranking.results_valid_days * 24 * 60 * 60 * 1000);

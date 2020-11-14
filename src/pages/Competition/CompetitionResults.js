@@ -1,8 +1,11 @@
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
+import { ProgressSpinner } from 'primereact/progressspinner';
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { getTest, getCompetition } from '../../actions';
+import { markToDouble } from '../../tools';
 
 class CompetitionResults extends React.Component {
     
@@ -20,8 +23,23 @@ class CompetitionResults extends React.Component {
         }
     }
 
+    renderRider(rowData, col) {
+        return ( 
+            <Link to={`/rider/${rowData.rider.id}/results/${this.props.match.params.testcode}`}>{rowData.rider.fullname}</Link>
+        )
+    }
+
+    renderHorse(rowData, col) {
+        return (
+            <Link to={`/horse/${rowData.horse.id}/results/${this.props.match.params.testcode}`}>{rowData.horse.horse_name}</Link>
+        )
+    }
+
+    renderMark(rowData) {
+        return markToDouble(rowData.mark, this.props.test.rounding_precision);
+    }
+
     render() {
-        console.log(this.props.test);
         return (
             <>
                 <div className="row">
@@ -29,14 +47,11 @@ class CompetitionResults extends React.Component {
                         <h2 className="subheader">{this.props.match.params.testcode} results</h2>
                     </div>
                 </div>
-                {this.props.test && <DataTable className="results-table mt-4" value={this.props.test.results} autoLayout={true} dataKey="id">
-                    <Column field="rider.fullname" className="rider" header="Rider" />
-                    <Column field="horse.horse_name" className="horse" header="Horse" />
-                    <Column field="mark" className="mark" header="Mark" />
-                    {/* <Column field="test.competition.name" className="competition" header="Competition" />
-                    <Column field="mark" header="Mark" className="mark" body={this.renderMark} />
-                    <Column field="test.competition.include_in_ranking.shortname" className="rankings" header="" body={(r, c) => this.getValidity(r, c)} /> */}
-                </DataTable>}
+                {(this.props.test && this.props.test.results && <DataTable className="results-table mt-4" value={this.props.test.results} autoLayout={true} dataKey="id">
+                    <Column field="rider.fullname" className="rider" header="Rider" body={(rowData, col) => this.renderRider(rowData, col)} />
+                    <Column field="horse.horse_name" className="horse" header="Horse" body={(rowData, col) => this.renderHorse(rowData, col)} />
+                    <Column field="mark" className="mark" header="Mark" body={(rowData) => this.renderMark(rowData)} />
+                </DataTable>) || <ProgressSpinner />}
             </>
         )
     }

@@ -36,6 +36,13 @@ class Navbar extends React.Component {
         if (this.props.currentUser) {
             const userActions = [
                 {
+                    label: "Create competition",
+                    icon: "pi pi-calendar-plus",
+                    command: () => {
+                        this.props.history.push('/competition/create')
+                    }
+                },
+                {
                     label: "Log out",
                     icon: "pi pi-sign-out",
                     command: () => {
@@ -54,7 +61,6 @@ class Navbar extends React.Component {
                     <Button label="Login" icon="pi pi-sign-in" className="p-button-raised p-button-rounded login-button" onClick={(e) => this.setState({showLogin: true})} />
                     <Button icon="pi pi-search" className="search-button d-block d-md-none" onClick={() => {
                         this.setState({show: true});
-                        console.log("hey");
                     }} />
                 </>
             );

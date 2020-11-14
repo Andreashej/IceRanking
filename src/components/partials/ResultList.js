@@ -8,9 +8,14 @@ import { Link } from 'react-router-dom';
 class ResultList extends React.Component {
 
     getSubmarks = (result, col) => {
-        return result.marks.map((result, index, arr) => {
-            let mark = markToDouble(result.mark, this.props.rounding_precision);
-            return (index !== arr.length - 1) ? mark + ", " : mark;
+        return result.marks.map((mark, index) => {
+            return (
+                <span key={mark.id}>
+                    {index > 0 && ", "}
+                    <Link to={`/competition/${mark.test.competition.id}/test/${mark.test.testcode}`}>{markToDouble(mark.mark, this.props.rounding_precision)}</Link>
+                </span>
+            )
+            
         });
     }
 

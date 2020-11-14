@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withRouter, Redirect } from 'react-router';
+import { withRouter } from 'react-router';
 import { Route, Switch } from 'react-router-dom';
 
 import { getRanking, getRankingTests, getProfile } from '../../actions';

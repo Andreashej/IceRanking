@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import Page from '../../components/partials/Page';
 import CompetitionInfo from './CompetitionInfo';
 import CompetitionResults from './CompetitionResults';
+import CompetitionCreate from './CompetitionCreate';
 import { getCompetition } from '../../actions';
 
 class Competition extends React.Component {
@@ -16,16 +17,18 @@ class Competition extends React.Component {
         if (this.props.competition) {
             return this.props.competition.name;
         }
+
+        return 'Register competition'
     }
 
     getMenuItems() {
-        const tests = this.props.competition ? Object.values(this.props.competition.tests).map( test => {
+        const tests = Object.values(this.props.competition.tests).map( test => {
             return {
                 label: test.testcode,
                 className: this.props.match.params.testcode === test.testcode ? 'active' : null,
                 command: () => this.props.history.push(`/competition/${this.props.competition.id}/test/${test.testcode}`)
             };
-        }) : [];
+        });
 
         return [
             {
@@ -37,8 +40,9 @@ class Competition extends React.Component {
 
     render() {
         return (
-            <Page title={this.getTitle()} icon="calendar-alt" menuItems={this.getMenuItems()}>
+            <Page title={this.getTitle()} icon="calendar-alt" menuItems={this.props.competition ? this.getMenuItems() : null}>
                 <Switch>
+                    <Route exact path="/competition/create" component={CompetitionCreate} />
                     <Route exact path="/competition/:id" component={CompetitionInfo} />
                     <Route path="/competition/:id/test/:testcode" component={CompetitionResults} /> 
                 </Switch>

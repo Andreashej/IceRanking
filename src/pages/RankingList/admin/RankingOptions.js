@@ -54,7 +54,7 @@ class EditRanking extends React.Component {
                 <>
                     <Growl ref={el => {this.growl = el}}></Growl>
                     <h2 className="subheader">Ranking options</h2>
-                    <form id="editRankning" onSubmit={e => this.onSubmit(e)}>
+                    <form id="editRanking" onSubmit={e => this.onSubmit(e)}>
                         <span className="p-float-label">
                             <InputText id="name" value={this.state.listname} onChange={(e) => this.setState({listname: e.target.value})} />
                             <label htmlFor="name">Listname</label>

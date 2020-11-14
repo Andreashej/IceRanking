@@ -18,8 +18,6 @@ export default (state = {}, action) => {
             let horse = state[action.payload.id];
             horse.results[action.payload.testcode] = action.payload.result;
 
-            console.log(action.payload);
-
             return {...state, [action.payload.id]: horse};
         default:
             return state;

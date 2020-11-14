@@ -96,6 +96,12 @@ class HorseResults extends React.Component {
         });
     }
 
+    renderCompetition(rowData, col) {
+        return (
+            <Link to={`/competition/${rowData.test.competition.id}/test/${this.props.match.params.testcode}`}>{rowData.test.competition.name}</Link>
+        )
+    }
+
     rowExtraTemplate(result) {
         return (
             <div className="row d-flex d-md-none">
@@ -139,13 +145,13 @@ class HorseResults extends React.Component {
                     </Card>
                 </div>
             </div>
-            <DataTable className="results-table mt-4" value={this.props.results} autoLayout={true} rowExpansionTemplate={(row) => this.rowExtraTemplate(row)} expandedRows={this.state.expandedRows} onRowToggle={(e) => this.setState({expandedRows:e.data})} dataKey="id">
+            {(this.props.results && <DataTable className="results-table mt-4" value={this.props.results} autoLayout={true} rowExpansionTemplate={(row) => this.rowExtraTemplate(row)} expandedRows={this.state.expandedRows} onRowToggle={(e) => this.setState({expandedRows:e.data})} dataKey="id">
                 <Column expander={true} className="expander" />
                 <Column field="rider.fullname" className="rider" header="Rider" body={(rowData, col) => this.renderHorse(rowData, col)} />
-                <Column field="test.competition.name" className="competition" header="Competition" />
+                <Column field="test.competition.name" className="competition" header="Competition" body={(rowData, col) => this.renderCompetition(rowData, col)} />
                 <Column field="mark" header="Mark" className="mark" body={this.renderMark} />
                 <Column field="test.competition.include_in_ranking.shortname" className="rankings" header="" body={(r, c) => this.getValidity(r, c)} />
-            </DataTable>
+            </DataTable>) || <ProgressSpinner />}
             </>
         );
     }

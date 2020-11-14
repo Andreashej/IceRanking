@@ -84,7 +84,6 @@ class RankingTestDefinitions extends React.Component {
     }
 
     onRowEdit(event) {
-        console.log(event.data);
         this.setState({
             editClone: event.data
         })
@@ -92,7 +91,7 @@ class RankingTestDefinitions extends React.Component {
 
     onRowSave(event) {
         let test = this.state.editClone;
-        console.log(test);
+
         if (test.action === 'create') {
             this.props.createRankingTest(this.props.match.params.shortname, test);
             delete test.action;

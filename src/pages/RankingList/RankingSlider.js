@@ -15,8 +15,6 @@ class RankingSlider extends React.Component {
         newSlide = newSlide < 0 ? this.props.rankings.length - 1 : newSlide;
         newSlide = newSlide > this.props.rankings.length - 1 ? 0 : newSlide;
 
-        console.log(newSlide);
-
         this.setState({
             currentSlide: newSlide
         });

@@ -1,5 +1,5 @@
 import rankingApi from '../apis/ranking';
-import { GET_RANKINGS, GET_RANKING, GET_RANKING_TESTS, GET_RANKING_TEST, UPDATE_RANKING_TEST, GET_RANKING_TEST_RESULTS, LOGIN, LOGOUT, GET_PROFILE, NO_USER, GET_RIDER, GET_RIDER_RESULTS, UPDATE_RANKING, GET_HORSE, GET_HORSE_RESULTS, CREATE_RANKING_TEST, SET_CURRENT_PAGE, GET_COMPETITION, GET_TEST } from './types';
+import { GET_RANKINGS, GET_RANKING, GET_RANKING_TESTS, GET_RANKING_TEST, UPDATE_RANKING_TEST, GET_RANKING_TEST_RESULTS, LOGIN, LOGOUT, GET_PROFILE, NO_USER, GET_RIDER, GET_RIDER_RESULTS, UPDATE_RANKING, GET_HORSE, GET_HORSE_RESULTS, CREATE_RANKING_TEST, SET_CURRENT_PAGE, GET_COMPETITION, GET_TEST, GET_TEST_CATALOG, GET_TEST_DEFINITION, CREATE_COMPETITION } from './types';
 
 // Ranking actions
 
@@ -186,6 +186,21 @@ export const getCompetition = (id) => async (dispatch) => {
     }
 }
 
+export const createCompetition = (competition) => async (dispatch) => {
+    try {
+        const response = await rankingApi.post(`/competitions`, competition);
+
+        dispatch({
+            type: CREATE_COMPETITION,
+            payload: response.data.data,
+        });
+
+        return response.data.data;
+    } catch (error) {
+        Promise.reject(error);
+    }
+}
+
 // Test actions
 
 export const getTest = (id) => async (dispatch) => {
@@ -209,4 +224,31 @@ export const setCurrentPage = page => async dispatch => {
             currentPage: page
         }
     })
+}
+
+// Test catalog
+export const getTestCatalog = () => async dispath => {
+    try {
+        const response = await rankingApi.get('/test-catalog');
+
+        dispath({
+            type: GET_TEST_CATALOG,
+            payload: response.data.data
+        })
+    } catch ( error ) {
+        console.log (error);
+    }
+}
+
+export const getTestDefinition = (testcode) => async (dispatch) => {
+    try {
+        const response = await rankingApi.get(`/test-catalog/${testcode}`);
+
+        dispatch({
+            type: GET_TEST_DEFINITION,
+            payload: response.data.data
+        });
+    } catch (error) {
+        console.log(error);
+    }
 }

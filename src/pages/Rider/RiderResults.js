@@ -27,7 +27,6 @@ class RiderResults extends React.Component {
     }
 
     renderHorse(rowData, column) {
-        console.log(rowData);
         return (
             <Link to={`/horse/${rowData.horse.id}/results/${this.props.match.params.testcode}`} >{rowData.horse.horse_name}<span className="horse-id d-none d-md-inline"> ({rowData.horse.feif_id})</span></Link>
         );
@@ -35,6 +34,12 @@ class RiderResults extends React.Component {
 
     renderMark(rowData, column) {
         return markToDouble(rowData.mark, rowData.test.rounding_precision);
+    }
+
+    renderCompetition(rowData, col) {
+        return (
+            <Link to={`/competition/${rowData.test.competition.id}/test/${this.props.match.params.testcode}`}>{rowData.test.competition.name}</Link>
+        )
     }
 
     bestResult() {
@@ -134,13 +139,13 @@ class RiderResults extends React.Component {
                     {this.activity()}
                 </div>
             </div>
-            <DataTable className="results-table mt-4" value={this.props.results} autoLayout={true} rowExpansionTemplate={(row) => this.rowExtraTemplate(row)} expandedRows={this.state.expandedRows} onRowToggle={(e) => this.setState({expandedRows:e.data})} dataKey="id">
+            {(this.props.results && <DataTable className="results-table mt-4" value={this.props.results} autoLayout={true} rowExpansionTemplate={(row) => this.rowExtraTemplate(row)} expandedRows={this.state.expandedRows} onRowToggle={(e) => this.setState({expandedRows:e.data})} dataKey="id">
                 <Column expander={true} className="expander" />
                 <Column field="horse.horse_name" className="horse" header="Horse" body={(rowData, col) => this.renderHorse(rowData, col)} />
-                <Column field="test.competition.name" className="competition" header="Competition" />
+                <Column field="test.competition.name" className="competition" header="Competition" body={(rowData, col) => this.renderCompetition(rowData, col)} />
                 <Column field="mark" header="Mark" className="mark" body={this.renderMark} />
                 <Column field="test.competition.include_in_ranking.shortname" className="rankings" header="" body={(r, c) => this.getValidity(r, c)} />
-            </DataTable>
+            </DataTable>) || <ProgressSpinner />}
             </>
         );
     }

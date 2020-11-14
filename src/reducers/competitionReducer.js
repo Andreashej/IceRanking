@@ -1,9 +1,9 @@
-import { bindActionCreators } from 'redux';
-import { GET_COMPETITION, GET_COMPETITION_RESULTS, GET_TEST } from '../actions/types';
+import { CREATE_COMPETITION, GET_COMPETITION, GET_TEST } from '../actions/types';
 
 export default (state = {}, action) => {
     switch (action.type) {
         case GET_COMPETITION:
+        case CREATE_COMPETITION:
             let testObjs = {}
             for (const test of action.payload.tests) {
                 testObjs[test.testcode] = test;
@@ -36,6 +36,7 @@ export default (state = {}, action) => {
                 ...state, 
                 [action.payload.competition.id]: competition,
             };
+
         default:
             return state;
     }
