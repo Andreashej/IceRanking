@@ -18,6 +18,7 @@ library.add(fab, faListOl, faUser, faHorseHead, faCalendarAlt, faQuestion, faTim
 
 
 const App = () => {
+    console.log(process.env);
     return (
         <HashRouter>
             <Navbar />
