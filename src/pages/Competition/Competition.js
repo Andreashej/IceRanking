@@ -10,7 +10,17 @@ import { getCompetition } from '../../actions';
 class Competition extends React.Component {
 
     componentDidMount() {
-        this.props.getCompetition(this.props.match.params.id);
+        if (this.props.match.params.id !== 'create') {
+            this.props.getCompetition(this.props.match.params.id).then(() => {
+                console.log("fetched competition");
+            });
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.match.params.id !== ' create' && prevProps.match.params.id !== this.props.match.params.id) {
+            this.props.getCompetition(this.props.match.params.id)
+        }
     }
 
     getTitle() {
@@ -39,6 +49,7 @@ class Competition extends React.Component {
     }
 
     render() {
+        console.log(this.props.match.params.id);
         return (
             <Page title={this.getTitle()} icon="calendar-alt" menuItems={this.props.competition ? this.getMenuItems() : null}>
                 <Switch>

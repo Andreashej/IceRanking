@@ -1,4 +1,5 @@
 import rankingApi from '../apis/ranking';
+import authService from '../services/auth.service';
 import { GET_RANKINGS, GET_RANKING, GET_RANKING_TESTS, GET_RANKING_TEST, UPDATE_RANKING_TEST, GET_RANKING_TEST_RESULTS, LOGIN, LOGOUT, GET_PROFILE, NO_USER, GET_RIDER, GET_RIDER_RESULTS, UPDATE_RANKING, GET_HORSE, GET_HORSE_RESULTS, CREATE_RANKING_TEST, SET_CURRENT_PAGE, GET_COMPETITION, GET_TEST, GET_TEST_CATALOG, GET_TEST_DEFINITION, CREATE_COMPETITION } from './types';
 
 // Ranking actions
@@ -79,20 +80,17 @@ export const getRankingTestResult = (shortname, testcode) => async dispatch => {
 // User actions
 
 export const login = ({username, password}) => async dispatch => {
-    const response = await rankingApi.post('/login', {}, {
-        auth: {
-            username,
-            password
-        }
-    });
+    const user = await authService.login(username, password)
 
     dispatch({
         type: LOGIN,
-        payload: {user: response.data.data, token: response.data.token}
+        payload: { user: user }
     })
 }
 
 export const logout = () => async dispatch => {
+    await authService.logout();
+    
     dispatch({
         type: LOGOUT
     })

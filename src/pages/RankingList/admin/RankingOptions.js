@@ -41,7 +41,7 @@ class EditRanking extends React.Component {
 
     onSubmit(e) {
         e.preventDefault();
-        this.props.updateRanking(this.props.shortname, this.state).then(
+        this.props.updateRanking(this.props.match.params.shortname, this.state).then(
             () => {
                 this.growl.show({severity: 'success', summary: 'Success!', detail: "The options were saved successfully."});
             }
