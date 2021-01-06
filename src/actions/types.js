@@ -7,6 +7,7 @@ export const CREATE_RANKING_TEST = 'CREATE_RANKING_TEST';
 export const GET_RANKING_TEST = 'GET_RANKING_TEST';
 export const UPDATE_RANKING_TEST = 'UPDATE_RANKING_TEST';
 export const GET_RANKING_TEST_RESULTS = 'GET_RANKING_TEST_RESULTS';
+export const RECOMPUTE_RANKING_RESULTS = 'RECOMPUTE_RANKING_RESULTS';
 
 // User actions
 export const LOGIN = 'LOGIN';
@@ -35,3 +36,6 @@ export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 // Test Catalog
 export const GET_TEST_CATALOG = 'GET_TEST_ARCHIVE';
 export const GET_TEST_DEFINITION = 'GET_TEST_DEFINITION';
+
+// Tasks
+export const GET_TASK = 'GET_TASK';

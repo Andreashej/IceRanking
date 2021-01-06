@@ -7,13 +7,13 @@ export function getToken(refresh) {
     if (!refresh) {
         token = localStorage.getItem('accessToken');
     } else {
-        token = localStorage.getItem('refreshToken')
+        token = localStorage.getItem('refreshToken');
     }
-
+    
     if (token) {
-        return 'Bearer ' + token;
+        return { 'Authorization': `Bearer ${token}`};
     } else {
-        return null;
+        return { };
     }
 }
 
@@ -21,7 +21,7 @@ const instance = axios.create({
     // baseURL: 'https://rankingapi.andreashej.dk/api',
     baseURL: process.env.REACT_APP_API_URL,
     headers: {
-        Authorization: getToken()
+        ...getToken()
     }
 });
 
@@ -29,9 +29,9 @@ instance.interceptors.response.use( (response) => {
         // Return a successful response back to the calling service
         return response;
     }, (error) => {
-        console.log(error.config.headers);
         // Return any error which is not due to authentication back to the calling service
-        if (error.response.status !== 401) {
+        console.log(error.config);
+        if (error.response && error.response.status !== 401) {
             return new Promise((resolve, reject) => {
                 reject(error);
             });
@@ -43,17 +43,17 @@ instance.interceptors.response.use( (response) => {
             logout();
 
             return new Promise((resolve, reject) => {
-            reject(error);
+                console.log(error);
+                reject(error);
             });
         }
 
         // Try request again with new token
         return authService.refreshToken()
             .then((token) => {
-
                 // New request with new token
                 const config = error.config;
-                config.headers['Authorization'] = `Bearer ${token}`;
+                config.headers = { ...config.headers, token };
 
                 return new Promise((resolve, reject) => {
                     axios.request(config).then(response => {

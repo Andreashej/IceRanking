@@ -10,6 +10,8 @@ $lightgray: #f8f9fa;
 
 @import 'media-queries';
 @import '~bootstrap/scss/bootstrap';
+@import '~primereact/resources/primereact.min.css';
+@import '~primeicons/primeicons.css';
 
 @import 'footer';
 @import 'forms';
@@ -31,6 +33,11 @@ body {
 
     a {
         color: $blue;
+    }
+
+    .p-button-primary {
+        background-color: $blue;
+        border-color: $blue;
     }
 
 }

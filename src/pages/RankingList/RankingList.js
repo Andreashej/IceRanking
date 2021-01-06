@@ -10,6 +10,7 @@ import RankingEvents from './RankingEvents';
 import Page from '../../components/partials/Page';
 import RankingOptions from './admin/RankingOptions';
 import RankingTestDefinitions from './admin/RankingTestDefinitions';
+import RankingImports from './admin/RankingImports';
 
 class RankingList extends React.Component {
     mobileMenu;
@@ -72,6 +73,11 @@ class RankingList extends React.Component {
                     command: () => this.props.history.push(`/rankings/${this.props.match.params.shortname}/admin/testedit`),
                     className: "testedit" === this.props.match.params.page ? 'active' : null
                 },
+                {
+                    label: "Import",
+                    command: () => this.props.history.push(`/rankings/${this.props.match.params.shortname}/admin/import`),
+                    className: "testedit" === this.props.match.params.page ? 'active' : null
+                },
             ];
         }
     }
@@ -88,6 +94,7 @@ class RankingList extends React.Component {
                     <Route path="/rankings/:shortname/tests/:testcode" component={TestResults} />
                     <Route path="/rankings/:shortname/admin/edit" component={RankingOptions} />
                     <Route path="/rankings/:shortname/admin/testedit" component={RankingTestDefinitions} />
+                    <Route path="/rankings/:shortname/admin/import" component={RankingImports} />
                 </Switch>
             </Page>
         );

@@ -1,9 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getRanking, getRankingTests, getRankingTestResult, setCurrentPage } from '../../actions';
+import { getRanking, getRankingTests, getRankingTestResult, setCurrentPage, recomputeRankingTestResult, getRankingTest } from '../../actions';
 
 import { ProgressSpinner } from 'primereact/progressspinner';
+import ProgressBar from '../../components/Task/Progressbar';
+import { Button } from 'primereact/button';
 
 import ResultList from '../../components/partials/ResultList';
 
@@ -14,7 +16,9 @@ class RankingResultList extends React.Component {
 
         this.props.getRanking(shortname).then(() => {
             this.props.getRankingTests(shortname).then(() => {
-                this.props.getRankingTestResult(shortname, testcode);
+                if (this.props.test && this.props.test.tasks_in_progress.length === 0) {
+                    this.props.getRankingTestResult(shortname, testcode);
+                }
             });
         });
 
@@ -29,7 +33,10 @@ class RankingResultList extends React.Component {
             // test was changed
 
             this.props.getRankingTests(shortname).then(() => {
-                this.props.getRankingTestResult(shortname, testcode);
+                if (this.props.test.tasks_in_progress.length === 0) {
+                    this.props.getRankingTestResult(shortname, testcode);
+                    
+                }
             });
             
             this.props.setCurrentPage(this.props.location.pathname);
@@ -54,7 +61,15 @@ class RankingResultList extends React.Component {
     }
 
     renderList() {
-        if (!this.props.test || !this.props.test.results) {
+        if (!this.props.test) {
+            return false;
+        }
+
+        if (this.props.test.tasks_in_progress.length > 0) {
+            return (
+                <p>Ranking is being recomputed. Please wait...</p>
+            );
+        } else if (!this.props.test.results) {
             return false;
         }
         
@@ -63,14 +78,48 @@ class RankingResultList extends React.Component {
         );
     }
 
+    onRecompute() {
+        this.props.recomputeRankingTestResult(this.props.match.params.shortname, this.props.match.params.testcode).then(response => {
+            this.props.getRankingTest(this.props.match.params.shortname, this.props.match.params.testcode);
+        });
+    }
+
+    onRecomputeComplete() {
+        const {shortname, testcode} = this.props.match.params;
+
+        this.props.getRankingTests(shortname).then(() => {
+            if (this.props.test.tasks_in_progress.length === 0) {
+                this.props.getRankingTestResult(shortname, testcode);
+            }
+        });
+    }
+
+    renderToolbar() {
+        if (!this.props.test || !this.props.user) {
+            return false;
+        }
+
+        if (this.props.test.tasks_in_progress.length > 0) {
+            return this.props.test.tasks_in_progress.map(task => {
+                return <ProgressBar key={task.id} taskId={task.id} onComplete={() => this.onRecomputeComplete()} />
+            });
+        }
+
+        return (
+            <Button label="Recompute" className="mb-3" onClick={(e) => this.onRecompute(e)} />
+        );
+    }
+
     render() {
         const description = this.renderDescription();
         const list = this.renderList();
+
         if (description && list) {
             return (
                 <div className="row">
                     <div className="col">
                         {description}
+                        {this.renderToolbar()}
                         {list}
                     </div>
                 </div>
@@ -84,6 +133,7 @@ class RankingResultList extends React.Component {
 const mapStateToProps = (state, ownProps) => {
     let props = {
         ranking: state.rankings[ownProps.match.params.shortname],
+        user: state.users.currentUser
     }
 
     if (props.ranking) {
@@ -93,4 +143,4 @@ const mapStateToProps = (state, ownProps) => {
     return props;
 }
 
-export default connect(mapStateToProps, { getRanking, getRankingTests, getRankingTestResult, setCurrentPage })(RankingResultList);
+export default connect(mapStateToProps, { getRanking, getRankingTests, getRankingTest, getRankingTestResult, setCurrentPage, recomputeRankingTestResult })(RankingResultList);

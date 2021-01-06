@@ -7,6 +7,7 @@ import horses from './horseReducer';
 import navigation from './navigationReducer';
 import competitions from './competitionReducer';
 import testCatalog from './testCatalogReducer';
+import tasks from './taskReducer';
 
 export default combineReducers({
    rankings,
@@ -15,5 +16,6 @@ export default combineReducers({
    horses,
    competitions,
    navigation,
-   testCatalog
+   testCatalog,
+   tasks,
 });

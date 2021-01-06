@@ -1,4 +1,4 @@
-.submenu, .admin-menu-container {
+.submenu, .fab-container {
     
     .p-menu {
         background-color: $lightgray;
@@ -21,6 +21,7 @@
     }
 
     .mobile-menu-button {
+        
         background-color: $dark;
 
         &:hover {
@@ -91,4 +92,25 @@ body .p-menubar {
         }
     }
     
+}
+
+.mobile-sidebar {
+    padding: 0!important;
+    border-color: $dark!important;
+
+    .header {
+        background-color: $dark;
+        padding: 4rem 1rem 2rem 1rem;
+
+        h2 {
+            font-size: 1.2rem;
+            color: $white;
+        }
+    }
+
+    .mobile-menu {
+        width: 100%;
+        border: none;
+    }
+
 }

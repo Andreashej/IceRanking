@@ -7,7 +7,6 @@ class AuthService {
             username,
             password
         });
-
         
         if (response.data.access_token) {
             console.log(response.data.access_token);
@@ -23,23 +22,23 @@ class AuthService {
         localStorage.removeItem("accessToken");
 
         await rankingApi.post("/logout/refresh", {}, {
-            headers: { 
-                Authorization: getToken(true) 
+            headers: {
+                ...getToken(true) 
             }
         });
-        localStorage.removeItem("refreshItem");
+        localStorage.removeItem("refreshToken");
     }
 
     async refreshToken() {
         const response = await rankingApi.post("/token/refresh", {}, {
             headers: {
-                Authorization: getToken(true)
+                ...getToken(true)
             }
         });
 
-        localStorage.setItem("accessToken", response.accessToken);
+        localStorage.setItem("accessToken", response.data.access_token);
 
-        return response.access_token;
+        return response.data.access_token;
     }
 }
 

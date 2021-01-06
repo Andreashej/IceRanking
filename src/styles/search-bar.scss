@@ -39,7 +39,7 @@
       transition: all .5s ease-in-out;
 
       &.show {
-         top: 1rem;
+         top: 1rem!important;
          opacity: 1;
       }
    }
@@ -48,7 +48,7 @@
 @include respond-below(lg) {
    .sticky {
       .p-autocomplete {
-         top: .5rem;
+         // top: .5rem;
       }
 
       .hide-search {

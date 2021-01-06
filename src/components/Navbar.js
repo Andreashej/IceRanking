@@ -11,8 +11,11 @@ import UserLogin from './User/UserLogin';
 import { getRankings, getProfile, logout } from '../actions';
 
 import SearchBar from "./Search/SearchBar";
+import { Menu } from "primereact/menu";
 
 class Navbar extends React.Component {
+    menu;
+
     state = {
         showLogin: false,
         isSticky: false,
@@ -39,20 +42,46 @@ class Navbar extends React.Component {
                     label: "Create competition",
                     icon: "pi pi-calendar-plus",
                     command: () => {
-                        this.props.history.push('/competition/create')
+                        
                     }
                 },
                 {
                     label: "Log out",
                     icon: "pi pi-sign-out",
                     command: () => {
-                        this.props.logout();
+                        
                     }
                 }
             ];
 
+            const tooltipOptions = {
+                position: 'bottom'
+            }
+
             return (
-                <SplitButton label={this.props.currentUser.username} icon="pi pi-user" model={userActions} className="login-button" />
+                <>
+                    <Button 
+                        icon="pi pi-plus" model={userActions}
+                        className="p-button-rounded p-button-raised p-button-success p-button-outlined p-button-icon-only mr-2" 
+                        onClick={e => {
+                            this.props.history.push('/competition/create')
+                        }}
+                        tooltip="Create competition"
+                        tooltipOptions={tooltipOptions}
+                    />
+                    <Button 
+                        icon="pi pi-sign-out" model={userActions}
+                        className="login-button p-button-rounded p-button-raised p-button-danger p-button-outlined p-button-icon-only" 
+                        onClick={e => {
+                            this.props.logout();
+                        }}
+                        tooltip="Log out"
+                        tooltipOptions={tooltipOptions}
+                    />
+                    <Button icon="pi pi-search" className="search-button d-block d-md-none" onClick={() => {
+                        this.setState({show: true});
+                    }} />
+                </>
             );
         } else if (this.props.currentUser === null) {
             return (
