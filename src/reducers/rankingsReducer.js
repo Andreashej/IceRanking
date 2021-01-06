@@ -5,11 +5,11 @@ export default ( state = {}, action) => {
     let currentRanking;
     switch(action.type) {
         case GET_RANKINGS:
-            return { ...state, ..._.mapKeys(action.payload.data,'shortname') };
+            return { ...state, ..._.mapKeys(action.payload,'shortname') };
 
         case GET_RANKING:
         case UPDATE_RANKING:
-            return { ...state, [action.payload.data.shortname]: action.payload.data};
+            return { ...state, [action.payload.shortname]: action.payload};
 
         case GET_RANKING_TESTS:
             currentRanking = {...state[action.payload.shortname]};

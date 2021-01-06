@@ -21,10 +21,13 @@ class TaskBar extends React.Component {
     }
 
     render() {
-        if (!this.props.task) {
-            return null;
+        let progress = 0;
+
+        if (this.props.task) {
+            progress = this.props.task.progress;
         }
-        return <ProgressBar value={this.props.task.progress} color="#374785" />
+
+        return <ProgressBar value={progress} color="#374785" />
     }
 }
 

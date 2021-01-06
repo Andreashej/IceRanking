@@ -1,33 +1,34 @@
 import rankingApi from '../apis/ranking';
 import authService from '../services/auth.service';
+import rankingListService from '../services/rankings.service';
 import { GET_RANKINGS, GET_RANKING, GET_RANKING_TESTS, GET_RANKING_TEST, UPDATE_RANKING_TEST, GET_RANKING_TEST_RESULTS, LOGIN, LOGOUT, GET_PROFILE, NO_USER, GET_RIDER, GET_RIDER_RESULTS, UPDATE_RANKING, GET_HORSE, GET_HORSE_RESULTS, CREATE_RANKING_TEST, SET_CURRENT_PAGE, GET_COMPETITION, GET_TEST, GET_TEST_CATALOG, GET_TEST_DEFINITION, CREATE_COMPETITION, RECOMPUTE_RANKING_RESULTS, GET_TASK } from './types';
 
 // Ranking actions
 
 export const getRankings = () => async dispatch => {
-    const response = await rankingApi.get('/rankings');
+    const rankingLists = await rankingListService.getAllRankingLists();
 
     dispatch({
         type: GET_RANKINGS,
-        payload: response.data
+        payload: rankingLists
     }); 
 }
 
 export const getRanking = shortname => async dispatch => {
-    const response = await rankingApi.get(`/rankings/${shortname}`);
+    const rankingList = await rankingListService.getRankingList(shortname);
 
     dispatch({
         type: GET_RANKING,
-        payload: response.data
+        payload: rankingList
     });
 }
 
 export const updateRanking = (shortname, atts) => async dispatch => {
-    const response = await rankingApi.patch(`/rankings/${shortname}`, atts);
+    const rankingList = await rankingApi.patch(`/rankings/${shortname}`, atts);
 
     dispatch({
         type: UPDATE_RANKING,
-        payload: response.data
+        payload: rankingList
     });
 }
 

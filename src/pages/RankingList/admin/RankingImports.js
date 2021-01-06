@@ -6,6 +6,7 @@ import { Button } from 'primereact/button';
 import { FileUpload } from 'primereact/fileupload';
 
 import riderService from '../../../services/rider.service';
+import rankingListService from '../../../services/rankings.service';
 import ProgressBar from '../../../components/Task/Progressbar';
 
 class RankingImports extends React.Component {
@@ -16,10 +17,30 @@ class RankingImports extends React.Component {
 
     uploadHandler = (event) => {
         console.log(event);
-        riderService.importAliases(event.files[0]).then((task) => {
-            console.log(task);
-            this.setState({activeForm: "processing", currentTask: task.id})
-        });
+
+        switch (this.state.activeForm) {
+            case "riders":
+                riderService.importAliases(event.files[0]).then((task) => {
+                    console.log(task);
+                    this.setState({activeForm: "processing", currentTask: task.id})
+                });
+            break;
+
+            case "competitions":
+                rankingListService.importCompetitions(this.props.match.params.shortname, event.files[0]).then((task) => {
+                    console.log(task);
+                    this.setState({activeForm: "processing", currentTask: task.id})
+                });
+            break;
+
+            case "results":
+                rankingListService.importResults(this.props.match.params.shortname, event.files[0]).then((task) => {
+                    console.log(task);
+                    this.setState({activeForm: "processing", currentTask: task.id})
+                });
+            break;
+
+        }
     }
 
     renderForm = () => {
@@ -33,9 +54,21 @@ class RankingImports extends React.Component {
                 )
 
             case "competitions":
+                return (
+                    <>
+                        <h3>Import competitions</h3>
+                        <FileUpload name="competitions" mode="basic" customUpload uploadHandler={this.uploadHandler} />
+                    </>
+                )
             break;
 
             case "results":
+                return (
+                    <>
+                        <h3>Import results</h3>
+                        <FileUpload name="results" mode="basic" customUpload uploadHandler={this.uploadHandler} />
+                    </>
+                )
             break;
 
             case "processing":
