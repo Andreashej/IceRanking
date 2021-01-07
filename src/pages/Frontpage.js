@@ -15,10 +15,21 @@ class Frontpage extends React.Component {
     renderCardRow() {
         return this.props.rankings.map((ranking) => {
             return (
-                <div className="col-12 col-sm-6 col-md-4 py-4" key={ranking.id} >
-                    <Link to={`/rankings/${ranking.shortname}`}>
-                        <RankingCard ranking={ranking} />
-                    </Link>
+                <div className="jumbotron bg-light border-blue border-bottom border-primary mb-0" key={ranking.id}> 
+                    <div className="container">
+                        <div class="row">
+                            <div class="col-auto">
+                                <img className="logo" src={ranking.logo} style={{ width: 150 }} />
+                            </div>
+                            <div class="col">
+                                <h2 className="display-4">{ranking.shortname}</h2>
+                                <p className="lead">{ranking.listname}</p>
+                                <Link to={`/rankings/${ranking.shortname}`} className="btn btn-primary">
+                                    Go to ranking list
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )
         });
@@ -32,7 +43,7 @@ class Frontpage extends React.Component {
                         <div className="container">
                             <div className="row">
                                 <div className="col">
-                                    <h1 className="display-3">Welcome to IceRanking</h1>
+                                    <h1 className="display-3">Welcome to IceCompass Rankings</h1>
                                     <hr className="stylish-line" />
                                     <p className="lead" style={{fontSize: "2rem"}}>A simple, modern ranking system</p>
                                 </div>
@@ -40,12 +51,8 @@ class Frontpage extends React.Component {
                         </div>
                     </div>
                 </section>
-                <section className="container-fluid bg-light">
-                    <div className="container">
-                        <div className="row align-items-center justify-content-center h-100">
-                            {this.renderCardRow()}
-                        </div>
-                    </div>
+                <section className="container-fluid bg-light px-0">
+                    {this.renderCardRow()}
                 </section>
             </React.Fragment>
         );
