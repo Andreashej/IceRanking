@@ -52,3 +52,9 @@
 
     color: white;
 }
+
+.p-card.list-card {
+    .p-card-body {
+        padding: 0!important;
+    }
+}

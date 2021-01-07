@@ -3,7 +3,7 @@ import { Message } from 'primereact/message';
 
 import { Link } from 'react-router-dom';
 
-const EventList = ({events, noEventsText = "There are no events in the list."}) => {
+const EventList = ({events, noEventsText = "There are no events in the list.", style = {}}) => {
 
     if (events.length < 1) {
         return (
@@ -28,7 +28,7 @@ const EventList = ({events, noEventsText = "There are no events in the list."}) 
     });
 
     return (
-        <ul className="list-group list-group-flush">
+        <ul className="list-group list-group-flush" style={style}>
             {eventItems}
         </ul>
     );

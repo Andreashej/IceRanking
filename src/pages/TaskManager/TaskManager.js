@@ -28,7 +28,7 @@ class Taskmanager extends React.Component {
             this.setState({ tasks: [], requestComplete: false });
             clearInterval(this.interval);
             
-            if (this.state.filter == 'IN PROGRESS') {
+            if (this.state.filter === 'IN PROGRESS') {
                 this.interval = setInterval(() => this.getTasks(this.state.filter), 2000);
             } else {
                 this.getTasks(this.state.filter);

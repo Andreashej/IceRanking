@@ -27,7 +27,7 @@ class RankingEvents extends React.Component {
             this.setState({
                 events: competitions
             })
-        })
+        });
     }
 
     renderEvents(filter = 'upcoming') {

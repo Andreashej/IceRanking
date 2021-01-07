@@ -48,10 +48,17 @@ class Competition extends React.Component {
         ];
     }
 
+    getSubtitle() {
+        if (!this.props.competition) return null
+        
+        const fromDate = new Date(this.props.competition.first_date);
+        const toDate = new Date(this.props.competition.last_date);
+        return `${fromDate.toLocaleDateString()} - ${toDate.toLocaleDateString()}`;
+    }
+
     render() {
-        console.log(this.props.match.params.id);
         return (
-            <Page title={this.getTitle()} icon="calendar-alt" menuItems={this.props.competition ? this.getMenuItems() : []}>
+            <Page title={this.getTitle()} icon="calendar-alt" menuItems={this.props.competition ? this.getMenuItems() : []} subtitle={this.getSubtitle()}>
                 <Switch>
                     <Route exact path="/competition/create" component={CompetitionCreate} />
                     <Route exact path="/competition/:id" component={CompetitionInfo} />

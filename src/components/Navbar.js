@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 
-import { SplitButton } from 'primereact/splitbutton';
 import { Button } from 'primereact/button';
 
 import UserLogin from './User/UserLogin';
@@ -11,7 +10,6 @@ import UserLogin from './User/UserLogin';
 import { getRankings, getProfile, logout } from '../actions';
 
 import SearchBar from "./Search/SearchBar";
-import { Menu } from "primereact/menu";
 
 class Navbar extends React.Component {
     menu;

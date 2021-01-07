@@ -39,7 +39,9 @@ class RankingImports extends React.Component {
                     this.setState({activeForm: "processing", currentTask: task.id})
                 });
             break;
-
+            
+            default:
+            break;
         }
     }
 
@@ -60,7 +62,6 @@ class RankingImports extends React.Component {
                         <FileUpload name="competitions" mode="basic" customUpload uploadHandler={this.uploadHandler} />
                     </>
                 )
-            break;
 
             case "results":
                 return (
@@ -69,7 +70,6 @@ class RankingImports extends React.Component {
                         <FileUpload name="results" mode="basic" customUpload uploadHandler={this.uploadHandler} />
                     </>
                 )
-            break;
 
             case "processing":
                 return (

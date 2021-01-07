@@ -6,7 +6,6 @@ import { Sidebar } from 'primereact/sidebar';
 
 import Header from '../partials/Header';
 
-let mobileMenuButton = null;
 let adminMenuRef = null;
 let adminMenuContainer = null;
 
@@ -29,7 +28,7 @@ const Page = ({title, subtitle, pretitle, icon, menuItems = [], adminMenuItems =
         <>
             <Header title={title} subtitle={subtitle} pretitle={pretitle} icon={icon} />
             <div className="page-content container">
-                {(menuItems.length > 0) && <div className="fab-container d-flex d-lg-none left" ref={el => mobileMenuButton = el}>{mobileMenuBtn}</div>}
+                {(menuItems.length > 0) && <div className="fab-container d-flex d-lg-none left">{mobileMenuBtn}</div>}
                 {(adminMenuItems.length > 0) && <div className="fab-container right d-none d-lg-flex" ref={el => adminMenuContainer = el}>{adminMenu}{adminMenuBtn}</div>}
                 <div className="row">
                     {menuItems.length > 0 && <div className="d-none d-lg-flex submenu">
