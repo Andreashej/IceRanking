@@ -19,30 +19,32 @@ class Taskmanager extends React.Component {
 
     componentDidMount() {
         this.setState({
-            filter: "progress"
+            filter: "IN PROGRESS"
         })
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.state.filter !== prevState.filter) {
+        if (this.state.filter && this.state.filter !== prevState.filter) {
             this.setState({ tasks: [], requestComplete: false });
+            clearInterval(this.interval);
             
-            this.interval = setInterval(
-                () => {
-                    taskService.getTasks({
-                    complete: 0
-                }).then(tasks => {
-                    this.setState({
-                        tasks,
-                        requestComplete: true
-                    });
-
-                    if (this.state.filter === 'COMPLETE' || this.state.tasks.length === 0) {
-                        clearInterval(this.interval);
-                    }
-                })
-            }, 2000);
+            if (this.state.filter == 'IN PROGRESS') {
+                this.interval = setInterval(() => this.getTasks(this.state.filter), 2000);
+            } else {
+                this.getTasks(this.state.filter);
+            }
         }
+    }
+
+    getTasks(filter) {
+        taskService.getTasks({
+            state: filter
+        }).then(tasks => {
+            this.setState({
+                tasks,
+                requestComplete: true
+            });
+        });
     }
 
     stateTemplate(rowData) {
@@ -50,7 +52,7 @@ class Taskmanager extends React.Component {
         let cls;
 
         switch (rowData.state) {
-            case "PROGRESS":
+            case "IN PROGRESS":
                 cls = 'success';
             break;
 
@@ -73,10 +75,10 @@ class Taskmanager extends React.Component {
     
     render() {
         const filters = [
-            { label: "In progress", value: "progress" },
-            { label: "Not started yet", value: "waiting" },
-            { label: "Done", value: "complete" },
-            { label: "Error", value: "error" },
+            { label: "In progress", value: "IN PROGRESS" },
+            { label: "Not started yet", value: "WAITING" },
+            { label: "Done", value: "COMPLETE" },
+            { label: "Error", value: "ERROR" },
         ];
 
         const taskHtml = this.state.tasks.map(task => {
@@ -102,7 +104,7 @@ class Taskmanager extends React.Component {
         return (
             <Page title="Task manager">
                 <h2 className="subtitle">Tasks</h2>
-                {/* <SelectButton value={this.state.filter} options={filters} onChange={(e) => this.setState({filter: e.value})} /> */}
+                <SelectButton value={this.state.filter} options={filters} onChange={(e) => this.setState({filter: e.value})} />
                 {this.state.tasks.length > 0 ? <ul class="list-group">
                     {taskHtml}
                 </ul> : (!this.state.requestComplete && <ProgressSpinner />)}
