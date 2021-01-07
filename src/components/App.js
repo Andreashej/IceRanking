@@ -9,6 +9,7 @@ import RankingList from '../pages/RankingList';
 import Rider from '../pages/Rider';
 import Horse from '../pages/Horse';
 import Competition from '../pages/Competition';
+import TaskManager from '../pages/TaskManager';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
@@ -27,6 +28,7 @@ const App = () => {
                 <Route path="/rider/:id" component={Rider} />
                 <Route path="/horse/:id" component={Horse} />
                 <Route path="/competition/:id" component={Competition} />
+                <Route path="/tasks" component={TaskManager} />
             </Switch>
             <Footer />
         </HashRouter>

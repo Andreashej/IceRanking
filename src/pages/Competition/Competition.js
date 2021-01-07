@@ -51,7 +51,7 @@ class Competition extends React.Component {
     render() {
         console.log(this.props.match.params.id);
         return (
-            <Page title={this.getTitle()} icon="calendar-alt" menuItems={this.props.competition ? this.getMenuItems() : null}>
+            <Page title={this.getTitle()} icon="calendar-alt" menuItems={this.props.competition ? this.getMenuItems() : []}>
                 <Switch>
                     <Route exact path="/competition/create" component={CompetitionCreate} />
                     <Route exact path="/competition/:id" component={CompetitionInfo} />

@@ -29,15 +29,12 @@ const Page = ({title, subtitle, pretitle, icon, menuItems = [], adminMenuItems =
         <>
             <Header title={title} subtitle={subtitle} pretitle={pretitle} icon={icon} />
             <div className="page-content container">
-                <div className="fab-container d-flex d-lg-none left" ref={el => mobileMenuButton = el}>{mobileMenuBtn}</div>
-                {adminMenuItems.length > 0 ? <div className="fab-container right d-none d-lg-flex" ref={el => adminMenuContainer = el}>{adminMenu}{adminMenuBtn}</div> : null}
+                {(menuItems.length > 0) && <div className="fab-container d-flex d-lg-none left" ref={el => mobileMenuButton = el}>{mobileMenuBtn}</div>}
+                {(adminMenuItems.length > 0) && <div className="fab-container right d-none d-lg-flex" ref={el => adminMenuContainer = el}>{adminMenu}{adminMenuBtn}</div>}
                 <div className="row">
-                    {/* <div className="d-flex d-lg-none submenu mobile">
-                        <Button icon="pi pi-bars" className="mobile-menu-button" onClick={(event)=>setSidebarVisibility(!sidebarVisibility)} />
-                    </div> */}
-                    <div className="d-none d-lg-flex submenu">
+                    {menuItems.length > 0 && <div className="d-none d-lg-flex submenu">
                         <Menu model={menuItems} />
-                    </div>
+                    </div>}
                     <div className="col-12 col-lg page-container">
                         <div className="container-fluid">
                             {children}
