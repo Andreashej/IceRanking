@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const EventList = ({events, noEventsText = "There are no events in the list.", style = {}}) => {
 
-    if (events.length < 1) {
+    if (!events || events.length < 1) {
         return (
             <Message severity="info" text={noEventsText} style={{width: "100%"}}></Message>
         )
