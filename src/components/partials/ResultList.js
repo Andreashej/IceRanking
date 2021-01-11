@@ -8,15 +8,56 @@ import { Link } from 'react-router-dom';
 class ResultList extends React.Component {
 
     getSubmarks = (result, col) => {
-        return result.marks.map((mark, index) => {
+        let marks = result.marks;
+        const isCombination = this.props.testcode.charAt(0) === 'C'
+        if (isCombination) {
+            marks = result.marks.map((result) => {
+                let sortOrder = 0;
+                switch(result.test.testcode.charAt(0).toUpperCase()) {
+                    case 'T':
+                        sortOrder = 0;
+                        break;
+    
+                    case 'V':
+                    case 'F':
+                        sortOrder = 1;
+                        break;
+                    
+                    case 'P':
+                        sortOrder = 2;
+                        break;
+                }
+                sortOrder = result.test.testcode[0] == 'T'
+                return {
+                    ...result,
+                    sortOrder 
+                }
+            });
+    
+            marks.sort((a,b) => {
+                return b.sortOrder - a.sortOrder;
+            });
+        }
+
+        console.log(marks);
+
+        return marks.map((mark, index) => {
             return (
                 <span key={mark.id}>
                     {index > 0 && ", "}
-                    <Link to={`/competition/${mark.test.competition.id}/test/${mark.test.testcode}`}>{markToDouble(mark.mark, this.props.rounding_precision)}</Link>
+                    {isCombination && `${mark.test.testcode}: `}<Link to={`/competition/${mark.test.competition.id}/test/${mark.test.testcode}`}>{this.getDisplayMark(mark)}</Link>
                 </span>
             )
             
         });
+    }
+
+    getDisplayMark = (result, col) => {
+        const mark = markToDouble(result.mark, this.props.rounding_precision)
+
+        if (this.props.mark_type === 'time') return `${mark}s`;
+
+        return mark;
     }
 
     getDisplayName = (result) => {
@@ -37,8 +78,8 @@ class ResultList extends React.Component {
             <DataTable className="results-table" value={this.props.results} autoLayout={true}>
                 <Column field="rank" header="" className="minimize rank" />
                 <Column field="name" body={(result, col) => this.getDisplayName(result)} header={this.getDisplayHeader()} />
-                <Column field="submarks" className="submark" body={this.getSubmarks} header="" />
-                <Column field="mark" className="mark minimize" header="Mark" body={(result, col) => markToDouble(result.mark, this.props.rounding_precision)} />
+                <Column field="submarks" className="submark d-none d-md-table-cell" body={this.getSubmarks} header="" />
+                <Column field="mark" className="mark minimize" header="Mark" body={this.getDisplayMark} />
             </DataTable>
         );
     }
