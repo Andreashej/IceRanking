@@ -60,10 +60,28 @@ class RiderResults extends React.Component {
             return <ProgressSpinner />
         }
 
+        let content;
+
+        if (this.props.bestRank.rank) {
+            content = (
+                <>
+                    <h4 className="display-4 featured-number">{this.props.bestRank.rank}</h4>
+                    <p className="lead mb-0">{this.props.bestRank.test.rankinglist.listname}</p>
+                </>
+            );
+        } else {
+            content = (
+                <>
+                    <h4 className="display-4 featured-number">N/A</h4>
+                    <p className="lead mb-0">Not currently ranked in {this.props.match.params.testcode}</p>
+                </>
+            )
+        }
+
+
         return (
             <Card title="Best rank" className="featured-card">
-                <h4 className="display-4 featured-number">1</h4>
-                <p className="lead mb-0">Den Danske Rangliste</p>
+                {content}
             </Card>
         )
     }
@@ -159,6 +177,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         results: state.riders[ownProps.match.params.id].results[ownProps.match.params.testcode].history,
         best: state.riders[ownProps.match.params.id].results[ownProps.match.params.testcode].best,
+        bestRank: state.riders[ownProps.match.params.id].results[ownProps.match.params.testcode].best_rank,
     };
 };
 
