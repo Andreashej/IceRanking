@@ -18,8 +18,8 @@ class RankingEvents extends React.Component {
         const today = new Date()
 
         competitionService.getCompetitions({
-            filter: "include_in_ranking contains DRL",
-            filter: `first_date > ${today.toLocaleDateString()}`,
+            filter: "include_in_ranking contains DRL shortname",
+            filter: `first_date > ${today.getFullYear()}/${today.getMonth()+1}/${today.getDate()}`,
             order_by: "first_date asc",
             limit: this.state.limit
         }).then(competitions => {

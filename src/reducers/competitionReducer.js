@@ -17,9 +17,24 @@ export default (state = {}, action) => {
             return {...state, [action.payload.id]: competition_new};
         case GET_TEST:
 
+            let rank = 1;
+            let prevMark;
+            const results = action.payload.results.map((result, index) => {
+
+                if (prevMark !== result.mark) {
+                    rank = index + 1;
+                    prevMark = result.mark;
+                }
+
+                return {
+                    ...result,
+                    rank
+                }
+            })
+
             const test = {
                 ...state[action.payload.competition.id].tests[action.payload.testcode],
-                results: action.payload.results,
+                results: results,
             }
 
             const tests = {

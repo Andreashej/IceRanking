@@ -48,6 +48,7 @@ class CompetitionResults extends React.Component {
                     </div>
                 </div>
                 {(this.props.test && this.props.test.results && <DataTable className="results-table mt-4" value={this.props.test.results} autoLayout={true} dataKey="id">
+                    <Column field="rank" className="minimize rank" />
                     <Column field="rider.fullname" className="rider" header="Rider" body={(rowData, col) => this.renderRider(rowData, col)} />
                     <Column field="horse.horse_name" className="horse" header="Horse" body={(rowData, col) => this.renderHorse(rowData, col)} />
                     <Column field="mark" className="mark" header="Mark" body={(rowData) => this.renderMark(rowData)} />

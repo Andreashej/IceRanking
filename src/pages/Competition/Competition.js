@@ -53,7 +53,7 @@ class Competition extends React.Component {
         
         const fromDate = new Date(this.props.competition.first_date);
         const toDate = new Date(this.props.competition.last_date);
-        return `${fromDate.toLocaleDateString()} - ${toDate.toLocaleDateString()}`;
+        return `${fromDate.getDate()}/${fromDate.getMonth()+1}/${fromDate.getFullYear()} - ${toDate.getDate()}/${toDate.getMonth()+1}/${toDate.getFullYear()}`;
     }
 
     render() {
