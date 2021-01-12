@@ -1,5 +1,6 @@
 import React from 'react';
 import { Message } from 'primereact/message';
+import { dateToString } from '../../tools';
 
 import { Link } from 'react-router-dom';
 
@@ -20,7 +21,7 @@ const EventList = ({events, noEventsText = "There are no events in the list.", s
                 <div className="row">
                     <div className="col">
                         <Link to={`/competition/${event.id}`}><h5>{event.name}</h5></Link>
-                        <p className="text-muted mb-0">{startdate.toLocaleDateString()} - {enddate.toLocaleDateString()}</p>
+                        <p className="text-muted mb-0">{dateToString(startdate, 'd/m/Y')} - {dateToString(enddate, 'd/m/Y')}</p>
                     </div>
                 </div>
             </li>

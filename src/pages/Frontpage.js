@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Card } from 'primereact/card'
+import { dateToString } from '../tools';
 
 import competitionService from '../services/competition.service';
 
@@ -20,7 +21,7 @@ class Frontpage extends React.Component {
         const today = new Date()
 
         competitionService.getCompetitions({
-            filter: `first_date > ${today.toLocaleDateString()}`,
+            filter: `first_date > ${dateToString(today)}`,
             order_by: "first_date asc",
             limit: 5
         }).then(competitions => {
@@ -30,7 +31,7 @@ class Frontpage extends React.Component {
         });
 
         competitionService.getCompetitions({
-            filter: `first_date < ${today.toLocaleDateString()}`,
+            filter: `first_date < ${dateToString(today)}`,
             order_by: "first_date desc",
             limit: 5
         }).then(competitions => {

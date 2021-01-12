@@ -6,6 +6,7 @@ import CompetitionInfo from './CompetitionInfo';
 import CompetitionResults from './CompetitionResults';
 import CompetitionCreate from './CompetitionCreate';
 import { getCompetition } from '../../actions';
+import { dateToString } from '../../tools';
 
 class Competition extends React.Component {
 
@@ -53,7 +54,7 @@ class Competition extends React.Component {
         
         const fromDate = new Date(this.props.competition.first_date);
         const toDate = new Date(this.props.competition.last_date);
-        return `${fromDate.getDate()}/${fromDate.getMonth()+1}/${fromDate.getFullYear()} - ${toDate.getDate()}/${toDate.getMonth()+1}/${toDate.getFullYear()}`;
+        return `${dateToString(fromDate, 'd/m/Y')} - ${dateToString(toDate, 'd/m/Y')}`;
     }
 
     render() {
