@@ -36,6 +36,10 @@ class Taskmanager extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
     getTasks(filter) {
         taskService.getTasks({
             filter: `state == ${filter}`
