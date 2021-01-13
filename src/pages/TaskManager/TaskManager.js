@@ -19,7 +19,7 @@ class Taskmanager extends React.Component {
 
     componentDidMount() {
         this.setState({
-            filter: "IN PROGRESS"
+            filter: "PROGRESS"
         })
     }
 
@@ -28,7 +28,7 @@ class Taskmanager extends React.Component {
             this.setState({ tasks: [], requestComplete: false });
             clearInterval(this.interval);
             
-            if (this.state.filter === 'IN PROGRESS') {
+            if (this.state.filter === 'PROGRESS') {
                 this.interval = setInterval(() => this.getTasks(this.state.filter), 2000);
             } else {
                 this.getTasks(this.state.filter);
@@ -38,7 +38,7 @@ class Taskmanager extends React.Component {
 
     getTasks(filter) {
         taskService.getTasks({
-            state: filter
+            filter: `state == ${filter}`
         }).then(tasks => {
             this.setState({
                 tasks,
@@ -52,7 +52,7 @@ class Taskmanager extends React.Component {
         let cls;
 
         switch (rowData.state) {
-            case "IN PROGRESS":
+            case "PROGRESS":
                 cls = 'success';
             break;
 
@@ -75,7 +75,7 @@ class Taskmanager extends React.Component {
     
     render() {
         const filters = [
-            { label: "In progress", value: "IN PROGRESS" },
+            { label: "In progress", value: "PROGRESS" },
             { label: "Not started yet", value: "WAITING" },
             { label: "Done", value: "COMPLETE" },
             { label: "Error", value: "ERROR" },
