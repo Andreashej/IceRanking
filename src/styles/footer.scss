@@ -1,4 +1,12 @@
 .footer {
     background-color: $blue;
     color: white;
+
+    a {
+        color: $pink;
+
+        &:hover {
+            color: $pink;
+        }
+    }
 }
