@@ -102,7 +102,6 @@ class Navbar extends React.Component {
                     <div className="row">
                         <div className={`col-6 col-md-3 logo-container order-1 ${this.state.show ? 'hide' : ''}`}>
                             <Link to="/" className="branding-text d-inline">
-                                {/* <img src="assets/img/iceranking_tiny_notext.png" className="d-sm-none" style={{ height: 33}}/> */}
                                 <img src="assets/img/iceranking_tiny.png" style={{ height: 33}}/>
                             </Link>
                         </div>

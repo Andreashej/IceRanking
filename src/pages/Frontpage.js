@@ -77,6 +77,7 @@ class Frontpage extends React.Component {
                                 <div class="col-12 col-lg-auto d-flex order-2 order-lg-1">
                                     <img src="assets/img/iceranking_textunder.png" style={{
                                         width: 300,
+                                        maxWidth: "80%"
                                     }} />
                                 </div>
                                 <div className="col-12 col-lg d-flex order-1 order-lg-2 align-items-center stylish-border">
