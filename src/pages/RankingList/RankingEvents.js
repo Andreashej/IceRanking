@@ -18,8 +18,10 @@ class RankingEvents extends React.Component {
         const today = new Date()
 
         competitionService.getCompetitions({
-            filter: "include_in_ranking contains DRL shortname",
-            filter: `first_date > ${today.getFullYear()}/${today.getMonth()+1}/${today.getDate()}`,
+            filter: [
+                "include_in_ranking contains DRL shortname",
+                `first_date > ${today.getFullYear()}/${today.getMonth()+1}/${today.getDate()}`
+            ],
             order_by: "first_date asc",
             limit: this.state.limit
         }).then(competitions => {
@@ -30,7 +32,7 @@ class RankingEvents extends React.Component {
         });
     }
 
-    renderEvents(filter = 'upcoming') {
+    renderEvents() {
         if (!this.state.events) {
             return <div>Loading...</div>;
         }

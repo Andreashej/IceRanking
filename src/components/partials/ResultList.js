@@ -26,8 +26,12 @@ class ResultList extends React.Component {
                     case 'P':
                         sortOrder = 2;
                         break;
+                    
+                    default:
+                        sortOrder = 3;
+                        break;
                 }
-                sortOrder = result.test.testcode[0] == 'T'
+
                 return {
                     ...result,
                     sortOrder 
@@ -35,7 +39,7 @@ class ResultList extends React.Component {
             });
     
             marks.sort((a,b) => {
-                return b.sortOrder - a.sortOrder;
+                return a.sortOrder - b.sortOrder;
             });
         }
 

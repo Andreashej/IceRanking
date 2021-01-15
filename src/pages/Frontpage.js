@@ -78,7 +78,7 @@ class Frontpage extends React.Component {
                                     <img src="assets/img/iceranking_textunder.png" style={{
                                         width: 300,
                                         maxWidth: "80%"
-                                    }} />
+                                    }} alt="Large app logo" />
                                 </div>
                                 <div className="col-12 col-lg d-flex order-1 order-lg-2 align-items-center stylish-border">
                                     <h1 className="display-1">Welcome</h1>

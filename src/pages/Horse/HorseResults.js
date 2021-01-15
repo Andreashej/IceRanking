@@ -54,8 +54,6 @@ class HorseResults extends React.Component {
             return <ProgressSpinner />
         }
 
-        let content;
-
         if (this.props.bestRank.rank) {
             return(
                 <>
