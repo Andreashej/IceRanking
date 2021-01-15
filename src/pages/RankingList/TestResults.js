@@ -24,6 +24,7 @@ class RankingResultList extends React.Component {
 
         this.props.setCurrentPage(this.props.location.pathname);
 
+
     }
 
     componentDidUpdate(prevProps) {
@@ -38,7 +39,7 @@ class RankingResultList extends React.Component {
                     
                 }
             });
-            
+            document.title = `${testcode} | ${this.props.ranking.listname} | IceCompass Rankings`;
             this.props.setCurrentPage(this.props.location.pathname);
         }
     }
@@ -72,8 +73,6 @@ class RankingResultList extends React.Component {
         } else if (!this.props.test.results) {
             return false;
         }
-
-        console.log(this.props.test);
         
         return (
             <ResultList results={this.props.test.results} rounding_precision={this.props.test.rounding_precision} type={this.props.test.grouping} testcode={this.props.test.testcode} mark_type={this.props.test.mark_type} />

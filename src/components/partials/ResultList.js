@@ -39,8 +39,6 @@ class ResultList extends React.Component {
             });
         }
 
-        console.log(marks);
-
         return marks.map((mark, index) => {
             return (
                 <span key={mark.id}>

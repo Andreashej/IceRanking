@@ -30,7 +30,6 @@ instance.interceptors.response.use( (response) => {
         return response;
     }, (error) => {
         // Return any error which is not due to authentication back to the calling service
-        console.log(error.config);
         if (error.response && error.response.status !== 401) {
             return new Promise((resolve, reject) => {
                 reject(error);
@@ -43,7 +42,6 @@ instance.interceptors.response.use( (response) => {
             logout();
 
             return new Promise((resolve, reject) => {
-                console.log(error);
                 reject(error);
             });
         }

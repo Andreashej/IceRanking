@@ -23,6 +23,13 @@ const Page = ({title, subtitle, pretitle, icon, menuItems = [], adminMenuItems =
         onHide={() => setMenuIcon('cog')}
         onShow={() => setMenuIcon('times')}
     />;
+    
+    if (adminMenuItems.length > 0) {
+        menuItems = menuItems.concat({
+            label: "Administration",
+            items: adminMenuItems
+        })
+    }
 
     return (
         <>
@@ -45,10 +52,7 @@ const Page = ({title, subtitle, pretitle, icon, menuItems = [], adminMenuItems =
                 <div className="header">
                     <h2>{title}</h2>
                 </div>
-                <Menu model={menuItems.concat({
-                    label: "Administration",
-                    items: adminMenuItems
-                })} className="mobile-menu" />
+                <Menu model={menuItems} className="mobile-menu" />
             </Sidebar>}
         </>
     )

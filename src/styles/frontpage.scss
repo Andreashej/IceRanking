@@ -2,35 +2,58 @@
     background-image: url("/assets/img/header-branding-padded.jpg");
     background-repeat: no-repeat;
     background-position-y: -.5rem;
-    background-size: 260%;
+    background-size: 350%;
 
     .jumbotron {
-        background: transparent;
-        padding: 10rem 0 4rem 0;
-        // background: linear-gradient(rgba($blue, .2), rgba($blue, .5));
+        padding: 8rem 0 4rem 0;
         background: rgba($blue, .5);
 
-        .display-3, .lead {
-            text-shadow: rgba($darkgray, .5) 5px 5px 10px;
+        .display-1, .lead {
+            text-shadow: rgba($blue, 1) 2px 2px 2px;
+        }
+
+        .stylish-border {
+            padding-left: 3rem;
+            margin-left: 3rem;
+            border-color: $pink;
+            border-width: 0;
+            border-left-width: 5px;
+            border-style: solid;
         }
 
         @include respond-below(lg) {
-            .display-3 {
-                font-size: 3rem;
-            }
 
             .lead {
                 font-size: 2rem!important;
             }
+
+            [class*="col-"] {
+                justify-content: center;
+            }
+
+            .stylish-border {
+                border-left-width: 0;
+                padding: 0;
+                margin-bottom: 2rem;
+                margin-left: 0;
+                border-bottom-width: 5px;
+                margin-bottom: 2rem;
+            }
         }
 
         @include respond-below(sm) {
-            .display-3 {
-                font-size: 2rem;
+            .display-1 {
+                font-size: 4rem;
             }
 
             .lead {
                 font-size: 1.5rem!important;
+            }
+
+            .stylish-border {
+                flex: 1;
+                margin-left: 2rem;
+                margin-right: 2rem;
             }
         }
 
@@ -42,7 +65,12 @@
 
     @include respond-above(sm) {
         background-position-y: 0;
-        background-size: 180%;
+        background-size: 204%;
+    }
+
+    @include respond-above(md) {
+        background-position-y: 0;
+        background-size: 160%;
     }
 
     @include respond-above(lg) {

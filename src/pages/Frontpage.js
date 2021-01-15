@@ -74,10 +74,13 @@ class Frontpage extends React.Component {
                     <div className="jumbotron jumbotron-fluid mb-0">
                         <div className="container">
                             <div className="row">
-                                <div className="col">
-                                    <h1 className="display-3">Welcome to IceCompass Rankings</h1>
-                                    <hr className="stylish-line" />
-                                    <p className="lead" style={{fontSize: "2rem"}}>A simple, modern ranking system</p>
+                                <div class="col-12 col-lg-auto d-flex order-2 order-lg-1">
+                                    <img src="assets/img/iceranking_textunder.png" style={{
+                                        width: 300,
+                                    }} />
+                                </div>
+                                <div className="col-12 col-lg d-flex order-1 order-lg-2 align-items-center stylish-border">
+                                    <h1 className="display-1">Welcome</h1>
                                 </div>
                             </div>
                         </div>

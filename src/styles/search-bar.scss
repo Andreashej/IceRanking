@@ -46,15 +46,15 @@
 }
 
 @include respond-below(lg) {
-   .sticky {
-      .p-autocomplete {
-         // top: .5rem;
-      }
+   // .sticky {
+   //    .p-autocomplete {
+   //       top: .5rem!important;
+   //    }
 
-      .hide-search {
-         top: .5rem;
-      }
-   }
+   //    .hide-search {
+   //       top: .5rem!important;
+   //    }
+   // }
 }
 
 .hide-search {

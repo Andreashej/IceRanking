@@ -32,7 +32,7 @@ class SearchBar extends React.Component {
                 if (result._links.self.includes("riders")) {
                     return {
                         listName: `${result.firstname} ${result.lastname}`,
-                        secondaryText: "32 resultater",
+                        secondaryText: `${result.number_of_results} resultater`,
                         type: "rider",
                         link: `/rider/${result.id}`
                     }
@@ -85,7 +85,7 @@ class SearchBar extends React.Component {
                         this.setState({searchTerm: ""});
                     }}
                 />
-                <Button label="" icon="pi pi-times" className={`d-block d-md-none hide-search ${this.props.show ? 'show' : ''}`} onClick={this.props.onHide}></Button>
+                <Button label="" icon="pi pi-times" className={`d-block d-md-none hide-search ${this.props.show ? 'show' : 'hide'}`} onClick={this.props.onHide}></Button>
             </>
         );
     }

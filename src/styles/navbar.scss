@@ -6,7 +6,7 @@ nav.navigation {
     > .container {
         height: 100%;
         padding-top: 1rem;
-        padding-bottom: .5rem;
+        padding-bottom: 1rem;
 
         > .row {
             height: 100%;
@@ -51,10 +51,6 @@ nav.navigation {
         background-color: $dark;
         position: fixed;
         z-index: 999;
-
-        .container {
-            padding-top: .5rem;
-        }
 
         .logo-container {
             .branding-text {

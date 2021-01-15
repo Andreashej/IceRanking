@@ -97,6 +97,7 @@ body .p-menubar {
 .mobile-sidebar {
     padding: 0!important;
     border-color: $dark!important;
+    overflow-y: scroll;
 
     .header {
         background-color: $dark;
