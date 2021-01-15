@@ -21,7 +21,7 @@ class Frontpage extends React.Component {
         const today = new Date()
 
         competitionService.getCompetitions({
-            filter: `first_date > ${dateToString(today)}`,
+            filter: [`first_date > ${dateToString(today)}`],
             order_by: "first_date asc",
             limit: 5
         }).then(competitions => {
@@ -31,7 +31,7 @@ class Frontpage extends React.Component {
         });
 
         competitionService.getCompetitions({
-            filter: `first_date < ${dateToString(today)}`,
+            filter: [`first_date < ${dateToString(today)}`],
             order_by: "first_date desc",
             limit: 5
         }).then(competitions => {
