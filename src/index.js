@@ -6,6 +6,7 @@ import reduxThunk from 'redux-thunk';
 
 import App from "./components/App";
 import reducers from './reducers';
+import './analytics';
 
 import 'primereact/resources/themes/nova-light/theme.css';
 import 'primereact/resources/primereact.min.css';

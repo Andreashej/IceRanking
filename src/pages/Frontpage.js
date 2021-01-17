@@ -74,7 +74,7 @@ class Frontpage extends React.Component {
                     <div className="jumbotron jumbotron-fluid mb-0">
                         <div className="container">
                             <div className="row">
-                                <div class="col-12 col-lg-auto d-flex order-2 order-lg-1">
+                                <div className="col-12 col-lg-auto d-flex order-2 order-lg-1">
                                     <img src="assets/img/iceranking_textunder.png" style={{
                                         width: 300,
                                         maxWidth: "80%"
