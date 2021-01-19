@@ -6,7 +6,12 @@ export default (state = {}, action) => {
         case CREATE_COMPETITION:
             let testObjs = {}
             for (const test of action.payload.tests) {
-                testObjs[test.testcode] = test;
+                const results = state[action.payload.id]?.results[test];
+
+                testObjs[test.testcode] = {
+                    ...results,
+                    ...test
+                };
             }
 
             const competition_new = {

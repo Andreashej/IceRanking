@@ -5,7 +5,11 @@ export default (state = {}, action) => {
         case GET_HORSE:
             let testObjs = {}
             for (const test of action.payload.testlist) {
-                testObjs[test] = {}
+                const results = state[action.payload.id]?.results[test];
+
+                testObjs[test] = {
+                    ...results
+                }
             }
 
             const horse_new = {
@@ -15,7 +19,8 @@ export default (state = {}, action) => {
 
             return {...state, [action.payload.id]: horse_new};
         case GET_HORSE_RESULTS:
-            let horse = state[action.payload.id];
+            const horse = state[action.payload.id];
+
             horse.results[action.payload.testcode] = action.payload.result;
 
             return {...state, [action.payload.id]: horse};

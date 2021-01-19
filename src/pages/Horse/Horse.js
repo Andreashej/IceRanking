@@ -30,11 +30,15 @@ class Horse extends React.Component {
     }
 
     getFullName() {
-        return this.props.horse ? `${this.props.horse.horse_name}` : null;
+        return this.props.horse && this.props.horse.horse_name;
+    }
+
+    getFeifId() {
+        return this.props.horse && this.props.horse.feif_id;
     }
 
     getMenuItems() {
-        const tests = this.props.horse ? this.props.horse.testlist.map( testcode => {
+        const tests = this.props.horse && "testlist" in this.props.horse ? this.props.horse.testlist.map( testcode => {
             return {
                 label: testcode,
                 className: this.props.match.params.testcode === testcode ? 'active' : null,
@@ -52,7 +56,7 @@ class Horse extends React.Component {
 
     render() {
         return (
-            <Page title={this.getFullName()} icon="horse-head" menuItems={this.getMenuItems()}>
+            <Page title={this.getFullName()} subtitle={this.getFeifId()} icon="horse-head" menuItems={this.getMenuItems()}>
                 <Switch>
                     <Route exact path="/horse/:id" component={HorseInfo} />
                     <Route path="/horse/:id/results/:testcode" component={HorseResults} />

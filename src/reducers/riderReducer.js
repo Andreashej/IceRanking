@@ -5,7 +5,10 @@ export default (state = {}, action) => {
         case GET_RIDER:
             let testObjs = {}
             for (const test of action.payload.testlist) {
-                testObjs[test] = {}
+                const results = state[action.payload.id]?.results[test];
+                testObjs[test] = {
+                    ...results
+                }
             }
 
             const rider_new = {
