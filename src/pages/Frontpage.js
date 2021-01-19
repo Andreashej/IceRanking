@@ -48,7 +48,7 @@ class Frontpage extends React.Component {
                     <div className="container">
                         <div className="row">
                             <div className="col-12 col-sm-auto d-flex justify-content-center">
-                                <img className="logo" src={ranking.logo} style={{ width: 150 }} alt={`${ranking.shortname} logo`} />
+                                <img className="logo" src={ranking.logo} style={{ width: 150, height: 150 }} alt={`${ranking.shortname} logo`} />
                             </div>
                             <div className="col">
                                 <h2 className="display-4">{ranking.shortname}</h2>
@@ -76,8 +76,8 @@ class Frontpage extends React.Component {
                             <div className="row">
                                 <div className="col-12 col-lg-auto d-flex order-2 order-lg-1">
                                     <img src="assets/img/iceranking_textunder.png" style={{
-                                        width: 300,
-                                        maxWidth: "80%"
+                                        height: 250,
+                                        maxWidth: "80vw"
                                     }} alt="Large app logo" />
                                 </div>
                                 <div className="col-12 col-lg d-flex order-1 order-lg-2 align-items-center stylish-border">
