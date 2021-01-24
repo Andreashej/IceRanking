@@ -20,9 +20,7 @@ class Competition extends React.Component {
 
     componentDidMount() {
         if (this.props.match.params.id !== 'create') {
-            this.props.getCompetition(this.props.match.params.id).then(() => {
-                console.log("fetched competition");
-            });
+            this.props.getCompetition(this.props.match.params.id);
         }
     }
 
@@ -37,7 +35,11 @@ class Competition extends React.Component {
             return this.props.competition.name;
         }
 
-        return 'Register competition'
+        if (this.props.match.params.id === 'create') {
+            return 'Create competition';
+        }
+
+        return 'Competition not found';
     }
 
     getMenuItems() {
@@ -58,7 +60,7 @@ class Competition extends React.Component {
     }
 
     getAdminItems() {
-        if (!this.props.user) {
+        if (!this.props.user || !this.props.competition) {
             return [];
         }
 
@@ -81,11 +83,11 @@ class Competition extends React.Component {
     }
 
     getContent () {
-        if (!this.props.competition) {
-            return <ProgressSpinner />;
+        if (!this.props.competition && this.props.match.params.id !== 'create') {
+            return;
         }
 
-        if (this.props.competition.tasks_in_progress.length > 0) {
+        if (this.props.competition && this.props.competition.tasks_in_progress.length > 0) {
             return this.props.competition.tasks_in_progress.map(task => {
                 return <Progressbar taskId={task.id} />
             })

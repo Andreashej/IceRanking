@@ -18,6 +18,7 @@ class CompetitionCreate extends React.Component {
     }
 
     componentDidMount() {
+        console.log("test");
         this.props.getRankings();
         this.props.getTestCatalog();
     }
