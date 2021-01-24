@@ -16,7 +16,11 @@ class RiderResults extends React.Component {
 
     componentDidMount() {
         this.props.getRider(this.props.match.params.id).then(() => {
-            this.props.getRiderResults(this.props.match.params.id, this.props.match.params.testcode);
+            this.props.getRiderResults(this.props.match.params.id, this.props.match.params.testcode).then((results) => {
+                if (!this.props.results) {
+                    this.props.history.push(`/rider/${this.props.match.params.id}`);
+                }
+            });
         });
     }
 
@@ -170,7 +174,7 @@ class RiderResults extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    if(!state.riders[ownProps.match.params.id]) {
+    if(!state.riders[ownProps.match.params.id] || !state.riders[ownProps.match.params.id].results[ownProps.match.params.testcode]) {
         return {};
     }
 

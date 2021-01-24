@@ -16,7 +16,11 @@ class HorseResults extends React.Component {
 
     componentDidMount() {
         this.props.getHorse(this.props.match.params.id).then(() => {
-            this.props.getHorseResults(this.props.match.params.id, this.props.match.params.testcode);
+            this.props.getHorseResults(this.props.match.params.id, this.props.match.params.testcode).then(() => {
+                if (!this.props.results) {
+                    this.props.history.push(`/horse/${this.props.match.params.id}`);
+                }
+            });
         });
     }
 
@@ -167,7 +171,7 @@ class HorseResults extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    if (!state.horses[ownProps.match.params.id]) {
+    if (!state.horses[ownProps.match.params.id] || !state.horses[ownProps.match.params.id].results[ownProps.match.params.testcode]) {
         return {};
     }
 
