@@ -7,6 +7,6 @@ const trackingId = "2250194851";
 ReactGA.initialize(trackingId);
 
 history.listen(location => {
-    ReactGA.set( { page: location.pathname });
-    ReactGA.pageview(location.pathname)
+    ReactGA.set( { page: location.hash });
+    ReactGA.pageview(location.hash)
 });
