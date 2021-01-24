@@ -2,7 +2,7 @@ import ReactGA from 'react-ga';
 
 import history from './history';
 
-const trackingId = "G-H0JE6G4T3S";
+const trackingId = "2250194851";
 
 ReactGA.initialize(trackingId);
 

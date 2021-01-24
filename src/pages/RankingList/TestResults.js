@@ -21,10 +21,6 @@ class RankingResultList extends React.Component {
                 }
             });
         });
-
-        this.props.setCurrentPage(this.props.location.pathname);
-
-
     }
 
     componentDidUpdate(prevProps) {
@@ -39,7 +35,6 @@ class RankingResultList extends React.Component {
                     
                 }
             });
-            this.props.setCurrentPage(this.props.location.pathname);
         }
     }
 
