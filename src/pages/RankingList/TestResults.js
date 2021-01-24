@@ -39,7 +39,6 @@ class RankingResultList extends React.Component {
                     
                 }
             });
-            document.title = `${testcode} | ${this.props.ranking.listname} | IceCompass Rankings`;
             this.props.setCurrentPage(this.props.location.pathname);
         }
     }

@@ -9,13 +9,13 @@ import RankingList from '../pages/RankingList';
 import Rider from '../pages/Rider';
 import Horse from '../pages/Horse';
 import Competition from '../pages/Competition';
-import TaskManager from '../pages/TaskManager';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
-import { faListOl, faUser, faHorseHead, faCalendarAlt, faQuestion, faTimes, faSearch, faCalendarPlus } from '@fortawesome/free-solid-svg-icons'
+import { faListOl, faUser, faHorseHead, faCalendarAlt, faQuestion, faTimes, faSearch, faCalendarPlus, faTachometerAlt } from '@fortawesome/free-solid-svg-icons'
+import Dashboard from "../pages/Dashboard";
     
-library.add(fab, faListOl, faUser, faHorseHead, faCalendarAlt, faQuestion, faTimes, faSearch, faCalendarPlus);
+library.add(fab, faListOl, faUser, faHorseHead, faCalendarAlt, faQuestion, faTimes, faSearch, faCalendarPlus, faTachometerAlt);
 
 
 const App = () => {
@@ -28,7 +28,7 @@ const App = () => {
                 <Route path="/rider/:id" component={Rider} />
                 <Route path="/horse/:id" component={Horse} />
                 <Route path="/competition/:id" component={Competition} />
-                <Route path="/tasks" component={TaskManager} />
+                <Route path="/dashboard" component={Dashboard} />
             </Switch>
             <Footer />
         </HashRouter>

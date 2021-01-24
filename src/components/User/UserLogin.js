@@ -23,7 +23,7 @@ class UserLogin extends React.Component {
 
     render() {
         return (
-            <Dialog header="Please log in" visible={this.props.show} modal={true} onHide={this.props.onHide} position="top" className="loginbox">
+            <Dialog header="Please log in" visible={this.props.show} modal onHide={this.props.onHide} position="top" className="loginbox">
                 <form id="login" onSubmit={e => this.submitForm(e)}>
                     <span className="p-float-label">
                         <InputText id="username" value={this.state.username} onChange={(e) => this.setState({username: e.target.value})} />

@@ -1,10 +1,8 @@
 import React from 'react'
 
-import Page from '../../components/partials/Page';
-
 import { SelectButton } from 'primereact/selectbutton';
 
-import taskService from '../../services/task.service';
+import taskService from '../../../services/task.service';
 import { ProgressBar } from 'primereact/progressbar';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
@@ -42,7 +40,7 @@ class Taskmanager extends React.Component {
 
     getTasks(filter) {
         taskService.getTasks({
-            filter: `state == ${filter}`
+            filter: [`state == ${filter}`]
         }).then(tasks => {
             this.setState({
                 tasks,
@@ -52,13 +50,15 @@ class Taskmanager extends React.Component {
     }
 
     stateTemplate(rowData) {
-        console.log(rowData);
         let cls;
 
         switch (rowData.state) {
             case "PROGRESS":
-                cls = 'success';
-            break;
+                return (
+                    <ProgressBar value={rowData.progress} color="#A8D0E6" style={{
+                        borderRadius: 20,
+                    }} />
+                )
 
             case "COMPLETE":
                 cls = 'success';
@@ -87,18 +87,13 @@ class Taskmanager extends React.Component {
 
         const taskHtml = this.state.tasks.map(task => {
             return (
-                <li class="list-group-item" key={task.id}>
-                    <div class="row">
-                        <div class="col">
+                <li className="list-group-item" key={task.id}>
+                    <div className="row">
+                        <div className="col">
                             {task.description}
                         </div>
-                        <div class="col col-auto">
+                        <div className="col-4">
                             {this.stateTemplate(task)}
-                        </div>
-                        <div class="col-4">
-                            <ProgressBar value={task.progress} color="#A8D0E6" style={{
-                                borderRadius: 20,
-                            }} />
                         </div>
                     </div>
                 </li>
@@ -106,13 +101,13 @@ class Taskmanager extends React.Component {
         })
 
         return (
-            <Page title="Task manager">
+            <>
                 <h2 className="subtitle">Tasks</h2>
                 <SelectButton value={this.state.filter} options={filters} onChange={(e) => this.setState({filter: e.value})} />
-                {this.state.tasks.length > 0 ? <ul class="list-group">
+                {this.state.tasks.length > 0 ? <ul className="list-group">
                     {taskHtml}
                 </ul> : (!this.state.requestComplete && <ProgressSpinner />)}
-            </Page>
+            </>
         )
     }
 }

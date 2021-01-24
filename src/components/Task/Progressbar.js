@@ -16,8 +16,14 @@ class TaskBar extends React.Component {
     componentDidUpdate() {
         if (this.props.task && this.props.task.complete) {
             clearInterval(this.interval);
-            this.props.onComplete();
+            if (this.props.onComplete) {
+                this.props.onComplete();
+            }
         }
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
 
     render() {

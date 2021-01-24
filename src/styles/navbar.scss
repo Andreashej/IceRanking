@@ -71,6 +71,17 @@ nav.navigation {
                 border-color: darken($color: $pink, $amount: 10);
             }
         }
+
+    }
+    .p-menu {
+        left: unset!important;
+        right: 0px;
+
+        .p-menuitem {
+            a {
+                white-space: nowrap;
+            }
+        }
     }
 }
 
