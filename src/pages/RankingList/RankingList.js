@@ -11,6 +11,7 @@ import Page from '../../components/partials/Page';
 import RankingOptions from './admin/RankingOptions';
 import RankingTestDefinitions from './admin/RankingTestDefinitions';
 import RankingImports from './admin/RankingImports';
+import history from '../../history';
 
 class RankingList extends React.Component {
     mobileMenu;
@@ -35,12 +36,11 @@ class RankingList extends React.Component {
         let tests = [];
         if (this.props.ranking) {
             tests = Object.entries(this.props.ranking.tests).map(([testcode, test]) => {
-                const url = `/rankings/${this.props.match.params.shortname}/tests/${test.testcode}`;
                 return {
                     label: test.testcode,
-                    command: () => this.props.history.push(url),
+                    command: () => this.props.history.push(`/rankings/${this.props.match.params.shortname}/tests/${test.testcode}`),
                     id: test.id,
-                    className: url === this.props.currentPage ? 'active' : null
+                    className: history.location.hash.includes(testcode) ? 'active' : null,
                 }
             });
         }
@@ -49,7 +49,7 @@ class RankingList extends React.Component {
             {
                 label: "Events",
                 command: () => this.props.history.push(eventUrl),
-                className: eventUrl === this.props.currentPage ? 'active' : null
+                className: eventUrl === history.location.hash.slice(1) ? 'active' : null
             },
             {
                 label: "Tests",
@@ -66,17 +66,17 @@ class RankingList extends React.Component {
                 {
                     label: "Edit ranking",
                     command: () => this.props.history.push(`/rankings/${this.props.match.params.shortname}/admin/edit`),
-                    className: "edit" === this.props.match.params.page ? 'active' : null
+                    className: history.location.hash.includes("/admin/edit") ? 'active' : null
                 },
                 {
                     label: "Test definitions",
                     command: () => this.props.history.push(`/rankings/${this.props.match.params.shortname}/admin/testedit`),
-                    className: "testedit" === this.props.match.params.page ? 'active' : null
+                    className: history.location.hash.includes("/admin/testedit") ? 'active' : null
                 },
                 {
                     label: "Import",
                     command: () => this.props.history.push(`/rankings/${this.props.match.params.shortname}/admin/import`),
-                    className: "testedit" === this.props.match.params.page ? 'active' : null
+                    className: history.location.hash.includes("/admin/import") ? 'active' : null
                 },
             ];
         }
@@ -104,8 +104,7 @@ class RankingList extends React.Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         ranking: state.rankings[ownProps.match.params.shortname],
-        currentUser: state.users.currentUser,
-        currentPage: state.navigation.currentPage
+        currentUser: state.users.currentUser
     }
 }
 

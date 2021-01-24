@@ -30,9 +30,6 @@ export const CREATE_COMPETITION = 'CREATE_COMPETITION';
 // Tests
 export const GET_TEST = 'GET_TEST';
 
-// Navigation
-export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
-
 // Test Catalog
 export const GET_TEST_CATALOG = 'GET_TEST_ARCHIVE';
 export const GET_TEST_DEFINITION = 'GET_TEST_DEFINITION';

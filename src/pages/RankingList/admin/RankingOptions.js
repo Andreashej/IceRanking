@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getRanking, updateRanking, getProfile, setCurrentPage } from '../../../actions/index';
+import { getRanking, updateRanking, getProfile } from '../../../actions/index';
 
 import {InputText} from 'primereact/inputtext';
 import {InputNumber} from 'primereact/inputnumber';
@@ -25,8 +25,6 @@ class EditRanking extends React.Component {
         });
 
         this.props.getRanking(this.props.match.params.shortname);
-
-        this.props.setCurrentPage(this.props.location.pathname);
     }
 
     componentDidUpdate(prevProps) {
@@ -83,4 +81,4 @@ const mapStateToProps = (state, ownProps) => {
     }
 };
 
-export default connect(mapStateToProps, { getRanking, updateRanking, getProfile, setCurrentPage })(EditRanking);
+export default connect(mapStateToProps, { getRanking, updateRanking, getProfile })(EditRanking);

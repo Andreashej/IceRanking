@@ -7,11 +7,11 @@ import CompetitionResults from './CompetitionResults';
 import CompetitionCreate from './CompetitionCreate';
 import { getCompetition } from '../../actions';
 import { dateToString } from '../../tools';
-import { ProgressSpinner } from 'primereact/progressspinner';
 import Progressbar from '../../components/Task/Progressbar';
 import { Dialog } from 'primereact/dialog';
 import { Message } from 'primereact/message';
 import CompetitionUpload from '../../components/Task/CompetionUpload';
+import history from '../../history';
 
 class Competition extends React.Component {
     state = {
@@ -46,7 +46,7 @@ class Competition extends React.Component {
         const tests = Object.values(this.props.competition.tests).map( test => {
             return {
                 label: test.testcode,
-                className: this.props.match.params.testcode === test.testcode ? 'active' : null,
+                className: history.location.hash.includes(test.testcode) ? 'active' : null,
                 command: () => this.props.history.push(`/competition/${this.props.competition.id}/test/${test.testcode}`)
             };
         });

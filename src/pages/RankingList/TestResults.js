@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getRanking, getRankingTests, getRankingTestResult, setCurrentPage, recomputeRankingTestResult, getRankingTest } from '../../actions';
+import { getRanking, getRankingTests, getRankingTestResult, recomputeRankingTestResult, getRankingTest } from '../../actions';
 
 import { ProgressSpinner } from 'primereact/progressspinner';
 import ProgressBar from '../../components/Task/Progressbar';
@@ -143,4 +143,4 @@ const mapStateToProps = (state, ownProps) => {
     return props;
 }
 
-export default connect(mapStateToProps, { getRanking, getRankingTests, getRankingTest, getRankingTestResult, setCurrentPage, recomputeRankingTestResult })(RankingResultList);
+export default connect(mapStateToProps, { getRanking, getRankingTests, getRankingTest, getRankingTestResult, recomputeRankingTestResult })(RankingResultList);

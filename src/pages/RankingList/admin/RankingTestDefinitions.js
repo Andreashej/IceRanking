@@ -8,7 +8,7 @@ import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 import { Button } from 'primereact/button';
 
-import { getRanking, updateRankingTest, getProfile, getRankingTests, createRankingTest, setCurrentPage } from '../../../actions';
+import { getRanking, updateRankingTest, getProfile, getRankingTests, createRankingTest } from '../../../actions';
 
 class RankingTestDefinitions extends React.Component {
     state = {
@@ -28,8 +28,6 @@ class RankingTestDefinitions extends React.Component {
                 tests: this.props.ranking.tests
             })
         });
-
-        this.props.setCurrentPage(this.props.location.pathname);
     }
 
     textEditor(props, field) {
@@ -173,4 +171,4 @@ const mapStateToProps = (state, ownProps) => {
     }
 }
 
-export default connect(mapStateToProps, { getRanking, updateRankingTest, getProfile, getRankingTests, createRankingTest, setCurrentPage })(RankingTestDefinitions);
+export default connect(mapStateToProps, { getRanking, updateRankingTest, getProfile, getRankingTests, createRankingTest })(RankingTestDefinitions);

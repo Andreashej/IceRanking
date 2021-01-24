@@ -7,6 +7,7 @@ import HorseInfo from './HorseInfo';
 
 import {getHorse} from '../../actions';
 import { Route, Switch } from 'react-router-dom';
+import history from '../../history';
 
 class Horse extends React.Component {
 
@@ -41,7 +42,7 @@ class Horse extends React.Component {
         const tests = this.props.horse && "testlist" in this.props.horse ? this.props.horse.testlist.map( testcode => {
             return {
                 label: testcode,
-                className: this.props.match.params.testcode === testcode ? 'active' : null,
+                className: history.location.hash.includes(testcode) ? 'active' : null,
                 command: () => this.props.history.push(`/horse/${this.props.horse.id}/results/${testcode}`)
             };
         }) : [];

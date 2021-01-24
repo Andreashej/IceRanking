@@ -1,6 +1,5 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import { setCurrentPage } from '../../actions';
 
 import EventList from '../../components/partials/EventList';
 
@@ -13,8 +12,6 @@ class RankingEvents extends React.Component {
     }
 
     componentDidMount() {
-        this.props.setCurrentPage(this.props.location.pathname);
-
         const today = new Date()
 
         competitionService.getCompetitions({
@@ -25,7 +22,6 @@ class RankingEvents extends React.Component {
             order_by: "first_date asc",
             limit: this.state.limit
         }).then(competitions => {
-            console.log(competitions);
             this.setState({
                 events: competitions
             })
@@ -52,4 +48,4 @@ class RankingEvents extends React.Component {
     }
 }
 
-export default connect(null, { setCurrentPage })(RankingEvents);
+export default connect(null, { })(RankingEvents);

@@ -4,7 +4,6 @@ import rankings from './rankingsReducer';
 import users from './userReducer';
 import riders from './riderReducer';
 import horses from './horseReducer';
-import navigation from './navigationReducer';
 import competitions from './competitionReducer';
 import testCatalog from './testCatalogReducer';
 import tasks from './taskReducer';
@@ -15,7 +14,6 @@ export default combineReducers({
    riders,
    horses,
    competitions,
-   navigation,
    testCatalog,
    tasks,
 });

@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import { Menu } from 'primereact/menu';
 import { Button } from 'primereact/button';
 import { Sidebar } from 'primereact/sidebar';
 
 import Header from '../partials/Header';
+import history from '../../history';
 
 let adminMenuRef = null;
 let adminMenuContainer = null;
@@ -32,6 +33,14 @@ const Page = ({title, subtitle, pretitle, icon, menuItems = [], adminMenuItems =
             items: adminMenuItems
         })
     }
+
+    useEffect(() => {
+        const unlisten = history.listen(location => {
+            setSidebarVisibility(false);
+        });
+
+        return unlisten;
+    })
 
     return (
         <>
