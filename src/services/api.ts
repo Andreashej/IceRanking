@@ -54,7 +54,14 @@ export const getRequest: (
     };
     fetch(url, fetchParams)
       .then(handleApiErrors)
-      .then((res) => res.json())
+      .then((res) => {
+        // const contentType = res.headers.get('content-type');
+        if (res.status === 204) {
+          return [];
+        }
+
+        return res.json();
+      })
       .then((data) => resolve(data))
       .catch((err) => reject(err));
   });

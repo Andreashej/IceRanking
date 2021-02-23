@@ -10,6 +10,9 @@ export const searchAwSmartGroup: (adGroupName: string) => Promise<number> = asyn
       awHeaders,
       { name: `AD - ${adGroupName}` }
     );
+    if (awSmartGroups === undefined) {
+      return awSmartGroups;
+    }
 
     return awSmartGroups[0].SmartGroupID;
   } catch (error) {
