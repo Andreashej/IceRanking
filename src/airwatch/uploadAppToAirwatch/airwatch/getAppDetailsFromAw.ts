@@ -14,7 +14,6 @@ export const getAppDetailsFromAW: (appBundleId: string) => Promise<IAwAppDetails
       awHeaders,
       { bundleid: appBundleId }
     );
-    //console.log(appDetails);
 
     return appDetails;
   } catch (error) {
