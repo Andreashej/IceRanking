@@ -40,13 +40,13 @@ export const uploadToAirwatch: () => Promise<void> = async () => {
     logInfo('Starting app retirement');
     await retireApp(activeApps);
 
-    if (!smartGroupIds) {
+    if (previousApps.length === 0) {
       logInfo('Assigning the smart group to the newly created app');
 
       return await awAssignSmartgroup(awAppId, smartGroupIds);
     }
 
-    return logInfo('Smart group is already assigned to the Application');
+    return logInfo('Smart group is already assigned to the app');
   } catch (error) {
     throw error;
   }
