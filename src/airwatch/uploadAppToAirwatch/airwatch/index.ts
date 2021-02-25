@@ -19,7 +19,10 @@ export const uploadToAirwatch: () => Promise<void> = async () => {
     const { version, bundleId, fileName, appName } = await getAppDetails();
 
     logInfo('Getting previous app versions from Airwatch');
-    const previousApps = await getAppDetailsFromAW(bundleId);
+    let previousApps = await getAppDetailsFromAW(bundleId);
+    if (previousApps === undefined) {
+      previousApps = [];
+    }
     const activeApps = previousApps.filter((app) => app.Status === 'Active');
     const smartGroupIds = await getSmartGroupIds(
       AD_GROUP,
@@ -37,8 +40,13 @@ export const uploadToAirwatch: () => Promise<void> = async () => {
     logInfo('Starting app retirement');
     await retireApp(activeApps);
 
-    logInfo('Assigning the smart group to the newly created app');
-    await awAssignSmartgroup(awAppId, smartGroupIds);
+    if (previousApps.length === 0) {
+      logInfo('Assigning the smart group to the newly created app');
+
+      return await awAssignSmartgroup(awAppId, smartGroupIds);
+    }
+
+    return logInfo('Smart group is already assigned to the app');
   } catch (error) {
     throw error;
   }
