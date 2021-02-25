@@ -1,3 +1,13 @@
+## [1.0.1](https://github.com/LEGO/react-native-scripts/compare/v1.0.0...v1.0.1) (2021-02-25)
+
+
+### Bug Fixes
+
+* create new app and assign smart group ([2ce8a95](https://github.com/LEGO/react-native-scripts/commit/2ce8a9585a3b406569446f8ee10d2c22204f4077))
+* inavlid end of json input ([5c2c78b](https://github.com/LEGO/react-native-scripts/commit/5c2c78b30112d8b0a42a8c53b37c805e3bee2161))
+* requested changes in the code ([1ab0220](https://github.com/LEGO/react-native-scripts/commit/1ab02202881e69762f3c6b9fced5da3908c998d0))
+* testing jest ([6dc6b3f](https://github.com/LEGO/react-native-scripts/commit/6dc6b3fc5bdca7e690acf59c623918b6ef382417))
+
 # [1.0.0](https://github.com/LEGO/react-native-scripts/compare/v0.12.0...v1.0.0) (2020-11-03)
 
 
