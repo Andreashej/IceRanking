@@ -191,6 +191,9 @@ react-native-scripts github repo-dispatch eventName
 A script that takes the `.ipa` file from Appcenter, uploads it to Akamai CDN and then creates a new
 app in Airwatch.
 
+#### Info
+The script takes the .ipa file from Appcenter of the latest successful build that is placed under master branch. Therefore, it is important your build is placed under master branch, so API can find it.
+
 #### Usage
 
 If there is at least one previous version of the app, it retires that version and
@@ -235,11 +238,11 @@ react-native-scripts airwatch upload-app push-mode-auto
 | GH_TOKEN                 | A personal access token generated in GitHub with at least `read:packages` permissions. [More information here](https://help.github.com/en/github/managing-packages-with-github-packages/about-github-packages#about-tokens)     | 234yhdkjfhsdjf7ewr6wehrjkjhsduf       |
 | AD_GROUP                 | the name of the AD distribution group to be used with the app. [More info here](https://confluence.corp.lego.com/display/UXMP/Airwatch+Group+Assignment). If you don’t have the rights, AD group can be created via powershell. [More info here](https://confluence.corp.lego.com/display/UXMP/AD+Group+creation)                                                                       | g1.aw.sw_published_appName            |
 | AW_ORGANIZATION_GROUP_ID | the organizations group id from Airwatch. Can be obtained from the Airwatch console.                                                                                                                                            | 123                                   |
-| AW_TENANT_CODE           | the tenant code for publishing to Airwatch                                                                                                                                                                                      | 1ASDJH123H3148                        |
+| AW_TENANT_CODE           | the tenant code for publishing to Airwatch. Can be found in Airwatch console under API KEY by clicking System > Advanced > API > REST API.                                                                                                                                                                                     | 1ASDJH123H3148                        |
 | AW_USERNAME              | the username used for Airwatch login                                                                                                                                                                                            | LEGO\dkusername                       |
 | AW_PWD                   | the password used to authenticate the above username in Airwatch                                                                                                                                                                | aVerySecurePassword                   |
-| PRIVATE_KEY_PASSPHRASE   | the private key passphrase for accessing Akamai CDN                                                                                                                                                                             | mySecurePassphrase                    |
-| PRIVATE_KEY              | the contents of the private key file used to access Akamai CDN                                                                                                                                                                  | "-----BEGIN RSA PRIVATE KEY-----..."  |
+| PRIVATE_KEY_PASSPHRASE   | the private key passphrase for accessing Akamai CDN. The password can be found at https://pass:9119/ by searching AirWatch CDN private key password.                                                                                                                                                                             | mySecurePassphrase                    |
+| PRIVATE_KEY              | the contents of the private key file used to access Akamai CDN. Can be found at https://pass:9119/ under AirWatch CDN private key password.                                                                                                                                                                  | "-----BEGIN RSA PRIVATE KEY-----..."  |
 
 ## SENTRY
 
