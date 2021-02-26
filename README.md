@@ -22,7 +22,8 @@ yarn add -E -D @lego/react-native-scripts
 
 ### Configure Build Settings
 
-Sets the environment variables and other settings in in the build configuration for a branch in appcenter.ms
+Sets the environment variables and other settings in in the build configuration for a branch in appcenter.ms. 
+Enviormental variables below should be set as a repository secrets in Github. When "appcenter-configure-build-settings" is run in GitHub Action, the variables will be added automatically to the Appcenter Configuration. 
 
 #### Mandatory environment variables
 
