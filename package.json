@@ -23,7 +23,7 @@
     "release": "semantic-release",
     "release:ci": "echo 'unsafe-perm = true' > ./.npmrc && yarn run semantic-release --debug && rm -rf ./.npmrc",
     "test": "jest",
-    "airwatch-run-local": "yarn build && source ./src/utils/localEnvVars.sh && node lib/airwatch/uploadAppToAirwatch/index.js"
+    "airwatch-run-local": "yarn build && source ./src/utils/localEnvVars.sh && node lib/airwatch/uploadAppToAirwatch/airwatch/index.js"
   },
   "author": "",
   "license": "ISC",
