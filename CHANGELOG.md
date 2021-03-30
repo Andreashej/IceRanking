@@ -1,3 +1,12 @@
+## [1.0.2](https://github.com/LEGO/react-native-scripts/compare/v1.0.1...v1.0.2) (2021-03-30)
+
+
+### Bug Fixes
+
+* testing cdn ([c532100](https://github.com/LEGO/react-native-scripts/commit/c532100537526c4dee633adfd1a557b17feac7f1))
+* testing cdn ([1c0a4c0](https://github.com/LEGO/react-native-scripts/commit/1c0a4c0c5c8e1a086965e539a63762a8a3d18098))
+* testing cdn ([72a8136](https://github.com/LEGO/react-native-scripts/commit/72a8136869355c7d7066b1dcd08ec139f20114b8))
+
 ## [1.0.1](https://github.com/LEGO/react-native-scripts/compare/v1.0.0...v1.0.1) (2021-02-25)
 
 
