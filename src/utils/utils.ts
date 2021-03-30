@@ -59,31 +59,6 @@ export const getAppDetails: () => Promise<{
   });
 };
 
-export const getAppDetailsCDN: () => Promise<{
-  bundleId: string;
-  version: string;
-  fileName: string;
-  appName: string;
-}> = () => {
-  return new Promise((resolve, reject) => {
-    const fileName = readdirSync(`${downloadLocation}`)[0];
-
-    const ipaFile = openSync(`${downloadLocation}/${fileName}`, 'r');
-    ipaExtractInfo(ipaFile, (err: Error, ipaInfo: IIpaInfo[]) => {
-      if (err) {
-        reject(err);
-      }
-      const { CFBundleIdentifier, CFBundleShortVersionString, CFBundleDisplayName } = ipaInfo[0];
-      resolve({
-        bundleId: CFBundleIdentifier,
-        version: CFBundleShortVersionString,
-        fileName,
-        appName: CFBundleDisplayName,
-      });
-    });
-  });
-};
-
 export const promiseTimeout: (delay: number) => Promise<void> = (delay) => {
   return new Promise((resolve) => {
     setTimeout(resolve, delay);

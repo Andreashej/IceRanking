@@ -5,7 +5,7 @@ import flattenDeep from 'lodash.flattendeep';
 import minimist from 'minimist';
 import { join } from 'path';
 import { uploadAppToAirwatch } from './airwatch';
-import { uploadToAirwatchResign } from './airwatch/uploadAppToAirwatch/airwatch';
+import { uploadToAirwatch } from './airwatch/uploadAppToAirwatch/airwatch';
 import { setBuildConfiguration } from './appcenter';
 import { localBuild } from './fastlane';
 import { repoDispatch } from './github/repoDispatch';
@@ -149,7 +149,7 @@ export const main: () => Promise<void> = async () => {
             await uploadAppToAirwatch();
             break;
           case 'upload-app-resign':
-            await uploadToAirwatchResign();
+            await uploadToAirwatch();
             break;
           default:
         }
