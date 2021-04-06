@@ -245,7 +245,7 @@ Enviormental variables below should be set as a repository secrets in Github. Wh
 | PRIVATE_KEY_PASSPHRASE   | the private key passphrase for accessing Akamai CDN. The password can be found at https://pass:9119/ by searching AirWatch CDN private key password.                                                                                                                                                                             | mySecurePassphrase                    |
 | PRIVATE_KEY              | the contents of the private key file used to access Akamai CDN. Can be found at https://pass:9119/ under AirWatch CDN private key password.                                                                                                                                                                  | "-----BEGIN RSA PRIVATE KEY-----..."  |
 
-[Continue to the next step](https://confluence.corp.lego.com/display/UXMP/4.+Github+Actions)
+[Continue to the next step -> GitHub Actions](https://confluence.corp.lego.com/display/UXMP/4.+Github+Actions)
 
 ## SENTRY
 
