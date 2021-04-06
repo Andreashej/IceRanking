@@ -208,16 +208,16 @@ and linked in the Airwatch Console ([more info here](https://confluence.corp.leg
 
 > The script must run on a machine connected to a LEGO internal network
 
-For executing the script run
+Open package.json and add the following line to your scripts:
 
 ```bash
-react-native-scripts airwatch upload-app
+"upload-app-to-aw": "react-native-scripts airwatch upload-app"
 ```
 
 By default, the script retires only the latest app version. If you want to retire all previous app versions append `force-publish`:
 
 ```bash
-react-native-scripts airwatch upload-app force-publish
+"upload-app-to-aw": "react-native-scripts airwatch upload-app force-publish"
 ```
 
 By default, the script only uploads the app to Airwatch and users can request the install from the
@@ -225,10 +225,11 @@ LEGO App Store. If you want to automatically install the app to the assigned use
 `push-mode-auto` when running the script:
 
 ```bash
-react-native-scripts airwatch upload-app push-mode-auto
+"upload-app-to-aw": "react-native-scripts airwatch upload-app push-mode-auto"
 ```
 
 #### Mandatory environment variables
+Enviormental variables below should be set as a repository secrets in Github. When "upload-app-to-aw" is run in GitHub Action, the variables will be used to upload an app to AirWatch.
 
 | Environment Variable     | Description                                                                                                                                                                                                                     | Example                               |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
