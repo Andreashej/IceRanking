@@ -20,7 +20,7 @@ class RankingEvents extends React.Component {
                 `first_date > ${today.getFullYear()}/${today.getMonth()+1}/${today.getDate()}`
             ],
             order_by: "first_date asc",
-            limit: this.state.limit
+            // limit: this.state.limit
         }).then(competitions => {
             this.setState({
                 events: competitions
