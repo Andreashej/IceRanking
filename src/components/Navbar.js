@@ -62,7 +62,7 @@ class Navbar extends React.Component {
 
             return (
                 <>
-                    <SplitButton label={this.props.currentUser.username} icon="pi pi-user" model={userActions} className="login-button" />
+                    <SplitButton label={this.props.currentUser.username} icon="pi pi-user" model={userActions} className="login-button p-button-sm"></SplitButton>
                     <Button icon="pi pi-search" className="search-button d-block d-md-none" onClick={() => {
                         this.setState({show: true});
                     }} />
@@ -72,7 +72,7 @@ class Navbar extends React.Component {
             return (
                 <>
                     <UserLogin show={this.state.showLogin} onHide={() => this.setState({showLogin: false})}></UserLogin>
-                    <Button label="Login" icon="pi pi-sign-in" className="p-button-raised p-button-rounded login-button" onClick={(e) => this.setState({showLogin: true})} />
+                    <Button label="Login" icon="pi pi-sign-in" className="p-button-raised p-button-rounded login-button p-button-sm" onClick={(e) => this.setState({showLogin: true})} />
                     <Button icon="pi pi-search" className="search-button d-block d-md-none" onClick={() => {
                         this.setState({show: true});
                     }} />

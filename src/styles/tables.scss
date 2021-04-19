@@ -58,6 +58,7 @@
                     > td {
                         border: none;
                         background-color: white;
+                        padding: .5rem 1rem;
 
                         &.mark {
                             text-align: right;
@@ -80,11 +81,9 @@
 
                         &.rankings {
                             .p-button {
-                                background-color: $blue;
-                                border-color: $blue;
-
-                                .p-button-text {
-                                    padding: .25rem .5rem;
+                                &.p-button-text {
+                                    color: $dark;
+                                    padding: 0;
                                 }
                             }
 

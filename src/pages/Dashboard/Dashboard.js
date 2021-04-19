@@ -5,6 +5,7 @@ import { getProfile } from '../../actions';
 import Page from '../../components/partials/Page';
 import TaskManager from './TaskManager';
 import CompetitionList from './CompetitionList';
+import ErrorLog from './ErrorLog';
 
 class Dashboard extends React.Component {
     state = {
@@ -34,6 +35,12 @@ class Dashboard extends React.Component {
                 command: () => {
                     this.props.history.push("/dashboard/tasks")
                 }
+            },
+            {
+                label: "Error Log",
+                command: () => {
+                    this.props.history.push("/dashboard/errors")
+                }
             }
         ]
     }
@@ -48,6 +55,7 @@ class Dashboard extends React.Component {
                 <Switch>
                     <Route exact path="/dashboard" component={CompetitionList} />
                     <Route path="/dashboard/tasks" component={TaskManager} />
+                    <Route path="/dashboard/errors" component={ErrorLog} />
                 </Switch>
             </Page>
         );

@@ -81,8 +81,6 @@
     color: white;
 }
 
-.p-card.list-card {
-    .p-card-body {
-        padding: 0!important;
-    }
+.p-card.list-card .p-card-content {
+    padding: 0;
 }

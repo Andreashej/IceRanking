@@ -114,7 +114,7 @@ class RiderResults extends React.Component {
             return (
                 <Button key={ranking.shortname}
                     label={ranking.shortname} 
-                    className="p-button-raised p-button-rounded" 
+                    className="p-button-sm p-button-text" 
                     tooltip={tooltip} 
                     tooltipOptions={{position: "top"}}
                     onClick={() => this.props.history.push(`/rankings/${ranking.shortname}/tests/${this.props.match.params.testcode}`)}

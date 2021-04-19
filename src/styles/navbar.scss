@@ -65,6 +65,8 @@ nav.navigation {
         & {
             background-color: $pink;
             border-color: $pink;
+            font-size: 0.875rem;
+            padding: 0.4375rem 0.875rem;
         
             &:enabled:hover {
                 background-color: darken($color: $pink, $amount: 10);

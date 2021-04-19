@@ -94,12 +94,12 @@ class Frontpage extends React.Component {
                     <div className="container">
                         <div className="row py-5">
                             <div className="col-12 col-md">
-                                <Card title="Upcoming events">
+                                <Card title="Upcoming events" className="list-card">
                                     <EventList events={this.state.upcomingEvents} style={eventCardStyle} noEventsText="There are no upcoming events :(" />
                                 </Card>
                             </div>
-                            <div className="col-12 col-md">
-                                <Card title="Recently finished">
+                            <div className="col-12 col-md pt-4 pt-md-0">
+                                <Card title="Recently finished" className="list-card">
                                     <EventList events={this.state.recentEvents} style={eventCardStyle} />
                                 </Card>
                             </div>

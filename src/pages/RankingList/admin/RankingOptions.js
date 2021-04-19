@@ -6,10 +6,10 @@ import { getRanking, updateRanking, getProfile } from '../../../actions/index';
 import {InputText} from 'primereact/inputtext';
 import {InputNumber} from 'primereact/inputnumber';
 import { Button } from 'primereact/button';
-import { Growl } from 'primereact/growl';
+import { Toast } from 'primereact/toast';
 
 class EditRanking extends React.Component {
-    growl;
+    toast;
 
     state = {
         listname: "",
@@ -41,7 +41,7 @@ class EditRanking extends React.Component {
         e.preventDefault();
         this.props.updateRanking(this.props.match.params.shortname, this.state).then(
             () => {
-                this.growl.show({severity: 'success', summary: 'Success!', detail: "The options were saved successfully."});
+                this.toast.show({severity: 'success', summary: 'Success!', detail: "The options were saved successfully."});
             }
         );
     }
@@ -50,7 +50,7 @@ class EditRanking extends React.Component {
         if (this.props.ranking) {
             return (
                 <>
-                    <Growl ref={el => {this.growl = el}}></Growl>
+                    <Toast ref={el => {this.toast = el}}></Toast>
                     <h2 className="subheader">Ranking options</h2>
                     <form id="editRanking" onSubmit={e => this.onSubmit(e)}>
                         <span className="p-float-label">
