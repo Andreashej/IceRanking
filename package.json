@@ -16,6 +16,7 @@
   },
   "scripts": {
     "build": "yarn clean && tsc -b ./tsconfig.json && yarn copy-sh-files",
+    "build-link": "yarn build && npm link",
     "copy-sh-files": "yarn copyfiles **/*.sh lib -u 1 -E",
     "clean": "rimraf ./lib",
     "lint": "eslint src/**/*.ts",
@@ -37,11 +38,11 @@
     "lodash.flattendeep": "4.4.0",
     "minimist": "1.2.5",
     "node-fetch": "2.6.0",
-    "rimraf": "3.0.2",
+    "rimraf": "^3.0.2",
     "scp2": "0.5.0"
   },
   "devDependencies": {
-    "@babel/core": "7.4.5",
+    "@babel/core": "^7.13.15",
     "@babel/plugin-proposal-optional-chaining": "7.7.4",
     "@babel/preset-env": "7.4.5",
     "@babel/preset-typescript": "7.3.3",
@@ -70,11 +71,12 @@
     "dotenv": "8.0.0",
     "husky": "2.4.1",
     "jest": "24.8.0",
+    "jest-diff": "^26.6.2",
     "jest-fetch-mock": "2.1.2",
     "lint-staged": "8.2.1",
     "semantic-release": "15.13.19",
     "ts-node": "8.2.0",
-    "typescript": "3.7.2"
+    "typescript": "4.0.2"
   },
   "publishConfig": {
     "access": "restricted",

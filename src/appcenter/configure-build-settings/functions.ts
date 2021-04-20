@@ -27,6 +27,10 @@ interface IEnvVars {
   PROJECT_OR_WORKSPACE_PATH?: string;
   XCODE_SCHEME_NAME?: string;
   SENTRY_AUTH_TOKEN: string;
+  PLATFORM: string;
+  KEYSTORE_PASSWORD?: string;
+  KEY_ALIAS?: string;
+  KEY_PASSWORD?: string;
 }
 
 interface IBodyEnvVars {
@@ -50,12 +54,24 @@ const envVars: IEnvVars = {
   BUNDLE_GIT__COM: process.env.BUNDLE_GIT__COM,
   GH_TOKEN: process.env.GH_TOKEN,
   GITHUB_REF: process.env.GITHUB_REF?.split('refs/heads/')[1],
-  IOS_CERTIFICATES_GIT_URL: process.env.IOS_CERTIFICATES_GIT_URL,
+  IOS_CERTIFICATES_GIT_URL: process.env.IOS_CERTIFICATES_GIT_URL || '',
   MATCH_PASSWORD: process.env.MATCH_PASSWORD,
-  PROJECT_OR_WORKSPACE_PATH: process.env.PROJECT_OR_WORKSPACE_PATH,
-  XCODE_SCHEME_NAME: process.env.XCODE_SCHEME_NAME,
+  PROJECT_OR_WORKSPACE_PATH: process.env.PROJECT_OR_WORKSPACE_PATH || '',
+  XCODE_SCHEME_NAME: process.env.XCODE_SCHEME_NAME || '',
   SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN || '',
+  PLATFORM: process.env.PLATFORM || 'xcode',
+  KEYSTORE_PASSWORD: process.env.KEYSTORE_PASSWORD,
+  KEY_ALIAS: process.env.KEY_ALIAS,
+  KEY_PASSWORD: process.env.KEY_PASSWORD,
 };
+
+const androidOnly = ['KEYSTORE_PASSWORD', 'KEY_ALIAS', 'KEY_PASSWORD'];
+const xcodeOnly = [
+  'IOS_CERTIFICATES_GIT_URL',
+  'PROJECT_OR_WORKSPACE_PATH',
+  'XCODE_SCHEME_NAME',
+  'MATCH_PASSWORD',
+];
 
 const fileExists: (fileName: string) => boolean = (fileName) => {
   const homeDir = process.env.GITHUB_WORKSPACE || '';
@@ -68,9 +84,16 @@ const missingEnvVars: string[] = [];
 // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-7.html#assertion-functions
 const validateEnvVars: (vars: IEnvVars) => asserts vars is Required<IEnvVars> = (vars) => {
   Object.keys(envVars).forEach((key: string) => {
-    const envVarsKey = key as keyof IEnvVars;
-    if (!vars[envVarsKey] || typeof vars[envVarsKey] !== 'string') {
-      missingEnvVars.push(key);
+    if (
+      !(
+        (envVars.PLATFORM === 'android' && xcodeOnly.includes(key)) ||
+        (envVars.PLATFORM === 'xcode' && androidOnly.includes(key))
+      )
+    ) {
+      const envVarsKey = key as keyof IEnvVars;
+      if (!vars[envVarsKey] || typeof vars[envVarsKey] !== 'string') {
+        missingEnvVars.push(key);
+      }
     }
   });
 
@@ -83,11 +106,11 @@ const validateEnvVars: (vars: IEnvVars) => asserts vars is Required<IEnvVars> = 
 
 export const setBranchConfig = (
   config: Pick<Config, 'nodeVersion' | 'xcodeVersion'>,
-  certificateEncoded: string,
-  certificateFilename: string,
-  profileEncoded: string,
-  provisioningProfileFilename: string,
-  method: 'POST' | 'PUT'
+  method: 'POST' | 'PUT',
+  certificateEncoded?: string,
+  certificateFilename?: string,
+  profileEncoded?: string,
+  provisioningProfileFilename?: string
 ): Promise<object> => {
   // disable consistent-return because the function has a different return behavior depending on
   // code branching https://eslint.org/docs/rules/consistent-return#when-not-to-use-it
@@ -103,12 +126,13 @@ export const setBranchConfig = (
       APPCENTER_OWNER_NAME,
       APPCENTER_APP_NAME,
       APPCENTER_API_TOKEN,
-      MATCH_PASSWORD,
-      PROJECT_OR_WORKSPACE_PATH,
-      XCODE_SCHEME_NAME,
+      // MATCH_PASSWORD,
+      // PROJECT_OR_WORKSPACE_PATH,
+      // XCODE_SCHEME_NAME,
       GH_TOKEN,
       BUNDLE_GIT__COM,
       SENTRY_AUTH_TOKEN,
+      PLATFORM,
     } = envVars;
 
     const encodedBranchName = encodeURIComponent(GITHUB_REF);
@@ -179,7 +203,43 @@ export const setBranchConfig = (
       paramObject.postBuild = 'appcenter-post-build.sh';
     }
 
-    const { xcodeVersion, nodeVersion } = config;
+    let buildSettings;
+
+    const { nodeVersion } = config;
+
+    if (PLATFORM === 'android') {
+      const { KEY_ALIAS, KEYSTORE_PASSWORD, KEY_PASSWORD } = envVars;
+
+      buildSettings = {
+        gradleWrapperPath: 'android/gradlew',
+        module: 'app',
+        buildVariant: 'release',
+        runTests: false,
+        runLint: false,
+        isRoot: true,
+        automaticSigning: true,
+        keystorePassword: KEYSTORE_PASSWORD,
+        keyAlias: KEY_ALIAS,
+        keyPassword: KEY_PASSWORD,
+        // keystoreFilename: 'string',
+        // keystoreEncoded: 'string',
+      };
+    } else {
+      const { PROJECT_OR_WORKSPACE_PATH, XCODE_SCHEME_NAME, MATCH_PASSWORD } = envVars;
+      const { xcodeVersion } = config;
+
+      buildSettings = {
+        appExtensionProvisioningProfileFiles: [],
+        certificateEncoded,
+        certificateFilename,
+        certificatePassword: MATCH_PASSWORD,
+        xcodeVersion,
+        projectOrWorkspacePath: PROJECT_OR_WORKSPACE_PATH,
+        provisioningProfileEncoded: profileEncoded,
+        provisioningProfileFilename,
+        scheme: XCODE_SCHEME_NAME,
+      };
+    }
 
     const body: IBodyObject = {
       environmentVariables,
@@ -193,17 +253,7 @@ export const setBranchConfig = (
           packageJsonPath: 'package.json',
           runTests: false,
         },
-        xcode: {
-          appExtensionProvisioningProfileFiles: [],
-          certificateEncoded,
-          certificateFilename,
-          certificatePassword: MATCH_PASSWORD,
-          xcodeVersion,
-          projectOrWorkspacePath: PROJECT_OR_WORKSPACE_PATH,
-          provisioningProfileEncoded: profileEncoded,
-          provisioningProfileFilename,
-          scheme: XCODE_SCHEME_NAME,
-        },
+        [PLATFORM]: buildSettings,
       },
       trigger: 'manual',
     };

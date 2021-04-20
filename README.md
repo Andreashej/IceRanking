@@ -2,15 +2,28 @@
 
 A collection of scripts used for RN projects
 
-- [APPCENTER](#appcenter)
-  - [Configure Build Settings](#configure-build-settings)
-- [FASTLANE](#fastlane)
-  - [Local Builds](#local-builds)
-- [GITHUB](#github)
-  - [Repo Dispatch](#repo-dispatch)
-- [AIRWATCH](#airwatch)
-  - [Upload an app to Airwatch](#upload-an-app-to-airwatch)
-- [SENTRY](#sentry)
+- [react-native-scripts](#react-native-scripts)
+  - [Installation](#installation)
+  - [APPCENTER](#appcenter)
+    - [Configure Build Settings](#configure-build-settings)
+      - [Mandatory environment variables](#mandatory-environment-variables)
+      - [Mandatory environment variables for iOS builds](#mandatory-environment-variables-for-ios-builds)
+      - [Mandatory environment variables for Android builds](#mandatory-environment-variables-for-android-builds)
+      - [Other environment variables](#other-environment-variables)
+      - [Usage](#usage)
+  - [FASTLANE](#fastlane)
+    - [Local Builds](#local-builds)
+      - [Usage](#usage-1)
+  - [GITHUB](#github)
+    - [Repo Dispatch](#repo-dispatch)
+      - [Usage](#usage-2)
+  - [AIRWATCH](#airwatch)
+    - [Upload an app to Airwatch](#upload-an-app-to-airwatch)
+      - [Info](#info)
+      - [Usage](#usage-3)
+      - [Mandatory environment variables](#mandatory-environment-variables-1)
+  - [SENTRY](#sentry)
+      - [USAGE](#usage-4)
 
 ## Installation
 
@@ -33,12 +46,28 @@ Enviormental variables below should be set as a repository secrets in Github. Wh
 | APPCENTER_APP_NAME        | the name of your app on appcenter, required by appcenter openapi, can be obtained by opening your app in appcenter.ms and extracting it from the url (appcenter.ms /orgs/{{APPCENTER_OWNER_NAME}}/apps/{{APPCENTER_APP_NAME}})  | Goods-Receipt-2.0                                                                                  |
 | APPCENTER_OWNER_NAME      | the name of your team on appcenter, required by appcenter openapi, can be obtained by opening your app in appcenter.ms and extracting it from the url (appcenter.ms /orgs/{{APPCENTER_OWNER_NAME}}/apps/{{APPCENTER_APP_NAME}}) | LEGOUXMP                                                                                           |
 | BUNDLE_GIT\_\_COM         | needs to be in the form of "username:github_token", not base64 encoded, required by fastlane to be able to authenticate and install react-native-ci                                                                             | gituser:12398yjhadiy1238hqwueqwgehaksjbkas                                                         |
-| IOS_CERTIFICATES_GIT_URL  | the github repository url where your generated certificates and provisioning profiles are stored, required by configure-build-settings to download the certificates                                                             | add only the last part of the URL, the one after "github. com/", e.g.: "LEGO/ios-certificates.git" |
 | MATCH_PASSWORD            | the passphrase you provided for encrypting the certificates and provisioning profiles, required by configure-build-settings to decrypt the certificates                                                                         | mysecretpassword                                                                                   |
 | GH_TOKEN                  | A personal access token generated in GitHub with at least `read:packages` permissions. [More information here](https://help.github.com/en/github/managing-packages-with-github-packages/about-github-packages#about-tokens)     | 234yhdkjfhsdjf7ewr6wehrjkjhsduf                                                                    |
+| SENTRY_AUTH_TOKEN         | the token from Sentry used for uploading DSYM                                                                                                                                                                                   | 12368hjdbhq23tgasdhajsdgad                                                                         |
+
+#### Mandatory environment variables for iOS builds
+| Environment Variable      | Description                                                                                                                                                                                                                     | Example                                                                                            |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| IOS_CERTIFICATES_GIT_URL  | the github repository url where your generated certificates and provisioning profiles are stored, required by configure-build-settings to download the certificates                                                             | add only the last part of the URL, the one after "github. com/", e.g.: "LEGO/ios-certificates.git" |mysecretpassword                                                                                   |
 | PROJECT_OR_WORKSPACE_PATH | the path from the root folder to you .xcodeproj or .xcworkspace file, required by appcenter openapi                                                                                                                             | ios/lbrgoodsreceipt.xcworkspace                                                                    |
 | XCODE_SCHEME_NAME         | the name of the scheme used for building the app, required by appcenter openapi                                                                                                                                                 | lbrgoodsreceipt                                                                                    |
-| SENTRY_AUTH_TOKEN         | the token from Sentry used for uploading DSYM                                                                                                                                                                                   | 12368hjdbhq23tgasdhajsdgad                                                                         |
+
+#### Mandatory environment variables for Android builds
+| Environment Variable      | Description                                                                                                                                                                                                                     | Example                                                                                            |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| PLATFORM  | the platform must be specified to send the correct config to appcenter.                                                          | only "android" or "xcode" is supported. |mysecretpassword                                                                                   |
+| KEYSTORE_PASSWORD | Password to you keystore generated from Android studio | verysecretpassword                                                                    |
+| KEY_ALIAS         | The key alias as defined n Android studio when generating your keystore                                                                                                                                                 | verysecretalias                                                                                    |
+| KEY_PASSWORD | The key password for the key alias as defined in Android Studio | secretkeypass|
+
+It is important that you Android Project is setup for automatic signing.
+
+#### Other environment variables
 
 It is also possible to add arbitrary environment variables by adding them to the environment with the prefix `LEGORN_`.
 They will then automatically be added to the AppCenter Configuration.

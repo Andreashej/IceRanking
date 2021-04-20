@@ -1,10 +1,11 @@
 import { FetchMock } from 'jest-fetch-mock';
 import { setBranchConfig } from './functions';
-import { expectedBody } from './testUtils';
+import { expectedBodyAndroid, expectedBodyXcode } from './testUtils';
 
 const fetchMock: FetchMock = global.fetch;
 
 const currentBranchName = encodeURIComponent(process.env.GITHUB_REF?.split('refs/heads/')[1]);
+const platform = process.env.PLATFORM || 'xcode';
 const testConfig = {
   xcodeVersion: '12.1',
   nodeVersion: '12.x',
@@ -14,8 +15,10 @@ afterEach(() => {
   fetchMock.resetMocks();
 });
 
+const expectedBody = platform === 'android' ? expectedBodyAndroid : expectedBodyXcode;
+
 describe('setBranchConfig', () => {
-  it('should be able to set the branch configuration', async () => {
+  it('should be able to set the branch configuration xcode', async () => {
     fetchMock.mockResponse(JSON.stringify({ success: true }), {
       headers: {
         'content-type': 'application/json',
@@ -25,11 +28,11 @@ describe('setBranchConfig', () => {
     expect.assertions(2);
     const response = await setBranchConfig(
       testConfig,
+      'POST',
       'certEncoded',
       'certFilename',
       'profileEncoded',
-      'provisioningProfileFilename',
-      'POST'
+      'provisioningProfileFilename'
     );
     expect(response).toStrictEqual({ success: true });
     expect(fetchMock.mock.calls[0]).toEqual([
@@ -51,11 +54,11 @@ describe('setBranchConfig', () => {
     await expect(
       setBranchConfig(
         testConfig,
+        'PUT',
         'certEncoded',
         'certFilename',
         'profileEncoded',
-        'provisioningProfileFilename',
-        'PUT'
+        'provisioningProfileFilename'
       )
     ).rejects.toThrow('error');
     expect(fetchMock.mock.calls[0]).toEqual([
