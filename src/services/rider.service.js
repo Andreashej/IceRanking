@@ -5,7 +5,13 @@ class RiderService {
         const response = await rankingApi.get(`/riders/${id}`)
 
         return response.data.data;
-    }   
+    }
+
+    async updateRider(id, rider) {
+        const response = await rankingApi.patch(`/riders/${id}`, rider);
+
+        return response.data.data
+    }
 
     async createRider(firstname, lastname) {
         const response = await rankingApi.post(`/riders`, {
@@ -27,6 +33,21 @@ class RiderService {
         });
 
         return response.data.data
+    }
+
+    async getAliases(riderId) {
+        const response = await rankingApi.get(`/riders/${riderId}/aliases`);
+
+        return response.data.data;
+    }
+
+    async createAlias(riderId, payload) {
+        try {
+            const response = await rankingApi.post(`/riders/${riderId}/aliases`, payload);
+            return response.data.data;
+        } catch (e) {
+            return Promise.reject(e.response.data.message);
+        }
     }
 }
 

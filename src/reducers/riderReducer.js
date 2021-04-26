@@ -1,8 +1,9 @@
-import { GET_RIDER, GET_RIDER_RESULTS } from "../actions/types";
+import { GET_RIDER, GET_RIDER_RESULTS, UPDATE_RIDER } from "../actions/types";
 
 export default (state = {}, action) => {
     switch (action.type) {
         case GET_RIDER:
+        case UPDATE_RIDER:
             let testObjs = {}
             for (const test of action.payload.testlist) {
                 const results = state[action.payload.id]?.results[test];
@@ -21,6 +22,7 @@ export default (state = {}, action) => {
             rider.results[action.payload.testcode] = action.payload.results;
 
             return {...state, [action.payload.id]: rider};
+        
         default:
             return state;
         }

@@ -12,12 +12,13 @@ export const RECOMPUTE_RANKING_RESULTS = 'RECOMPUTE_RANKING_RESULTS';
 // User actions
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
-export const GET_PROFILE = 'GET_PROFILE'
-export const NO_USER = 'NO_USER'
+export const GET_PROFILE = 'GET_PROFILE';
+export const NO_USER = 'NO_USER';
 
 // Rider actions
-export const GET_RIDER = 'GET_RIDER'
-export const GET_RIDER_RESULTS = 'GET_RIDER_RESULTS'
+export const GET_RIDER = 'GET_RIDER';
+export const GET_RIDER_RESULTS = 'GET_RIDER_RESULTS';
+export const UPDATE_RIDER = 'UPDATE_RIDER';
 
 // Horse actions
 export const GET_HORSE = 'GET_HORSE';

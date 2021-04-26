@@ -15,7 +15,7 @@ const Page = ({title, subtitle, pretitle, icon, menuItems = [], adminMenuItems =
     const [sidebarVisibility, setSidebarVisibility] = useState(false);
 
     const mobileMenuBtn = <Button icon={`pi pi-bars`} className="fab p-button-primary p-button-raised" onClick={(event)=>setSidebarVisibility(!sidebarVisibility)} />;
-    const adminMenuBtn = <Button icon={`pi pi-${menuIcon}`} className="fab p-button-success p-button-raised" tooltip="Ranking settings" tooltipOptions={{position: "bottom"}} onClick={event => adminMenuRef.toggle(event)} />;
+    const adminMenuBtn = <Button icon={`pi pi-${menuIcon}`} className="fab p-button-success p-button-raised" tooltip="Settings" tooltipOptions={{position: "bottom"}} onClick={event => adminMenuRef.toggle(event)} />;
     const adminMenu = <Menu 
         model={adminMenuItems} 
         ref={el => adminMenuRef=el} 
