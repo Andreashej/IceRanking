@@ -1,6 +1,6 @@
 import React from 'react';
 import { FileUpload } from 'primereact/fileupload'
-import competitionService from '../../services/competition.service';
+import competitionService from '../../services/v1/competition.service';
 import Progressbar from './Progressbar';
 
 class CompetitionUpload extends React.Component {

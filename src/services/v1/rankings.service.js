@@ -1,4 +1,4 @@
-import rankingApi from '../apis/ranking';
+import rankingApi from '../../apis/ranking';
 
 class RankingListService {
 

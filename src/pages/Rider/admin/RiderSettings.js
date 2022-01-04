@@ -4,7 +4,7 @@ import { Toast } from 'primereact/toast';
 import React from 'react'
 import { connect } from 'react-redux'
 import { updateRider } from '../../../actions';
-import riderService from '../../../services/rider.service';
+import riderService from '../../../services/v1/rider.service';
 
 class RiderSettings extends React.Component {
     toast;

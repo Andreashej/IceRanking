@@ -1,8 +1,8 @@
 import { Button } from 'primereact/button'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import horseService from '../../services/horse.service'
-import logService from '../../services/log.service'
+import horseService from '../../services/v1/horse.service'
+import logService from '../../services/v1/log.service'
 import _ from 'lodash';
 
 class ErrorLog extends React.Component {

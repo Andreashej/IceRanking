@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from 'primereact/button';
 import { FileUpload } from 'primereact/fileupload';
 
-import riderService from '../../../services/rider.service';
-import rankingListService from '../../../services/rankings.service';
+import riderService from '../../../services/v1/rider.service';
+import rankingListService from '../../../services/v1/rankings.service';
 import ProgressBar from '../../../components/Task/Progressbar';
 
 class RankingImports extends React.Component {

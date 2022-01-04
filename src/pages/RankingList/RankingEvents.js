@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 
 import EventList from '../../components/partials/EventList';
 
-import competitionService from '../../services/competition.service';
+import competitionService from '../../services/v1/competition.service';
 
 class RankingEvents extends React.Component {
     state = {

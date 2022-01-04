@@ -1,5 +1,5 @@
 import axios from 'axios';
-import authService from '../services/auth.service';
+import authService from '../services/v1/auth.service';
 import { logout } from '../actions';
 
 export function getToken(refresh) {
@@ -19,7 +19,7 @@ export function getToken(refresh) {
 
 const instance = axios.create({
     // baseURL: 'https://rankingapi.andreashej.dk/api',
-    baseURL: process.env.REACT_APP_API_URL,
+    baseURL: `${process.env.REACT_APP_API_URL}/api`,
     headers: {
         ...getToken()
     }

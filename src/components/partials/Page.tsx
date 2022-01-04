@@ -1,31 +1,44 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
-import { Menu } from 'primereact/menu';
+import { Menu, MenuAppendToType } from 'primereact/menu';
 import { Button } from 'primereact/button';
 import { Sidebar } from 'primereact/sidebar';
 
-import Header from '../partials/Header';
+import Header from './Header';
 import history from '../../history';
+import { MenuItem } from 'primereact/menuitem';
 
-let adminMenuRef = null;
-let adminMenuContainer = null;
+type PageProps = {
+    title: string;
+    subtitle?: string;
+    pretitle?: string;
+    icon?: string;
+    menuItems?: MenuItem[];
+    adminMenuItems?: MenuItem[];
+}
 
-const Page = ({title, subtitle, pretitle, icon, menuItems = [], adminMenuItems = [], children}) => {
+const Page: React.FC<PageProps> = ({title, subtitle, pretitle, icon, menuItems = [], adminMenuItems = [], children}) => {
     const [menuIcon, setMenuIcon] = useState('cog');
     const [sidebarVisibility, setSidebarVisibility] = useState(false);
+    const adminMenuRef = useRef<Menu>(null);
+    const adminMenuContainer = useRef(null);
+
 
     const mobileMenuBtn = <Button icon={`pi pi-bars`} className="fab p-button-primary p-button-raised" onClick={(event)=>setSidebarVisibility(!sidebarVisibility)} />;
-    const adminMenuBtn = <Button icon={`pi pi-${menuIcon}`} className="fab p-button-success p-button-raised" tooltip="Settings" tooltipOptions={{position: "bottom"}} onClick={event => adminMenuRef.toggle(event)} />;
+    const adminMenuBtn = <Button icon={`pi pi-${menuIcon}`} className="fab p-button-success p-button-raised" tooltip="Settings" tooltipOptions={{position: "bottom"}} onClick={event => {
+        if (adminMenuRef && adminMenuRef.current) 
+            adminMenuRef.current.toggle(event)
+    }} />;
     const adminMenu = <Menu 
         model={adminMenuItems} 
-        ref={el => adminMenuRef=el} 
+        ref={adminMenuRef} 
         popup={true} 
-        appendTo={adminMenuContainer} 
+        appendTo={adminMenuContainer.current}
         onHide={() => setMenuIcon('cog')}
         onShow={() => setMenuIcon('times')}
     />;
 
-    let mobileMenuItems = menuItems;
+    let mobileMenuItems: MenuItem[] = menuItems;
     
     if (adminMenuItems.length > 0) {
         mobileMenuItems = mobileMenuItems.concat({
@@ -40,14 +53,14 @@ const Page = ({title, subtitle, pretitle, icon, menuItems = [], adminMenuItems =
         });
 
         return unlisten;
-    })
+    });
 
     return (
         <>
             <Header title={title} subtitle={subtitle} pretitle={pretitle} icon={icon} />
             <div className="page-content container">
                 {(menuItems.length > 0) && <div className="fab-container d-flex d-lg-none left">{mobileMenuBtn}</div>}
-                {(adminMenuItems.length > 0) && <div className="fab-container right d-none d-lg-flex" ref={el => adminMenuContainer = el}>{adminMenu}{adminMenuBtn}</div>}
+                {(adminMenuItems.length > 0) && <div className="fab-container right d-none d-lg-flex" ref={adminMenuContainer}>{adminMenu}{adminMenuBtn}</div>}
                 <div className="row">
                     {menuItems.length > 0 && <div className="d-none d-lg-flex submenu">
                         <Menu model={menuItems} />

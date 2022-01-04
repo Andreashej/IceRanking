@@ -1,7 +1,7 @@
 import rankingApi from '../apis/ranking';
-import authService from '../services/auth.service';
-import rankingListService from '../services/rankings.service';
-import riderService from '../services/rider.service'
+import authService from '../services/v1/auth.service';
+import rankingListService from '../services/v1/rankings.service';
+import riderService from '../services/v1/rider.service'
 import { GET_RANKINGS, GET_RANKING, GET_RANKING_TESTS, GET_RANKING_TEST, UPDATE_RANKING_TEST, GET_RANKING_TEST_RESULTS, LOGIN, LOGOUT, GET_PROFILE, NO_USER, GET_RIDER, GET_RIDER_RESULTS, UPDATE_RANKING, GET_HORSE, GET_HORSE_RESULTS, CREATE_RANKING_TEST, GET_COMPETITION, GET_TEST, GET_TEST_CATALOG, GET_TEST_DEFINITION, CREATE_COMPETITION, RECOMPUTE_RANKING_RESULTS, GET_TASK, UPDATE_RIDER } from './types';
 
 // Ranking actions

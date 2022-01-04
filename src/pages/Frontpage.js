@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Card } from 'primereact/card'
 import { dateToString } from '../tools';
 
-import competitionService from '../services/competition.service';
+import competitionService from '../services/v1/competition.service';
 
 import { getRankings } from '../actions';
 import EventList from '../components/partials/EventList';

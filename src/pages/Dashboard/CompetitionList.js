@@ -1,6 +1,6 @@
 import React from 'react';
 import { dateToString } from '../../tools';
-import competitionService from '../../services/competition.service';
+import competitionService from '../../services/v1/competition.service';
 import CompetitionUpload from '../../components/Task/CompetionUpload';
 
 class CompetitionList extends React.Component {

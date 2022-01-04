@@ -1,5 +1,5 @@
-import rankingApi from '../apis/ranking';
-import { getToken } from '../apis/ranking';
+import rankingApi from '../../apis/ranking';
+import { getToken } from '../../apis/ranking';
 
 class AuthService {
     async login (username, password) {

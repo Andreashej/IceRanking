@@ -2,7 +2,7 @@ import React from 'react'
 
 import { SelectButton } from 'primereact/selectbutton';
 
-import taskService from '../../../services/task.service';
+import taskService from '../../../services/v1/task.service';
 import { ProgressBar } from 'primereact/progressbar';
 import { ProgressSpinner } from 'primereact/progressspinner';
 

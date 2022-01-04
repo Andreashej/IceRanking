@@ -14,7 +14,7 @@ const Header = ({title, subtitle, pretitle, icon, content = null}) => {
             </>
         );
     }
-
+    
     return (
         <div className="page-header jumbotron jumbotron-fluid mb-0">
             <div className="container">
