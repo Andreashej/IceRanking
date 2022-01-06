@@ -1,14 +1,20 @@
 import { CompetitionProvider, useCompetitionContext } from "../../contexts/competition.context"
 import { RouteComponentProps, Switch, Route, useHistory } from "react-router-dom";
 import Page from "../../components/partials/Page";
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { dateToString } from "../../tools";
 import { MenuItem } from "primereact/menuitem";
 import CompetitionInfo from "./CompetitionInfo";
 import { CompetitionResults } from "./CompetitionResults";
+import { getProfile, logout, login } from "../../services/v2/auth.service";
 
 const CompetitionPage: React.FC = ({ children }) => {
     const { competition, loading, error } = useCompetitionContext();
+
+    useEffect(() => {
+        // login("andreashej", "12345678");
+        logout();
+    },[]);
 
     const history = useHistory();
 

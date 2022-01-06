@@ -1,6 +1,6 @@
 import { apiV2 } from ".";
 import { Competition } from "../../models/competition.model";
-import { ApiResponse } from "../../models/apiresponse.model";
+import { ApiResponse, Pagination } from "../../models/apiresponse.model";
 import axios from 'axios'
 
 export const getCompetition = async (id: number, params?: URLSearchParams): Promise<Competition> => {
@@ -18,11 +18,11 @@ export const getCompetition = async (id: number, params?: URLSearchParams): Prom
     }
 }
 
-export const getCompetitions = async (params: URLSearchParams): Promise<Competition[]> => {
+export const getCompetitions = async (params: URLSearchParams): Promise<[Competition[], Pagination?]> => {
     try {
         const response = await apiV2.get<ApiResponse<Competition[]>>(`/competitions`, { params });
 
-        return response.data.data;
+        return [response.data.data, response.data.pagination];
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
             return Promise.reject(error.response?.data.message ?? error.message)
@@ -31,7 +31,7 @@ export const getCompetitions = async (params: URLSearchParams): Promise<Competit
     }
 }
 
-export const patchCompetition = async (competition: Competition) => {
+export const patchCompetition = async (competition: Partial<Competition>) => {
     try {
         const response = await apiV2.patch<ApiResponse<Competition>>(`/competition/${competition.id}`, competition)
 

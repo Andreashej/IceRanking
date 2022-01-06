@@ -5,4 +5,5 @@ export type Result = {
     riderId: number;
     horseId: number;
     testId: number;
+    rank: number;
 }

@@ -1,8 +1,7 @@
-import axios from 'axios';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { ProgressSpinner } from 'primereact/progressspinner';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useCompetition } from '../../contexts/competition.context';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
@@ -16,18 +15,16 @@ export const CompetitionResults: React.FC = () => {
     const [competition] = useCompetition();
     const [results, setResults] = useState<Result[]>([]);
     const [pagination, setPagination] = useState<Pagination>();
-    // const [page, setPage] = useState<number>(1);
     const [loading, setLoading] = useState<boolean>(false);
     const listBottomRef = useRef<HTMLDivElement>(null);
-    const bottomReached = useIntersectionObserver(listBottomRef, { threshold: 0, rootMargin: '200px' });
+    const bottomReached = useIntersectionObserver(listBottomRef, { threshold: 0, rootMargin: '500px' });
 
     const { testcode } = useParams<{ testcode: string; }>()
 
-    const test = useMemo(() => competition.tests?.find(test => test.testcode === testcode), [testcode]);
+    const test = useMemo(() => competition.tests?.find(test => test.testcode === testcode), [testcode, competition.tests]);
 
-    const getResults = async (testId: number): Promise<void> => {
+    const getResults = useCallback(async (testId: number): Promise<void> => {
         setLoading(true);
-        console.log("Loading started...", pagination?.nextPage?.toString() ?? '1');
 
         const params = new URLSearchParams({ 
             page: pagination?.nextPage?.toString() ?? '1',
@@ -37,24 +34,24 @@ export const CompetitionResults: React.FC = () => {
 
         try {
             const [results, pagination] = await getTestResults(testId, params)
+
             setResults(((oldValue) => [...oldValue, ...results]));
             setPagination(pagination);
         } catch (error: unknown) {
-            console.log(testcode, error);
+            console.log(error);
         } finally {
             setLoading(false);
         }
-    }
+    }, [pagination]);
 
     useEffect(() => {
         setResults([]);
         setPagination(undefined);
-        if (test) getResults(test.id)
-    }, [test?.id])
+    }, [testcode])
 
     useEffect(() => {
-        if(pagination?.hasNext && bottomReached && test && !loading) getResults(test?.id);
-    }, [bottomReached, loading])
+        if(bottomReached && test && !loading) getResults(test.id);
+    }, [bottomReached, loading, getResults, test])
 
     const riderColumn = (rider: Rider) => {
         return (
@@ -68,6 +65,13 @@ export const CompetitionResults: React.FC = () => {
         )
     }
 
+    const markColumn = (mark: number) => {
+        const roundedMark = mark.toFixed(test?.roundingPrecision);
+        const unit = test?.markType === 'time' ? '"' : '';
+
+        return `${roundedMark}${unit}`;
+    }
+
     return (
         <>
             <div className="row">
@@ -79,7 +83,7 @@ export const CompetitionResults: React.FC = () => {
                 <Column field="rank" className="minimize rank" />
                 <Column field="rider.fullname" className="rider" header="Rider" body={(rowData) => riderColumn(rowData.rider)} />
                 <Column field="horse.horseName" className="horse" header="Horse" body={(rowData) => horseColumn(rowData.horse)}/>
-                <Column field="mark" className="mark" header="Mark" body={(rowData) => rowData.mark.toFixed(test?.roundingPrecision)} />
+                <Column field="mark" className="mark" header="Mark" body={(rowData) => markColumn(rowData.mark)} />
             </DataTable>)}
             {(!pagination || pagination?.hasNext) && <div ref={listBottomRef}><ProgressSpinner /></div>}
         </>

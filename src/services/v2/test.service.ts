@@ -19,7 +19,7 @@ export const getTest = async (id: number, params?: URLSearchParams): Promise<Tes
     }
 }
 
-export const getTests = async (params: URLSearchParams): Promise<[Test[], Pagination]> => {
+export const getTests = async (params: URLSearchParams): Promise<[Test[], Pagination?]> => {
     try {
         const response = await apiV2.get<ApiResponse<Test[]>>(`/tests`, { params });
 
@@ -32,7 +32,7 @@ export const getTests = async (params: URLSearchParams): Promise<[Test[], Pagina
     }
 }
 
-export const getTestResults = async (id: number, params?: URLSearchParams ): Promise<[Result[], Pagination]> => {
+export const getTestResults = async (id: number, params?: URLSearchParams ): Promise<[Result[], Pagination?]> => {
     try {
         const response = await apiV2.get<ApiResponse<Result[]>>(`/tests/${id}/results`, { params });
 
