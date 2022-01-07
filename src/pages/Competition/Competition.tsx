@@ -1,21 +1,18 @@
 import { CompetitionProvider, useCompetitionContext } from "../../contexts/competition.context"
-import { RouteComponentProps, Switch, Route, useHistory } from "react-router-dom";
+import { RouteComponentProps, Switch, Route, useHistory, useParams } from "react-router-dom";
 import Page from "../../components/partials/Page";
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { dateToString } from "../../tools";
 import { MenuItem } from "primereact/menuitem";
 import CompetitionInfo from "./CompetitionInfo";
 import { CompetitionResults } from "./CompetitionResults";
-import { getProfile, logout, login } from "../../services/v2/auth.service";
+import { useIsLoggedIn } from "../../contexts/user.context";
 
 const CompetitionPage: React.FC = ({ children }) => {
     const { competition, loading, error } = useCompetitionContext();
 
-    useEffect(() => {
-        // login("andreashej", "12345678");
-        logout();
-    },[]);
-
+    const isLoggedIn = useIsLoggedIn();
+    
     const history = useHistory();
 
     const subtitle = useMemo<string>(() => {
@@ -30,27 +27,41 @@ const CompetitionPage: React.FC = ({ children }) => {
         return 'Not found';
     },[competition, loading]);
 
-    const menuItems = useMemo<MenuItem[]>(() => {
-        if (loading || error || !competition || !competition.tests) return [];
+    const [menuItems, adminMenuItems] = useMemo<[MenuItem[], MenuItem[]]>(() => {
+        if (loading || error || !competition || !competition.tests) return [[], []];
 
         const testItems = competition.tests?.map((test): MenuItem => {
             return {
                 label: test.testcode,
-                className: history.location.hash.includes(test.testcode) ? 'active' : '',
+                className: history.location.pathname.includes(`/test/${test.testcode}`) ? 'active' : '',
                 command: () => history.push(`/competition/${competition.id}/test/${test.testcode}`)
             };
         });
 
-        return [
+        const menuItems = [
             {
                 label: "Results",
                 items: testItems,
             }
+        ];
+
+        if (!isLoggedIn) return [menuItems, []];
+
+        const adminItems = [
+            {
+                label: "Edit competition",
+                command: () => history.push(`/competition/${competition?.id}/`)
+            },
+            {
+                label: "Upload results",
+            },
         ]
-    }, [competition,loading]);
+
+        return [menuItems, adminItems];
+    }, [competition, loading, error, history, isLoggedIn, history.location.pathname]);
 
     return (
-        <Page title={title} icon="calendar-alt" subtitle={subtitle} menuItems={menuItems}>
+        <Page title={title} icon="calendar-alt" subtitle={subtitle} menuItems={menuItems} adminMenuItems={adminMenuItems}>
             {competition && children}
             {!loading && !competition && <div>{error}</div>}
         </Page>
@@ -63,6 +74,8 @@ export const Competition: React.FC<RouteComponentProps<{id: string}>> = (props) 
             <CompetitionPage>
                 <Switch>
                     <Route exact path="/competition/:id" component={CompetitionInfo} />
+                    <Route exact path="/competition/edit" component={CompetitionInfo} />
+                    <Route exact path="/competition/upload" component={CompetitionInfo} />
                     <Route path="/competition/:id/test/:testcode" component={CompetitionResults} />
                 </Switch>
             </CompetitionPage>    

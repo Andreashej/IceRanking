@@ -21,7 +21,7 @@ export const CompetitionResults: React.FC = () => {
 
     const { testcode } = useParams<{ testcode: string; }>()
 
-    const test = useMemo(() => competition.tests?.find(test => test.testcode === testcode), [testcode, competition.tests]);
+    const test = useMemo(() => competition?.tests?.find(test => test.testcode === testcode), [testcode, competition?.tests]);
 
     const getResults = useCallback(async (testId: number): Promise<void> => {
         setLoading(true);

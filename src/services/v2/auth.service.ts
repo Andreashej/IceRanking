@@ -97,3 +97,16 @@ export const getProfile = async (): Promise<User> => {
         return Promise.reject(error)
     }
 }
+
+export const patchUser = async (user: Partial<User>): Promise<User> => {
+    try {
+        const response = await apiV2.patch<ApiResponse<User>>(`/competition/${user.id}`, user)
+
+        return response.data.data;
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            return Promise.reject(error.response?.data.message ?? error.message)
+        }
+        return Promise.reject(error);
+    }
+}

@@ -1,12 +1,12 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 
 import { Menu, MenuAppendToType } from 'primereact/menu';
 import { Button } from 'primereact/button';
 import { Sidebar } from 'primereact/sidebar';
 
 import Header from './Header';
-import history from '../../history';
 import { MenuItem } from 'primereact/menuitem';
+import { useHistory } from 'react-router-dom';
 
 type PageProps = {
     title: string;
@@ -18,34 +18,43 @@ type PageProps = {
 }
 
 const Page: React.FC<PageProps> = ({title, subtitle, pretitle, icon, menuItems = [], adminMenuItems = [], children}) => {
-    const [menuIcon, setMenuIcon] = useState('cog');
+    // const [menuIcon, setMenuIcon] = useState('cog');
     const [sidebarVisibility, setSidebarVisibility] = useState(false);
-    const adminMenuRef = useRef<Menu>(null);
-    const adminMenuContainer = useRef(null);
+    const history = useHistory();
+    // const adminMenuRef = useRef<Menu>(null);
+    // const adminMenuContainer = useRef(null);
 
 
     const mobileMenuBtn = <Button icon={`pi pi-bars`} className="fab p-button-primary p-button-raised" onClick={(event)=>setSidebarVisibility(!sidebarVisibility)} />;
-    const adminMenuBtn = <Button icon={`pi pi-${menuIcon}`} className="fab p-button-success p-button-raised" tooltip="Settings" tooltipOptions={{position: "bottom"}} onClick={event => {
-        if (adminMenuRef && adminMenuRef.current) 
-            adminMenuRef.current.toggle(event)
-    }} />;
-    const adminMenu = <Menu 
-        model={adminMenuItems} 
-        ref={adminMenuRef} 
-        popup={true} 
-        appendTo={adminMenuContainer.current}
-        onHide={() => setMenuIcon('cog')}
-        onShow={() => setMenuIcon('times')}
-    />;
+    // const adminMenuBtn = <Button icon={`pi pi-${menuIcon}`} className="fab p-button-success p-button-raised" tooltip="Settings" tooltipOptions={{position: "bottom"}} onClick={event => {
+    //     if (adminMenuRef && adminMenuRef.current) 
+    //         adminMenuRef.current.toggle(event)
+    // }} />;
+    // const adminMenu = <Menu 
+    //     model={adminMenuItems} 
+    //     ref={adminMenuRef} 
+    //     popup={true} 
+    //     appendTo={adminMenuContainer.current}
+    //     onHide={() => setMenuIcon('cog')}
+    //     onShow={() => setMenuIcon('times')}
+    // />;
 
-    let mobileMenuItems: MenuItem[] = menuItems;
+    // let mobileMenuItems: MenuItem[] = menuItems;
     
-    if (adminMenuItems.length > 0) {
-        mobileMenuItems = mobileMenuItems.concat({
-            label: "Administration",
-            items: adminMenuItems
-        })
-    }
+    // if (adminMenuItems.length > 0) {
+    //     mobileMenuItems = mobileMenuItems.concat({
+    //         label: "Administration",
+    //         items: adminMenuItems
+    //     })
+    // }
+    const allMenuItems = useMemo(() => {
+        if (adminMenuItems.length === 0) return menuItems;
+
+        return menuItems.concat({
+                    label: "Administration",
+                    items: adminMenuItems
+                });
+    }, [menuItems, adminMenuItems])
 
     useEffect(() => {
         const unlisten = history.listen(location => {
@@ -60,10 +69,10 @@ const Page: React.FC<PageProps> = ({title, subtitle, pretitle, icon, menuItems =
             <Header title={title} subtitle={subtitle} pretitle={pretitle} icon={icon} />
             <div className="page-content container">
                 {(menuItems.length > 0) && <div className="fab-container d-flex d-lg-none left">{mobileMenuBtn}</div>}
-                {(adminMenuItems.length > 0) && <div className="fab-container right d-none d-lg-flex" ref={adminMenuContainer}>{adminMenu}{adminMenuBtn}</div>}
+                {/* {(adminMenuItems.length > 0) && <div className="fab-container right d-none d-lg-flex" ref={adminMenuContainer}>{adminMenu}{adminMenuBtn}</div>} */}
                 <div className="row">
                     {menuItems.length > 0 && <div className="d-none d-lg-flex submenu">
-                        <Menu model={menuItems} />
+                        <Menu model={allMenuItems} />
                     </div>}
                     <div className="col-12 col-lg page-container">
                         <div className="container-fluid">
@@ -76,7 +85,7 @@ const Page: React.FC<PageProps> = ({title, subtitle, pretitle, icon, menuItems =
                 <div className="header">
                     <h2>{title}</h2>
                 </div>
-                <Menu model={mobileMenuItems} className="mobile-menu" />
+                <Menu model={menuItems} className="mobile-menu" />
             </Sidebar>}
         </>
     )
