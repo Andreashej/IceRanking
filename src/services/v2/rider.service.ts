@@ -1,12 +1,11 @@
 import { apiV2 } from ".";
-import { Competition } from "../../models/competition.model";
 import { ApiResponse, Pagination } from "../../models/apiresponse.model";
 import axios from 'axios'
-import { dateToString } from "../../tools";
+import { Rider } from "../../models/rider.model";
 
-export const getCompetition = async (id: number, params?: URLSearchParams): Promise<Competition> => {
+export const getRider = async (id: number, params?: URLSearchParams): Promise<Rider> => {
     try { 
-        const response = await apiV2.get<ApiResponse<Competition>>(`/competitions/${id}`, {
+        const response = await apiV2.get<ApiResponse<Rider>>(`/riders/${id}`, {
             params
         });
 
@@ -19,10 +18,10 @@ export const getCompetition = async (id: number, params?: URLSearchParams): Prom
     }
 }
 
-export const getCompetitions = async (params: URLSearchParams): Promise<[Competition[], Pagination?]> => {
+export const getRiders = async (params: URLSearchParams): Promise<[Rider[], Pagination?]> => {
     try {
-        const response = await apiV2.get<ApiResponse<Competition[]>>(`/competitions`, { params });
-        console.log(response)
+        const response = await apiV2.get<ApiResponse<Rider[]>>(`/riders`, { params });
+
         return [response.data.data, response.data.pagination];
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
@@ -32,13 +31,9 @@ export const getCompetitions = async (params: URLSearchParams): Promise<[Competi
     }
 }
 
-export const patchCompetition = async (competition: Competition) => {
+export const patchRider = async (rider: Rider) => {
     try {
-        const response = await apiV2.patch<ApiResponse<Competition>>(`/competitions/${competition.id}`, {
-            ...competition,
-            firstDate: dateToString(competition.firstDate, 'Y-M-d'),
-            lastDate: dateToString(competition.lastDate, 'Y-M-d')
-        })
+        const response = await apiV2.patch<ApiResponse<Rider>>(`/riders/${rider.id}`, rider)
 
         return response.data.data;
     } catch (error: unknown) {

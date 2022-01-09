@@ -10,7 +10,9 @@ export function handleDates(body: any) {
 
   for (const key of Object.keys(body)) {
     const value = body[key];
-    if (isIsoDateString(value)) body[key] = new Date(value);
+    if (isIsoDateString(value)){
+      body[key] =  new Date(value);
+    }
     else if (typeof value === "object") handleDates(value);
   }
 }

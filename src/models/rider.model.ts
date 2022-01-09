@@ -4,4 +4,5 @@ export type Rider = {
     lastname: string;
     fullname: string;
     numberOfResults: number;
+    testlist: string[];
 }

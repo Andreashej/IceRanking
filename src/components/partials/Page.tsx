@@ -25,7 +25,7 @@ const Page: React.FC<PageProps> = ({title, subtitle, pretitle, icon, menuItems =
     // const adminMenuContainer = useRef(null);
 
 
-    const mobileMenuBtn = <Button icon={`pi pi-bars`} className="fab p-button-primary p-button-raised" onClick={(event)=>setSidebarVisibility(!sidebarVisibility)} />;
+    const mobileMenuBtn = <Button icon={`pi pi-bars`} className="fab p-button-primary p-button-raised" onClick={()=>setSidebarVisibility(!sidebarVisibility)} />;
     // const adminMenuBtn = <Button icon={`pi pi-${menuIcon}`} className="fab p-button-success p-button-raised" tooltip="Settings" tooltipOptions={{position: "bottom"}} onClick={event => {
     //     if (adminMenuRef && adminMenuRef.current) 
     //         adminMenuRef.current.toggle(event)
@@ -57,7 +57,7 @@ const Page: React.FC<PageProps> = ({title, subtitle, pretitle, icon, menuItems =
     }, [menuItems, adminMenuItems])
 
     useEffect(() => {
-        const unlisten = history.listen(location => {
+        const unlisten = history.listen(() => {
             setSidebarVisibility(false);
         });
 
@@ -70,15 +70,17 @@ const Page: React.FC<PageProps> = ({title, subtitle, pretitle, icon, menuItems =
             <div className="page-content container">
                 {(menuItems.length > 0) && <div className="fab-container d-flex d-lg-none left">{mobileMenuBtn}</div>}
                 {/* {(adminMenuItems.length > 0) && <div className="fab-container right d-none d-lg-flex" ref={adminMenuContainer}>{adminMenu}{adminMenuBtn}</div>} */}
-                <div className="row">
+                <Menu model={allMenuItems} style={{width: '100%'}} className="submenu" />
+                {/* <div className="row">
                     {menuItems.length > 0 && <div className="d-none d-lg-flex submenu">
-                        <Menu model={allMenuItems} />
                     </div>}
                     <div className="col-12 col-lg page-container">
                         <div className="container-fluid">
-                            {children}
                         </div>
-                    </div>
+                        </div>
+                    </div> */}
+                <div>
+                    {children}
                 </div>
             </div>
             {menuItems && <Sidebar visible={sidebarVisibility} closeOnEscape={true} onHide={() => setSidebarVisibility(false)} className="mobile-sidebar">

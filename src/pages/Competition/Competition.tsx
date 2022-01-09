@@ -1,19 +1,22 @@
 import { CompetitionProvider, useCompetitionContext } from "../../contexts/competition.context"
-import { RouteComponentProps, Switch, Route, useHistory, useParams } from "react-router-dom";
+import { useParams, Switch, Route, useHistory } from "react-router-dom";
 import Page from "../../components/partials/Page";
 import React, { useMemo } from 'react';
 import { dateToString } from "../../tools";
 import { MenuItem } from "primereact/menuitem";
-import CompetitionInfo from "./CompetitionInfo";
+import { CompetitionInfo } from "./CompetitionInfo";
 import { CompetitionResults } from "./CompetitionResults";
 import { useIsLoggedIn } from "../../contexts/user.context";
+import { CompetitionEdit } from "./CompetitionEdit";
+import { CompetitionResultsUpload } from "./CompetitionResultsUpload";
 
 const CompetitionPage: React.FC = ({ children }) => {
-    const { competition, loading, error } = useCompetitionContext();
+    const { resource: competition, loading, error } = useCompetitionContext();
 
     const isLoggedIn = useIsLoggedIn();
     
     const history = useHistory();
+    const { pathname } = history.location; 
 
     const subtitle = useMemo<string>(() => {
         if (!loading && competition) return `${dateToString(competition.firstDate, 'd/m/Y')} - ${dateToString(competition.lastDate, 'd/m/Y')}`;
@@ -30,10 +33,10 @@ const CompetitionPage: React.FC = ({ children }) => {
     const [menuItems, adminMenuItems] = useMemo<[MenuItem[], MenuItem[]]>(() => {
         if (loading || error || !competition || !competition.tests) return [[], []];
 
-        const testItems = competition.tests?.map((test): MenuItem => {
+        const testItems = competition.tests?.map<MenuItem>((test): MenuItem => {
             return {
                 label: test.testcode,
-                className: history.location.pathname.includes(`/test/${test.testcode}`) ? 'active' : '',
+                className: pathname.includes(`/test/${test.testcode}`) ? 'active' : '',
                 command: () => history.push(`/competition/${competition.id}/test/${test.testcode}`)
             };
         });
@@ -50,15 +53,18 @@ const CompetitionPage: React.FC = ({ children }) => {
         const adminItems = [
             {
                 label: "Edit competition",
-                command: () => history.push(`/competition/${competition?.id}/`)
+                className: pathname.includes(`/edit`) ? 'active' : '',
+                command: () => history.push(`/competition/${competition?.id}/edit`)
             },
             {
                 label: "Upload results",
+                className: pathname.includes(`/upload`) ? 'active' : '',
+                command: () => history.push(`/competition/${competition?.id}/upload`)
             },
         ]
 
         return [menuItems, adminItems];
-    }, [competition, loading, error, history, isLoggedIn, history.location.pathname]);
+    }, [competition, loading, error, history, isLoggedIn, pathname]);
 
     return (
         <Page title={title} icon="calendar-alt" subtitle={subtitle} menuItems={menuItems} adminMenuItems={adminMenuItems}>
@@ -68,14 +74,16 @@ const CompetitionPage: React.FC = ({ children }) => {
     )
 }
 
-export const Competition: React.FC<RouteComponentProps<{id: string}>> = (props) => {
+export const Competition: React.FC = () => {
+    const { id } = useParams<{id: string}>();
+    
     return (
-        <CompetitionProvider competitionId={parseInt(props.match.params.id)}>
+        <CompetitionProvider competitionId={parseInt(id)}>
             <CompetitionPage>
                 <Switch>
                     <Route exact path="/competition/:id" component={CompetitionInfo} />
-                    <Route exact path="/competition/edit" component={CompetitionInfo} />
-                    <Route exact path="/competition/upload" component={CompetitionInfo} />
+                    <Route exact path="/competition/:id/edit" component={CompetitionEdit} />
+                    <Route exact path="/competition/:id/upload" component={CompetitionResultsUpload} />
                     <Route path="/competition/:id/test/:testcode" component={CompetitionResults} />
                 </Switch>
             </CompetitionPage>    

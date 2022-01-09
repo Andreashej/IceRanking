@@ -1,15 +1,11 @@
 import { Competition } from "../models/competition.model";
 import React, { createContext, useEffect, useState, useContext } from 'react';
 import { getCompetition, patchCompetition } from '../services/v2/competition.service';
+import { ResourceContext } from "../models/resource-context.model";
 
-interface CompetitionContext {
-    competition?: Competition;
-    updateCompetition: (competition: Partial<Competition>) => Promise<void>;
-    loading: boolean;
-    error?: string;
-}
+type CompetitionContext = ResourceContext<Competition>;
 
-const competitionContext = createContext<CompetitionContext | undefined>(undefined);
+const CompetitionContext = createContext<CompetitionContext | undefined>(undefined);
 
 type CompetitionProviderProps = {
     competitionId: number;
@@ -20,13 +16,35 @@ export const CompetitionProvider: React.FC<CompetitionProviderProps> = ({competi
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>();
     
-    const updateCompetition: CompetitionContext['updateCompetition'] = async (competition) => {
+    const saveCompetition: CompetitionContext['save'] = async (updatedFields) => {
+        const updatedCompetition = { ...competition, ...updatedFields } as Competition;
+
+        if (!updatedCompetition) return;
+
         try {
-            const updatedCompetition = await patchCompetition(competition);
-            setCompetition(updatedCompetition);
+            const savedCompetition = await patchCompetition(updatedCompetition);
+            setCompetition((prevCompetition) => {
+                return {
+                    ...prevCompetition,
+                    ...savedCompetition
+                }
+            });
         } catch (error: unknown) {
             console.log(error);
         }
+    }
+
+    const updateCompetition: CompetitionContext['update'] = (updatedFields) => {
+        if (!competition) return;
+        
+        setCompetition((c) => {
+            if (!c) return;
+
+            return {
+                ...c,
+                ...updatedFields
+            }
+        });
     }
 
     useEffect(() => {
@@ -50,19 +68,20 @@ export const CompetitionProvider: React.FC<CompetitionProviderProps> = ({competi
     }, [competitionId])
     
     return (
-        <competitionContext.Provider value={{
-            competition,
-            updateCompetition,
+        <CompetitionContext.Provider value={{
+            resource: competition,
+            update: updateCompetition,
+            save: saveCompetition,
             loading,
             error,
         }}>
             {children}
-        </competitionContext.Provider>
+        </CompetitionContext.Provider>
     )
 }
 
 export const useCompetitionContext = (): CompetitionContext => {
-    const context = useContext(competitionContext);
+    const context = useContext(CompetitionContext);
 
     if (context === undefined) {
         throw new Error('Missing CompetitionContext');
@@ -71,8 +90,8 @@ export const useCompetitionContext = (): CompetitionContext => {
     return context;
 }
 
-export const useCompetition = (): [Competition?, CompetitionContext['updateCompetition']?] => {
+export const useCompetition = (): [Competition?, CompetitionContext['update']?, CompetitionContext['save']?] => {
     const context = useCompetitionContext();
 
-    return [context.competition, context.updateCompetition];
+    return [context.resource, context.update, context.save];
 }

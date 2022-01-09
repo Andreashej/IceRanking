@@ -3,7 +3,7 @@ export type Horse = {
     feifId: string;
     horseName: string;
     lastLookup: Date;
-    lookupError: boolean | null
+    lookupError: boolean | null;
     numberOfResults: number;
     testlist: string[];
 }

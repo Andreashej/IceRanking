@@ -1,35 +1,77 @@
-import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
-import { ProgressSpinner } from 'primereact/progressspinner';
-import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { FlatList, FlatListItem } from '../../components/partials/FlatList';
+import { Skeleton } from '../../components/partials/Skeleton';
 import { useCompetition } from '../../contexts/competition.context';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import { Pagination } from '../../models/apiresponse.model';
 import { Horse } from '../../models/horse.model';
 import { Result } from '../../models/result.model';
 import { Rider } from '../../models/rider.model';
+import { Test } from '../../models/test.model';
+import { getHorse } from '../../services/v2/horse.service';
+import { getRider } from '../../services/v2/rider.service';
 import { getTestResults } from '../../services/v2/test.service';
+
+const CompetitionResultItem: React.FC<FlatListItem<Result, Test>> = ({ item: result, parent: test }) => {
+    const [rider, setRider] = useState<Rider>();
+    const [horse, setHorse] = useState<Horse>();
+    const ref = useRef(null);
+    const isVisible = useIntersectionObserver(ref, { rootMargin: '50px' })
+
+    useEffect(() => {
+        if (isVisible) {
+            getRider(result.riderId).then((rider) => {
+                setRider(rider);
+            })
+    
+            getHorse(result.horseId).then((horse) => {
+                setHorse(horse);
+            })
+        }
+    }, [result.horseId, result.riderId, isVisible])
+
+    const formatMark = (mark: number) => {
+        const roundedMark = mark.toFixed(test.roundingPrecision);
+        const unit = test?.markType === 'time' ? '"' : '';
+
+        return `${roundedMark}${unit}`;
+    }
+
+    return (
+        <>
+            <li className="flatlist-item" ref={ref}>
+                <div className="rank">
+                    {result.rank ?? '-'}
+                </div>
+                <div className="rider" style={{ alignSelf: "center" }}>{(rider && <Link to={`/rider/${rider.id}/results/${test.testcode}`}>{rider.fullname}</Link>) ?? <Skeleton style={{ height: "18px" }} />}</div>
+                <div className="horse" style={{ alignSelf: "center" }}>{(horse && <Link to={`/horse/${horse.id}/results/${test.testcode}`}>{horse.horseName}</Link>) ?? <Skeleton style={{ height: "18px" }} />}</div>
+                <div className="mark">
+                    {formatMark(result.mark)}
+                </div>
+            </li>
+        </>
+    )
+}
 
 export const CompetitionResults: React.FC = () => {
     const [competition] = useCompetition();
     const [results, setResults] = useState<Result[]>([]);
     const [pagination, setPagination] = useState<Pagination>();
     const [loading, setLoading] = useState<boolean>(false);
-    const listBottomRef = useRef<HTMLDivElement>(null);
-    const bottomReached = useIntersectionObserver(listBottomRef, { threshold: 0, rootMargin: '500px' });
+
 
     const { testcode } = useParams<{ testcode: string; }>()
 
     const test = useMemo(() => competition?.tests?.find(test => test.testcode === testcode), [testcode, competition?.tests]);
 
-    const getResults = useCallback(async (testId: number): Promise<void> => {
+    const getNextPage = useCallback(async (testId: number): Promise<void> => {
+        if (loading || (results.length > 0 && !pagination?.hasNext)) return;
         setLoading(true);
 
         const params = new URLSearchParams({ 
             page: pagination?.nextPage?.toString() ?? '1',
-            perPage: '10',
-            expand: 'rider,horse' 
+            perPage: '100',
         });
 
         try {
@@ -42,35 +84,22 @@ export const CompetitionResults: React.FC = () => {
         } finally {
             setLoading(false);
         }
-    }, [pagination]);
+    }, [results, pagination, loading]);
 
     useEffect(() => {
         setResults([]);
         setPagination(undefined);
     }, [testcode])
 
-    useEffect(() => {
-        if(bottomReached && test && !loading) getResults(test.id);
-    }, [bottomReached, loading, getResults, test])
+    // useEffect(() => {
+    //     if (test && results.length === 0 && !pagination) {
+    //         getNextPage(test.id);
+    //     }
+    // }, [test, results, pagination, getNextPage])
 
-    const riderColumn = (rider: Rider) => {
-        return (
-            <Link to={`/rider/${rider.id}/results/${testcode}`}>{rider.fullname}</Link>
-        )
-    }
 
-    const horseColumn = (horse: Horse) => {
-        return (
-            <Link to={`/horse/${horse.id}/results/${testcode}}`}>{horse.horseName}</Link>
-        )
-    }
 
-    const markColumn = (mark: number) => {
-        const roundedMark = mark.toFixed(test?.roundingPrecision);
-        const unit = test?.markType === 'time' ? '"' : '';
-
-        return `${roundedMark}${unit}`;
-    }
+    if (!test) return null;
 
     return (
         <>
@@ -79,13 +108,18 @@ export const CompetitionResults: React.FC = () => {
                     <h2 className="subheader">{testcode} results</h2>
                 </div>
             </div>
-            {(results.length > 0 && <DataTable className="results-table mt-4" value={results} autoLayout={true} dataKey="id">
-                <Column field="rank" className="minimize rank" />
-                <Column field="rider.fullname" className="rider" header="Rider" body={(rowData) => riderColumn(rowData.rider)} />
-                <Column field="horse.horseName" className="horse" header="Horse" body={(rowData) => horseColumn(rowData.horse)}/>
-                <Column field="mark" className="mark" header="Mark" body={(rowData) => markColumn(rowData.mark)} />
-            </DataTable>)}
-            {(!pagination || pagination?.hasNext) && <div ref={listBottomRef}><ProgressSpinner /></div>}
+            <div className="row">
+                <div className="col">
+                    <FlatList
+                        items={results}
+                        parent={test}
+                        RenderComponent={CompetitionResultItem} 
+                        hasMoreItems={pagination?.hasNext}
+                        onBottomReached={() => getNextPage(test.id)}
+                    />
+                </div>
+            </div>
+            
         </>
     )
 }

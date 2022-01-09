@@ -6,7 +6,7 @@ import { Navbar } from "./Navbar";
 import Frontpage from "../pages/Frontpage";
 import Footer from './Footer';
 import RankingList from '../pages/RankingList';
-import Rider from '../pages/Rider';
+import { Rider } from '../pages/Rider/Rider';
 import Horse from '../pages/Horse';
 import { Competition } from '../pages/Competition/Competition';
 
@@ -14,7 +14,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { faListOl, faUser, faHorseHead, faCalendarAlt, faQuestion, faTimes, faSearch, faCalendarPlus, faTachometerAlt } from '@fortawesome/free-solid-svg-icons'
 import Dashboard from "../pages/Dashboard";
-import CompetitionCreate from "../pages/Competition/CompetitionCreate";
+import CompetitionCreate from "../pages/CompetitionCreate";
 import { UserProvider } from "../contexts/user.context";
     
 library.add(fab, faListOl, faUser, faHorseHead, faCalendarAlt, faQuestion, faTimes, faSearch, faCalendarPlus, faTachometerAlt);

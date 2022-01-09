@@ -1,12 +1,11 @@
 import { apiV2 } from ".";
-import { Competition } from "../../models/competition.model";
 import { ApiResponse, Pagination } from "../../models/apiresponse.model";
 import axios from 'axios'
-import { dateToString } from "../../tools";
+import { RankingList } from "../../models/rankinglist.model";
 
-export const getCompetition = async (id: number, params?: URLSearchParams): Promise<Competition> => {
+export const getRankingList = async (id: number, params?: URLSearchParams): Promise<RankingList> => {
     try { 
-        const response = await apiV2.get<ApiResponse<Competition>>(`/competitions/${id}`, {
+        const response = await apiV2.get<ApiResponse<RankingList>>(`/rankinglists/${id}`, {
             params
         });
 
@@ -19,10 +18,10 @@ export const getCompetition = async (id: number, params?: URLSearchParams): Prom
     }
 }
 
-export const getCompetitions = async (params: URLSearchParams): Promise<[Competition[], Pagination?]> => {
+export const getRankingLists = async (params: URLSearchParams): Promise<[RankingList[], Pagination?]> => {
     try {
-        const response = await apiV2.get<ApiResponse<Competition[]>>(`/competitions`, { params });
-        console.log(response)
+        const response = await apiV2.get<ApiResponse<RankingList[]>>(`/rankinglists`, { params });
+
         return [response.data.data, response.data.pagination];
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
@@ -32,13 +31,9 @@ export const getCompetitions = async (params: URLSearchParams): Promise<[Competi
     }
 }
 
-export const patchCompetition = async (competition: Competition) => {
+export const patchRankingList = async (rankinglist: RankingList) => {
     try {
-        const response = await apiV2.patch<ApiResponse<Competition>>(`/competitions/${competition.id}`, {
-            ...competition,
-            firstDate: dateToString(competition.firstDate, 'Y-M-d'),
-            lastDate: dateToString(competition.lastDate, 'Y-M-d')
-        })
+        const response = await apiV2.patch<ApiResponse<RankingList>>(`/rankinglists/${rankinglist.id}`, rankinglist)
 
         return response.data.data;
     } catch (error: unknown) {

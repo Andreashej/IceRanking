@@ -1,0 +1,60 @@
+ol.flatlist {
+    padding: 0;
+
+    li.flatlist-item {
+        list-style: none;
+        display: grid;
+        grid-template-columns: 5ch 1fr 1fr 6ch;
+        column-gap: .5rem;
+        row-gap: .25rem;
+
+        border-radius: .25rem;
+        overflow: hidden;
+        margin-bottom: .5rem;
+        box-shadow: rgba($darkgray, .5) 0rem 0.125rem 0.25rem;
+        background-color: white;
+
+        .rider, .horse {
+            align-self: center;
+        }
+
+        .mark {
+            text-align: center;
+            align-self: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            height: 100%;
+            background: none!important;
+            color: $dark;
+        }
+
+        .rank {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: $dark;
+            padding: .125rem .25rem;
+            min-width: 100%;
+            color: white;
+            font-size: 1.2rem;
+        }
+    }
+
+    @include respond-below(sm) {
+        li.flatlist-item {
+            .rider, .horse {
+                grid-column: 2 / 4;
+            }
+
+            .rank {
+                grid-column: 1 / 2;
+                grid-row: 1 / 3;
+            }
+
+            .mark {
+                grid-column: 4 / 5;
+                grid-row: 1 / 3;
+            }
+        }
+    }
+}

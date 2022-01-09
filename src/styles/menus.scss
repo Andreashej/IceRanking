@@ -1,38 +1,43 @@
-.submenu, .fab-container {
-    
-    .p-menu {
-        background-color: $lightgray;
-        height: fit-content;
-        margin-right: 1rem;
-        padding: 0;
+.submenu.p-menu {
+    background: none;
+    height: fit-content;
+    margin-right: 1rem;
+    padding: 0;
+    border: none;
 
-        .p-menu-list {
+    .p-menu-list {
 
-            & > .p-menuitem {
-                margin: 0;
-                background-color: transparent;
-                
-                .p-menuitem-link {
-                    padding: 1rem 1rem;
-                    &:hover {
-                        background-color: $info;
-                    }
-                }
-    
-                &.active {
-                    .p-menuitem-link {
-                        background-color: $info;
-                    }
+        & > .p-menuitem {
+            margin: 0;
+            background-color: transparent;
+            
+            .p-menuitem-link {
+                padding: 1rem .5rem;
+                border-radius: .25rem;
+
+                &:hover, &:focus {
+                    box-shadow: none;
+                    background-color: rgba($dark, .25);
                 }
             }
 
-            & > .p-submenu-header {
-                background-color: $dark;
-                color: white;
+            &.active {
+                .p-menuitem-link {
+                    font-weight: bold;
+                    
+                    .p-menuitem-text {
+                        color: $dark;
+                    }
+                }
             }
         }
 
+        & > .p-submenu-header {
+            padding: 0;
+            background: none;
+        }
     }
+
 
     .mobile-menu-button {
         
@@ -42,14 +47,6 @@
             background-color: $blue!important;
         }
     }
-
-}
-
-.fab-container .p-menu {
-        top: 50px!important;
-        left: unset!important;
-        right: 0;
-        margin-right: 0;
 
 }
 
@@ -118,17 +115,30 @@ body .p-menubar {
 }
 
 .mobile-sidebar {
-    padding: 0!important;
-    border-color: $dark!important;
     overflow-y: scroll;
+
+    .p-sidebar-content {
+        padding: 0;
+    }
 
     .p-sidebar-icons {
         background-color: $dark;
     }
 
+    .p-sidebar-header {
+        position: absolute;
+        z-index: 1200;
+        right: 0;
+        color: white;
+
+        .p-sidebar-close-icon {
+            color: white;
+        }
+    }
+
     .header {
         background-color: $dark;
-        padding: 2rem 1rem 2rem 1rem;
+        padding: 1rem;
 
         h2 {
             font-size: 1.2rem;

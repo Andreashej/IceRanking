@@ -4,7 +4,7 @@ import { Calendar } from 'primereact/calendar';
 import { MultiSelect } from 'primereact/multiselect';
 import { Button } from 'primereact/button';
 import { connect } from 'react-redux';
-import { getRankings, getTestCatalog, createCompetition } from '../../actions';
+import { getRankings, getTestCatalog, createCompetition } from '../actions';
 import { AutoComplete } from 'primereact/autocomplete';
 
 class CompetitionCreate extends React.Component {
