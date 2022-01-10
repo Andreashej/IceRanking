@@ -54,6 +54,7 @@ export const RankingListProvider: React.FC<RankingListProviderProps> = ({ranking
                 const rankingList = await getRankingList(rankingListId);
                 setRankingList(rankingList);
             } catch (error : unknown) {
+                setRankingList(undefined);
                 setError(error as string);
             } finally {
                 setLoading(false);

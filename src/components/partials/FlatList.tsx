@@ -6,6 +6,7 @@ export type FlatListItem<T, P> = {
     item: T;
     index: number;
     parent: P;
+    columns?: string;
 }
 
 export type FlatListProps<T = any, P = any> = {

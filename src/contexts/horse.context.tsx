@@ -54,6 +54,7 @@ export const HorseProvider: React.FC<HorseProviderProps> = ({horseId, children})
                 const horse = await getHorse(horseId);
                 setHorse(horse);
             } catch (error : unknown) {
+                setHorse(undefined);
                 setError(error as string);
             } finally {
                 setLoading(false);

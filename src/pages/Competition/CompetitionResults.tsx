@@ -39,18 +39,16 @@ const CompetitionResultItem: React.FC<FlatListItem<Result, Test>> = ({ item: res
     }
 
     return (
-        <>
-            <li className="flatlist-item" ref={ref}>
-                <div className="rank">
-                    {result.rank ?? '-'}
-                </div>
-                <div className="rider" style={{ alignSelf: "center" }}>{(rider && <Link to={`/rider/${rider.id}/results/${test.testcode}`}>{rider.fullname}</Link>) ?? <Skeleton style={{ height: "18px" }} />}</div>
-                <div className="horse" style={{ alignSelf: "center" }}>{(horse && <Link to={`/horse/${horse.id}/results/${test.testcode}`}>{horse.horseName}</Link>) ?? <Skeleton style={{ height: "18px" }} />}</div>
-                <div className="mark">
-                    {formatMark(result.mark)}
-                </div>
-            </li>
-        </>
+        <li className="flatlist-item no-padding-left" style={{ gridTemplateColumns: "6ch minmax(0, 1fr) minmax(0, 1fr) 8ch" }} ref={ref}>
+            <div className="rank">
+                {result.rank ?? '-'}
+            </div>
+            <div className="mobile-span-2" style={{ alignSelf: "center" }}>{(rider && <Link to={`/rider/${rider.id}/results/${test.testcode}`}>{rider.fullname}</Link>) ?? <Skeleton style={{ height: "18px" }} />}</div>
+            <div className="mobile-span-2" style={{ alignSelf: "center" }}>{(horse && <Link to={`/horse/${horse.id}/results/${test.testcode}`}>{horse.horseName}</Link>) ?? <Skeleton style={{ height: "18px" }} />}</div>
+            <div className="mark">
+                {formatMark(result.mark)}
+            </div>
+        </li>
     )
 }
 
@@ -91,35 +89,18 @@ export const CompetitionResults: React.FC = () => {
         setPagination(undefined);
     }, [testcode])
 
-    // useEffect(() => {
-    //     if (test && results.length === 0 && !pagination) {
-    //         getNextPage(test.id);
-    //     }
-    // }, [test, results, pagination, getNextPage])
-
-
-
     if (!test) return null;
 
     return (
         <>
-            <div className="row">
-                <div className="col">
-                    <h2 className="subheader">{testcode} results</h2>
-                </div>
-            </div>
-            <div className="row">
-                <div className="col">
-                    <FlatList
-                        items={results}
-                        parent={test}
-                        RenderComponent={CompetitionResultItem} 
-                        hasMoreItems={pagination?.hasNext}
-                        onBottomReached={() => getNextPage(test.id)}
-                    />
-                </div>
-            </div>
-            
+            <h2 className="subheader">{testcode} results</h2>
+            <FlatList
+                items={results}
+                parent={test}
+                RenderComponent={CompetitionResultItem} 
+                hasMoreItems={pagination?.hasNext}
+                onBottomReached={() => getNextPage(test.id)}
+            />
         </>
     )
 }

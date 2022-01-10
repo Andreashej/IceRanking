@@ -28,20 +28,20 @@ apiV2.interceptors.request.use((req) => {
 
 apiV2.interceptors.response.use((res) => res, async (error) => {
     if (axios.isAxiosError(error)) {
-        if (error.response?.status === 401) {
-            if (error.config.url === '/token/refresh') return Promise.reject(error);
-            try {
-                const accessToken = await refreshAccessToken();
+        if (error.response?.status !== 401) return Promise.reject(error);
 
-                error.config.headers = {
-                    ...error.config.headers,
-                    'Authorization': `Bearer ${accessToken}`
-                }
+        if (error.config.url === '/token/refresh') return Promise.reject(error);
+        try {
+            const accessToken = await refreshAccessToken();
 
-                return axios.request(error.config);
-            } catch (err) {
-                return Promise.reject(error);
+            error.config.headers = {
+                ...error.config.headers,
+                'Authorization': `Bearer ${accessToken}`
             }
+
+            return axios.request(error.config);
+        } catch (err) {
+            return Promise.reject(error);
         }
     }
 

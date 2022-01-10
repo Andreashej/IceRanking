@@ -21,13 +21,13 @@ const CompetitionPage: React.FC = ({ children }) => {
     const subtitle = useMemo<string>(() => {
         if (!loading && competition) return `${dateToString(competition.firstDate, 'd/m/Y')} - ${dateToString(competition.lastDate, 'd/m/Y')}`;
         if (loading) return 'Loading'
-        return '';
+        return 'Competition not found';
     },[competition, loading]);
     
     const title = useMemo<string>(() => {
         if (!loading && competition) return competition.name;
         if (loading) return 'Loading'
-        return 'Not found';
+        return '404';
     },[competition, loading]);
 
     const [menuItems, adminMenuItems] = useMemo<[MenuItem[], MenuItem[]]>(() => {

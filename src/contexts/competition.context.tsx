@@ -56,6 +56,7 @@ export const CompetitionProvider: React.FC<CompetitionProviderProps> = ({competi
                 const competition = await getCompetition(competitionId, params);
                 setCompetition(competition);
             } catch (error : unknown) {
+                setCompetition(undefined);
                 setError(error as string);
             } finally {
                 setLoading(false);

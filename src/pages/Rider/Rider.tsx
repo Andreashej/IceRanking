@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 
 import Page from '../../components/partials/Page';
 import { Route, Switch, useParams, useHistory } from 'react-router-dom';
-import RiderResults from './RiderResults';
+import { RiderResults } from './RiderResults';
 import RiderInfo from './RiderInfo';
 import RiderSettings from './admin/RiderSettings';
 import { RiderProvider, useRiderContext } from '../../contexts/rider.context';
@@ -20,7 +20,13 @@ const RiderPage: React.FC = ({ children }) => {
     const title = useMemo<string>(() => {
         if (!loading && rider) return rider.fullname;
         if (loading) return 'Loading'
-        return 'Not found';
+        return '404';
+    },[rider, loading]);
+
+    const subtitle = useMemo<string>(() => {
+        if (!loading && rider) return ``;
+        if (loading) return 'Loading'
+        return 'Rider not found';
     },[rider, loading]);
 
     const [menuItems, adminMenuItems] = useMemo<[MenuItem[], MenuItem[]]>(() => {
@@ -56,8 +62,9 @@ const RiderPage: React.FC = ({ children }) => {
     }, [rider, pathname, loading, error, history, isLoggedIn]);
 
     return (
-        <Page title={title} icon="user" menuItems={menuItems} adminMenuItems={adminMenuItems}>
-            {children}
+        <Page title={title} subtitle={subtitle} icon="user" menuItems={menuItems} adminMenuItems={adminMenuItems}>
+            {rider && children}
+            {/* {!loading && !rider && <div>{error}</div>} */}
         </Page>
     )
 }
@@ -72,7 +79,7 @@ export const Rider: React.FC = () => {
                     <Route path="/rider/:id/results/:testcode" component={RiderResults} />
                     <Route path="/rider/:id/admin/edit" component={RiderSettings} />
                 </Switch>
-        </RiderPage>
+            </RiderPage>
         </RiderProvider>
     );
 }

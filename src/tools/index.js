@@ -21,3 +21,9 @@ export const dateToString = (date, format) => {
     }
 }
 
+export const markWithUnit = (mark, precision, markType) => {
+    const roundedMark = markToDouble(mark, precision);
+    const unit = markType === 'time' ? '"' : '';
+
+    return `${roundedMark}${unit}`;
+}

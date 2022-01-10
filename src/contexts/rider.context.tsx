@@ -54,6 +54,7 @@ export const RiderProvider: React.FC<RiderProviderProps> = ({riderId, children})
                 const rider = await getRider(riderId);
                 setRider(rider);
             } catch (error : unknown) {
+                setRider(undefined);
                 setError(error as string);
             } finally {
                 setLoading(false);
