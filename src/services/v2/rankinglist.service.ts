@@ -18,7 +18,7 @@ export const getRankingList = async (id: number, params?: URLSearchParams): Prom
     }
 }
 
-export const getRankingLists = async (params: URLSearchParams): Promise<[RankingList[], Pagination?]> => {
+export const getRankingLists = async (params?: URLSearchParams): Promise<[RankingList[], Pagination?]> => {
     try {
         const response = await apiV2.get<ApiResponse<RankingList[]>>(`/rankinglists`, { params });
 

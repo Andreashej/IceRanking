@@ -18,15 +18,15 @@ const CompetitionPage: React.FC = ({ children }) => {
     const history = useHistory();
     const { pathname } = history.location; 
 
-    const subtitle = useMemo<string>(() => {
+    const subtitle = useMemo<string | null>(() => {
         if (!loading && competition) return `${dateToString(competition.firstDate, 'd/m/Y')} - ${dateToString(competition.lastDate, 'd/m/Y')}`;
-        if (loading) return 'Loading'
+        if (loading) return null
         return 'Competition not found';
     },[competition, loading]);
     
-    const title = useMemo<string>(() => {
+    const title = useMemo<string | null>(() => {
         if (!loading && competition) return competition.name;
-        if (loading) return 'Loading'
+        if (loading) return null;
         return '404';
     },[competition, loading]);
 

@@ -17,15 +17,15 @@ const RiderPage: React.FC = ({ children }) => {
     const isLoggedIn = useIsLoggedIn();
     const { pathname } = history.location;
     
-    const title = useMemo<string>(() => {
+    const title = useMemo<string | null>(() => {
         if (!loading && rider) return rider.fullname;
-        if (loading) return 'Loading'
+        if (loading) return null;
         return '404';
     },[rider, loading]);
 
-    const subtitle = useMemo<string>(() => {
+    const subtitle = useMemo<string | null>(() => {
         if (!loading && rider) return ``;
-        if (loading) return 'Loading'
+        if (loading) return null;
         return 'Rider not found';
     },[rider, loading]);
 

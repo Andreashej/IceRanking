@@ -1,18 +1,19 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 
-import { Menu, MenuAppendToType } from 'primereact/menu';
+import { Menu } from 'primereact/menu';
 import { Button } from 'primereact/button';
 import { Sidebar } from 'primereact/sidebar';
 
 import Header from './Header';
 import { MenuItem } from 'primereact/menuitem';
 import { useHistory } from 'react-router-dom';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 type PageProps = {
-    title: string;
-    subtitle?: string;
+    title: string | null;
+    subtitle?: string | null;
     pretitle?: string;
-    icon?: string;
+    icon?: IconProp;
     menuItems?: MenuItem[];
     adminMenuItems?: MenuItem[];
 }
@@ -79,7 +80,7 @@ const Page: React.FC<PageProps> = ({title, subtitle, pretitle, icon, menuItems =
                         </div>
                         </div>
                     </div> */}
-                <div>
+                <div className="main-content">
                     {children}
                 </div>
             </div>

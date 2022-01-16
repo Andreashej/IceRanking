@@ -82,7 +82,7 @@ const RiderResult: React.FC<FlatListItem<Result, Rider>> = ({ item: result }) =>
     }, [horse, test])
 
     return (
-        <li className="flatlist-item" style={{ gridTemplateColumns: "minmax(0,1fr) minmax(0, 1fr) 8ch" }} ref={ref}>
+        <li className="flatlist-item" style={{ gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr) 8ch" }} ref={ref}>
             <div className="mobile-span-3">
                 {renderHorse}
             </div>
@@ -107,13 +107,13 @@ const BestResult: React.FC<{riderId: number, testcode?: string, order?: string}>
             const params = new URLSearchParams({
                 limit: '1',
                 orderBy: `mark ${order}`,
-                'filter[]': `test.testcode == ${testcode}`,
+                'filter[]': `mark > 0`,
                 expand: 'test,horse'
             });
             params.append('filter[]', `riderId == ${riderId}`);
+            params.append('filter[]', `test.testcode == ${testcode}`);
 
             getResults(params).then(([results]) => {
-                console.log(riderId, testcode, order);
                 setResult(results[0]);
             })
         }, [riderId, testcode, order])
@@ -236,6 +236,7 @@ export const RiderResults: React.FC = () => {
                 RenderComponent={RiderResult}
                 onBottomReached={() => getNextPage(rider.id)}
                 parent={rider}
+                hasMoreItems={(!pagination && results.length === 0) || (pagination && pagination.hasNext)}
             />
         </>
     );

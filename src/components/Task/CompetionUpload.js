@@ -1,7 +1,7 @@
 import React from 'react';
 import { FileUpload } from 'primereact/fileupload'
 import competitionService from '../../services/v1/competition.service';
-import Progressbar from './Progressbar';
+import { TaskBar } from './TaskBar';
 
 class CompetitionUpload extends React.Component {
     state = {
@@ -32,7 +32,7 @@ class CompetitionUpload extends React.Component {
 
     render() {
         if (this.state.task) {
-            return <Progressbar taskId={this.state.task.id} onComplete={this.props.onComplete} />
+            return <TaskBar taskId={this.state.task} onComplete={this.props.onComplete} />
         }
 
         return <FileUpload ref={this.ref} mode="basic" customUpload uploadHandler={(e) => this.uploadResult(e)} />

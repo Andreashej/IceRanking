@@ -15,20 +15,20 @@ export const CompetitionProvider: React.FC<CompetitionProviderProps> = ({competi
     const [competition, setCompetition] = useState<Competition>();
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>();
+    const [isChanged, setIsChanged] = useState<boolean>(false);
     
-    const saveCompetition: CompetitionContext['save'] = async (updatedFields) => {
-        const updatedCompetition = { ...competition, ...updatedFields } as Competition;
-
-        if (!updatedCompetition) return;
+    const saveCompetition: CompetitionContext['save'] = async () => {
+        if (!competition) return;
 
         try {
-            const savedCompetition = await patchCompetition(updatedCompetition);
+            const savedCompetition = await patchCompetition(competition);
             setCompetition((prevCompetition) => {
                 return {
                     ...prevCompetition,
                     ...savedCompetition
                 }
             });
+            setIsChanged(false);
         } catch (error: unknown) {
             console.log(error);
         }
@@ -45,6 +45,7 @@ export const CompetitionProvider: React.FC<CompetitionProviderProps> = ({competi
                 ...updatedFields
             }
         });
+        setIsChanged(true);
     }
 
     useEffect(() => {
@@ -75,6 +76,7 @@ export const CompetitionProvider: React.FC<CompetitionProviderProps> = ({competi
             save: saveCompetition,
             loading,
             error,
+            isChanged
         }}>
             {children}
         </CompetitionContext.Provider>
@@ -91,8 +93,8 @@ export const useCompetitionContext = (): CompetitionContext => {
     return context;
 }
 
-export const useCompetition = (): [Competition?, CompetitionContext['update']?, CompetitionContext['save']?] => {
+export const useCompetition = (): [Competition?, CompetitionContext['update']?, CompetitionContext['save']?, CompetitionContext['isChanged']?] => {
     const context = useCompetitionContext();
 
-    return [context.resource, context.update, context.save];
+    return [context.resource, context.update, context.save, context.isChanged];
 }

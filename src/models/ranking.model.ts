@@ -1,9 +1,10 @@
 import { RankingList } from "./rankinglist.model";
 import { RankingResult } from "./rankingresult.model";
+import { Task } from "./task.model";
 
 export type Ranking = {
     id: number;
-    testcode: number;
+    testcode: string;
     rankinglistId: number;
     includedMarks: number;
     order: "desc" | "asc";
@@ -14,4 +15,5 @@ export type Ranking = {
 
     rankinglist?: RankingList;
     results?: RankingResult[];
+    tasksInProgress: Task[];
 }

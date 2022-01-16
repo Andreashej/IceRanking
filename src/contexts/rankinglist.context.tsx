@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState, useContext } from 'react';
-import { getRankingList, patchRankingList } from '../services/v2/rankinglist.service';
+import { getRankingList, getRankingLists, patchRankingList } from '../services/v2/rankinglist.service';
 import { ResourceContext } from '../models/resource-context.model';
 import { RankingList } from '../models/rankinglist.model';
 
@@ -8,27 +8,28 @@ type RankingListContext = ResourceContext<RankingList>;
 const RankingListContext = createContext<RankingListContext | undefined>(undefined);
 
 type RankingListProviderProps = {
-    rankingListId: number;
+    rankingListId?: number;
+    rankingListShortname?: string;
 }
 
-export const RankingListProvider: React.FC<RankingListProviderProps> = ({rankingListId, children}) => {
+export const RankingListProvider: React.FC<RankingListProviderProps> = ({rankingListId, rankingListShortname, children}) => {
     const [rankingList, setRankingList] = useState<RankingList>();
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>();
+    const [isChanged, setIsChanged] = useState<boolean>(false);
     
-    const saveRankingList: RankingListContext['save'] = async (updatedFields) => {
-        const updatedRankingList = {...rankingList, ...updatedFields} as RankingList;
-
-        if (!updatedRankingList) return;
+    const saveRankingList: RankingListContext['save'] = async () => {
+        if (!rankingList) return;
 
         try {
-            const savedRankingList = await patchRankingList(updatedRankingList);
+            const savedRankingList = await patchRankingList(rankingList);
             setRankingList((prevRankingList) => {
                 return {
                     ...prevRankingList,
                     ...savedRankingList
                 }
             });
+            setIsChanged(false);
         } catch (error: unknown) {
             console.log(error);
         }
@@ -45,26 +46,56 @@ export const RankingListProvider: React.FC<RankingListProviderProps> = ({ranking
                 ...updatedFields
             }
         });
+        setIsChanged(true);
     }
 
     useEffect(() => {
-        const fetchRankingList = async (): Promise<void> => {
-            try {
-
-                const rankingList = await getRankingList(rankingListId);
-                setRankingList(rankingList);
-            } catch (error : unknown) {
-                setRankingList(undefined);
-                setError(error as string);
-            } finally {
-                setLoading(false);
+        if (rankingListId) {
+            const fetchRankingList = async (): Promise<void> => {
+                try {
+    
+                    const rankingList = await getRankingList(rankingListId);
+                    setRankingList(rankingList);
+                } catch (error : unknown) {
+                    setRankingList(undefined);
+                    setError(error as string);
+                } finally {
+                    setLoading(false);
+                }
             }
+    
+            setLoading(true);
+            setError(undefined);
+            fetchRankingList();
         }
-
-        setLoading(true);
-        setError(undefined);
-        fetchRankingList();
     }, [rankingListId])
+
+    useEffect(() => {
+        if (rankingListShortname) {
+            const fetchRankingList = async (): Promise<void> => {
+                try {
+                    const params = new URLSearchParams({
+                        'filter[]': `shortname == ${rankingListShortname}`,
+                        'expand': 'tests'
+                    });
+
+                    const [rankingLists] = await getRankingLists(params);
+                    if (rankingLists.length > 0) {
+                        setRankingList(rankingLists[0]);
+                    }
+                } catch (error : unknown) {
+                    setRankingList(undefined);
+                    setError(error as string);
+                } finally {
+                    setLoading(false);
+                }
+            }
+    
+            setLoading(true);
+            setError(undefined);
+            fetchRankingList();
+        }
+    }, [rankingListShortname])
     
     return (
         <RankingListContext.Provider value={{
@@ -73,6 +104,7 @@ export const RankingListProvider: React.FC<RankingListProviderProps> = ({ranking
             save: saveRankingList,
             loading,
             error,
+            isChanged,
         }}>
             {children}
         </RankingListContext.Provider>
@@ -89,8 +121,8 @@ export const useRankingListContext = (): RankingListContext => {
     return context;
 }
 
-export const useRankingList = (): [RankingList?, RankingListContext['update']?, RankingListContext['save']?] => {
+export const useRankingList = (): [RankingList?, RankingListContext['update']?, RankingListContext['save']?, RankingListContext['isChanged']?] => {
     const context = useRankingListContext();
 
-    return [context.resource, context.update, context.save];
+    return [context.resource, context.update, context.save, context.isChanged];
 }

@@ -1,3 +1,11 @@
 body .p-message.p-message-info {
     background-color: $info;
 }
+
+.p-tooltip {
+    .p-tooltip-text {
+        background-color: rgba($lightgray, .9);
+        color: $dark;
+        box-shadow: rgba($darkgray, .5) 0rem 0.125rem 0.25rem;
+    }
+}

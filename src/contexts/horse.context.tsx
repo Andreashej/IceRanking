@@ -15,20 +15,20 @@ export const HorseProvider: React.FC<HorseProviderProps> = ({horseId, children})
     const [horse, setHorse] = useState<Horse>();
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>();
+    const [isChanged, setIsChanged] = useState<boolean>(false);
     
-    const saveHorse: HorseContext['save'] = async (updatedFields) => {
-        const updatedHorse = {...horse, ...updatedFields} as Horse;
-
-        if (!updatedHorse) return;
+    const saveHorse: HorseContext['save'] = async () => {
+        if (!horse) return;
 
         try {
-            const savedHorse = await patchHorse(updatedHorse);
+            const savedHorse = await patchHorse(horse);
             setHorse((prevHorse) => {
                 return {
                     ...prevHorse,
                     ...savedHorse
                 }
             });
+            setIsChanged(false);
         } catch (error: unknown) {
             console.log(error);
         }
@@ -45,6 +45,7 @@ export const HorseProvider: React.FC<HorseProviderProps> = ({horseId, children})
                 ...updatedFields
             }
         });
+        setIsChanged(true);
     }
 
     useEffect(() => {
@@ -73,6 +74,7 @@ export const HorseProvider: React.FC<HorseProviderProps> = ({horseId, children})
             save: saveHorse,
             loading,
             error,
+            isChanged
         }}>
             {children}
         </HorseContext.Provider>
@@ -89,8 +91,8 @@ export const useHorseContext = (): HorseContext => {
     return context;
 }
 
-export const useHorse = (): [Horse?, HorseContext['update']?, HorseContext['save']?] => {
+export const useHorse = (): [Horse?, HorseContext['update']?, HorseContext['save']?, HorseContext['isChanged']?] => {
     const context = useHorseContext();
 
-    return [context.resource, context.update, context.save];
+    return [context.resource, context.update, context.save, context.isChanged];
 }

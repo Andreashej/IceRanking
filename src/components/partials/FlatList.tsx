@@ -24,15 +24,15 @@ export const FlatList: React.FC<FlatListProps> = ({items, RenderComponent, onBot
     const listElements = items.map((item, index) => <RenderComponent item={item} index={index} key={item.id} parent={parent} />);
 
     useEffect(() => {
-        if(bottomReached) onBottomReached?.();
-    },[bottomReached, onBottomReached])
+        if(bottomReached && hasMoreItems) onBottomReached?.();
+    },[bottomReached, hasMoreItems, onBottomReached])
     
     return (
         <>
             <ol className="flatlist">
                 {listElements}
             </ol>
-            {(items.length === 0 || hasMoreItems) && <div ref={listBottomRef} style={{ display: 'flex', }}><ProgressSpinner style={{ outerWidth: 20 }} /></div>}
+            {hasMoreItems && <div ref={listBottomRef} style={{ display: 'flex', }}><ProgressSpinner style={{ outerWidth: 20 }} /></div>}
         </>
     )
 }

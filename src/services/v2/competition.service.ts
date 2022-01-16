@@ -22,7 +22,7 @@ export const getCompetition = async (id: number, params?: URLSearchParams): Prom
 export const getCompetitions = async (params: URLSearchParams): Promise<[Competition[], Pagination?]> => {
     try {
         const response = await apiV2.get<ApiResponse<Competition[]>>(`/competitions`, { params });
-        console.log(response)
+
         return [response.data.data, response.data.pagination];
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) {

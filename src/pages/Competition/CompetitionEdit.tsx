@@ -1,12 +1,18 @@
+import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
 import { InputText } from 'primereact/inputtext';
-import React from 'react';
+import React, { FormEvent } from 'react';
 import { useCompetition } from '../../contexts/competition.context';
 
 export const CompetitionEdit: React.FC = () => {
-    const [competition, updateCompetition, saveCompetition] = useCompetition();
+    const [competition, updateCompetition, saveCompetition, isChanged] = useCompetition();
     
     if (!competition || !updateCompetition || !saveCompetition) return null;
+
+    const submit = (e: FormEvent) => {
+        e.preventDefault();
+        saveCompetition()
+    }
 
     return (
         <>
@@ -15,7 +21,7 @@ export const CompetitionEdit: React.FC = () => {
                 <h2 className="subtitle">Edit</h2>
             </div>
         </div>
-        <form id="editCompetition" className="mt-4" onSubmit={e => {}}>
+        <form id="editCompetition" className="mt-4" onSubmit={submit}>
             <span className="p-float-label">
                 <InputText 
                     id="competitionName" 
@@ -23,7 +29,6 @@ export const CompetitionEdit: React.FC = () => {
                     onChange={(e) => {
                         updateCompetition({ name: e.target.value })
                     }} 
-                    onBlur={() => saveCompetition()} 
                 />
                 <label htmlFor="competitionName">Competition Name</label>
             </span>
@@ -35,8 +40,7 @@ export const CompetitionEdit: React.FC = () => {
                             value={competition.firstDate} 
                             dateFormat="yy-mm-dd" 
                             style={{ width: '100%' }}
-                            onChange={(e) => saveCompetition({
-                                    ...competition,
+                            onChange={(e) => updateCompetition({
                                     firstDate: e.value as Date
                                 })
                             }
@@ -50,8 +54,7 @@ export const CompetitionEdit: React.FC = () => {
                             name="enddate" 
                             value={competition.lastDate} 
                             dateFormat="yy-mm-dd" 
-                            onChange={(e) => saveCompetition({ 
-                                ...competition, 
+                            onChange={(e) => updateCompetition({ 
                                 lastDate: e.value as Date
                             })} 
                             style={{ width: '100%' }} 
@@ -60,6 +63,7 @@ export const CompetitionEdit: React.FC = () => {
                     </span>
                 </div>
             </div>
+            <Button type="submit" label="Save" className="p-button-success p-button-raised p-button-rounded" icon="pi pi-save" disabled={!isChanged} />
         </form>
     </>
     )

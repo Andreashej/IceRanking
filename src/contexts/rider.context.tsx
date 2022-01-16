@@ -15,20 +15,20 @@ export const RiderProvider: React.FC<RiderProviderProps> = ({riderId, children})
     const [rider, setRider] = useState<Rider>();
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>();
+    const [isChanged, setIsChanged] = useState<boolean>(false);
     
-    const saveRider: RiderContext['save'] = async (updatedFields) => {
-        const updatedRider = {...rider, ...updatedFields} as Rider;
-
-        if (!updatedRider) return;
+    const saveRider: RiderContext['save'] = async () => {
+        if (!rider) return;
 
         try {
-            const savedRider = await patchRider(updatedRider);
+            const savedRider = await patchRider(rider);
             setRider((prevRider) => {
                 return {
                     ...prevRider,
                     ...savedRider
                 }
             });
+            setIsChanged(false);
         } catch (error: unknown) {
             console.log(error);
         }
@@ -45,6 +45,8 @@ export const RiderProvider: React.FC<RiderProviderProps> = ({riderId, children})
                 ...updatedFields
             }
         });
+
+        setIsChanged(true);
     }
 
     useEffect(() => {
@@ -73,6 +75,7 @@ export const RiderProvider: React.FC<RiderProviderProps> = ({riderId, children})
             save: saveRider,
             loading,
             error,
+            isChanged,
         }}>
             {children}
         </RiderContext.Provider>
@@ -89,8 +92,8 @@ export const useRiderContext = (): RiderContext => {
     return context;
 }
 
-export const useRider = (): [Rider?, RiderContext['update']?, RiderContext['save']?] => {
+export const useRider = (): [Rider?, RiderContext['update']?, RiderContext['save']?, RiderContext['isChanged']?] => {
     const context = useRiderContext();
 
-    return [context.resource, context.update, context.save];
+    return [context.resource, context.update, context.save, context.isChanged];
 }

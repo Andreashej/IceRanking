@@ -98,7 +98,7 @@ export const CompetitionResults: React.FC = () => {
                 items={results}
                 parent={test}
                 RenderComponent={CompetitionResultItem} 
-                hasMoreItems={pagination?.hasNext}
+                hasMoreItems={(!pagination && results.length === 0) || (pagination && pagination.hasNext)}
                 onBottomReached={() => getNextPage(test.id)}
             />
         </>
