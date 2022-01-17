@@ -32,6 +32,23 @@ export const getCompetitions = async (params: URLSearchParams): Promise<[Competi
     }
 }
 
+export const createCompetition = async (competition: Partial<Competition>) => {
+    try {
+        const response = await apiV2.post<ApiResponse<Competition>>(`/competitions`, {
+            ...competition,
+            firstDate: dateToString(competition.firstDate, 'Y-M-d'),
+            lastDate: dateToString(competition.lastDate, 'Y-M-d')
+        })
+
+        return response.data.data;
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            return Promise.reject(error.response?.data.message ?? error.message)
+        }
+        return Promise.reject(error);
+    }
+}
+
 export const patchCompetition = async (competition: Competition) => {
     try {
         const response = await apiV2.patch<ApiResponse<Competition>>(`/competitions/${competition.id}`, {

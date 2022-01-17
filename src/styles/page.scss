@@ -69,7 +69,20 @@ body {
             background-color: white;
             padding: .5rem .75rem;
             border-radius: .25rem;
-            box-shadow: rgba($darkgray, .5) 0 0 .25rem;
+            box-shadow: rgba($darkgray, .5) 0rem 0.125rem 0.25rem;
+        }
+
+        @for $i from 1 through 5 {
+            .grid-col-#{$i} {
+                display: grid;
+                grid-template-columns: repeat($i, 1fr);
+                gap: 1rem;
+                
+                @include respond-below(md) {
+                    grid-template-columns: 1fr;
+                }
+            }
+
         }
     }
 

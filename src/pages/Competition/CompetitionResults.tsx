@@ -1,8 +1,13 @@
+import { PrimeIcons } from 'primereact/api';
+import { Button } from 'primereact/button';
+import TooltipOptions from 'primereact/tooltip/tooltipoptions';
 import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 import { FlatList, FlatListItem } from '../../components/partials/FlatList';
 import { Skeleton } from '../../components/partials/Skeleton';
-import { useCompetition } from '../../contexts/competition.context';
+import { useCompetition, useCompetitionContext } from '../../contexts/competition.context';
+import { useToast } from '../../contexts/toast.context';
+import { useIsLoggedIn } from '../../contexts/user.context';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import { Pagination } from '../../models/apiresponse.model';
 import { Horse } from '../../models/horse.model';
@@ -11,7 +16,7 @@ import { Rider } from '../../models/rider.model';
 import { Test } from '../../models/test.model';
 import { getHorse } from '../../services/v2/horse.service';
 import { getRider } from '../../services/v2/rider.service';
-import { getTestResults } from '../../services/v2/test.service';
+import { deleteTest, getTestResults } from '../../services/v2/test.service';
 
 const CompetitionResultItem: React.FC<FlatListItem<Result, Test>> = ({ item: result, parent: test }) => {
     const [rider, setRider] = useState<Rider>();
@@ -53,10 +58,14 @@ const CompetitionResultItem: React.FC<FlatListItem<Result, Test>> = ({ item: res
 }
 
 export const CompetitionResults: React.FC = () => {
-    const [competition] = useCompetition();
+    const { resource: competition, fetch: fetchCompetition } = useCompetitionContext();
     const [results, setResults] = useState<Result[]>([]);
     const [pagination, setPagination] = useState<Pagination>();
     const [loading, setLoading] = useState<boolean>(false);
+    const isLoggedIn = useIsLoggedIn();
+    const showToast = useToast();
+
+    const history = useHistory();
 
 
     const { testcode } = useParams<{ testcode: string; }>()
@@ -89,11 +98,37 @@ export const CompetitionResults: React.FC = () => {
         setPagination(undefined);
     }, [testcode])
 
+    const tooltipOptions: TooltipOptions = {
+        position: "top",
+    }
+
+    
     if (!test) return null;
+
+    const removeTest = async () => {
+        try {
+            await deleteTest(test)
+            await fetchCompetition()
+        } catch (error: unknown) {
+            showToast({
+                severity: 'error',
+                summary: 'Could not delete test',
+                detail: error as string,
+            })
+        }
+    }
 
     return (
         <>
-            <h2 className="subheader">{testcode} results</h2>
+            <div className="grid-col-2">
+                <h2 className="subheader">
+                    {testcode} results 
+                </h2>
+                {isLoggedIn && <div className="toolbar" style={{ width: "max-content", placeSelf: "end" }} >
+                    <Button icon={PrimeIcons.PENCIL} className="p-button-text" tooltip="Edit" tooltipOptions={tooltipOptions} onClick={() => history.push(`${history.location.pathname}/edit`)} />
+                    <Button icon={PrimeIcons.TRASH} className="p-button-text p-button-danger" tooltip="Delete" tooltipOptions={tooltipOptions} onClick={() => removeTest()} />
+                </div>}
+            </div>
             <FlatList
                 items={results}
                 parent={test}

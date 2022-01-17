@@ -30,6 +30,7 @@ import { Task } from '../../models/task.model';
 import { TaskBar } from '../../components/Task/TaskBar';
 import { createTask } from '../../services/v2/task.service';
 import { PrimeIcons } from 'primereact/api';
+import { RankingList } from '../../models/rankinglist.model';
 
 type RankingResultMarkProps = {
     mark: Result;
@@ -239,7 +240,7 @@ export const RankingResults: React.FC = () => {
             'expand': 'tasksInProgress',
             'fields': 'tasksInProgress'
         })
-        const r = await getRanking(rankingId, params);
+        const r = await getRanking(rankingId, params) as Required<Pick<Ranking, 'tasksInProgress'>>;
 
         setTasks(r.tasksInProgress);
     }, []);
@@ -248,16 +249,16 @@ export const RankingResults: React.FC = () => {
         if (ranking) fetchTasks(ranking.id);
     }, [ranking, fetchTasks])
 
-    const toolbarRight = (
+    const toolbar = (
         <>
             <Button 
                 tooltip="Edit ranking definition"
                 tooltipOptions={{ position: 'top' }}
-                className="p-button-info p-button-raised mr-2" 
+                className="p-button-info mr-2 p-button-text" 
                 icon={PrimeIcons.PENCIL} 
                 onClick={async () => {
                     if (ranking) {
-                        history.push(`/rankinglist/DRL/ranking/${testcode}/edit`)
+                        history.push(`/rankinglist/${rankingList?.shortname}/ranking/${testcode}/edit`)
                     }
                 }} 
                 disabled={tasks.length > 0} 
@@ -265,7 +266,7 @@ export const RankingResults: React.FC = () => {
             <Button 
                 tooltip="Recompute marks"
                 tooltipOptions={{ position: 'top' }}
-                className="p-button-success p-button-raised mr-2" 
+                className="p-button-success mr-2 p-button-text" 
                 icon={PrimeIcons.SORT_NUMERIC_DOWN} 
                 onClick={async () => {
                     if (ranking) {
@@ -278,7 +279,7 @@ export const RankingResults: React.FC = () => {
             <Button 
                 tooltip="Flush all results"
                 tooltipOptions={{ position: 'top' }}
-                className="p-button-warning p-button-raised" 
+                className="p-button-warning p-button-text" 
                 icon={PrimeIcons.REFRESH} 
                 onClick={async () => {
                     if (ranking) {
@@ -294,17 +295,21 @@ export const RankingResults: React.FC = () => {
     if (!ranking) return null;
 
     const renderTasks = (
-        <div className="content-card">
+        <div>
             <h4>Ranking is being recomputed. Please wait...</h4>
             {tasks.map((task) => <TaskBar key={task.id} task={task} onComplete={() => setTasks((prev) => prev.filter((t) => t.id !== task.id))} />)}
         </div>
         );
 
     return (
-        <>
-            <h2 className="subheader">{testcode} results</h2>
+        <> 
+            <div className="grid-col-2">
+                <h2 className="subheader">{testcode} results</h2>
+                {isLoggedIn && <div className="toolbar" style={{ width: "max-content", placeSelf: "end" }}>
+                    {toolbar}
+                </div>}
+            </div>
             {description}
-            {isLoggedIn && <Toolbar right={toolbarRight} />}
             {tasks.length === 0 ? <FlatList
                 items={results}
                 RenderComponent={RankingResultListItem}

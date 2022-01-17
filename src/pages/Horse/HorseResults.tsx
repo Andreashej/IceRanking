@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Card } from 'primereact/card';
 import { Link, useParams } from 'react-router-dom';
 import { dateToString, markWithUnit } from '../../tools';
 import { FlatList, FlatListItem } from '../../components/partials/FlatList';
-import { useRider } from '../../contexts/rider.context';
 import { Result } from '../../models/result.model';
 import { Pagination } from '../../models/apiresponse.model';
 import { getResults } from '../../services/v2/result.service';
@@ -11,26 +9,25 @@ import { Rider } from '../../models/rider.model';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import { Horse } from '../../models/horse.model';
 import { Test } from '../../models/test.model';
-import { getHorse } from '../../services/v2/horse.service';
 import { getTest } from '../../services/v2/test.service';
 import { Skeleton } from '../../components/partials/Skeleton';
 import { FeaturedCard } from '../../components/partials/FeaturedCard';
-import { getRanking, getRankings } from '../../services/v2/ranking.service';
 import { getRankingResults } from '../../services/v2/rankingresult.service';
 import { getRankingList } from '../../services/v2/rankinglist.service';
-import { RankingResult } from '../../models/rankingresult.model';
+import { useHorse } from '../../contexts/horse.context';
+import { getRider } from '../../services/v2/rider.service';
 
-const RiderResult: React.FC<FlatListItem<Result, Rider>> = ({ item: result }) => {
+const HorseResult: React.FC<FlatListItem<Result, Horse>> = ({ item: result }) => {
     const ref = useRef(null);
     const isVisible = useIntersectionObserver(ref, { rootMargin: '50px' });
 
-    const [horse, setHorse] = useState<Horse>();
+    const [rider, setRider] = useState<Rider>();
     const [test, setTest] = useState<Test>();
 
     useEffect(() => {
         if (isVisible) {
-            getHorse(result.horseId).then((horse) => {
-                setHorse(horse);
+            getRider(result.riderId).then((rider) => {
+                setRider(rider);
             });
 
             getTest(result.testId, new URLSearchParams({ expand: 'competition' })).then((test) => {
@@ -65,8 +62,8 @@ const RiderResult: React.FC<FlatListItem<Result, Rider>> = ({ item: result }) =>
 
     }, [result.mark, test]);
 
-    const renderHorse = useMemo(() => {
-        if (!horse || !test) return (
+    const renderRider = useMemo(() => {
+        if (!rider || !test) return (
             <>
                 <Skeleton style={{ height: "24px" }} />
                 <Skeleton style={{ width: "60%", height: "24px" }} />
@@ -75,16 +72,16 @@ const RiderResult: React.FC<FlatListItem<Result, Rider>> = ({ item: result }) =>
 
         return (
             <>
-                <Link to={`/horse/${horse.id}/results/${test?.testcode}`}>{horse.horseName}</Link>
-                <span className="text-muted d-none d-sm-block">{horse.feifId}</span>
+                <Link to={`/rider/${rider.id}/results/${test?.testcode}`}>{rider.fullname}</Link>
+                {/* <span className="text-muted d-none d-sm-block">{rider}</span> */}
             </>
         )
-    }, [horse, test])
+    }, [rider, test])
 
     return (
         <li className="flatlist-item" style={{ gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr) 8ch" }} ref={ref}>
             <div className="mobile-span-3">
-                {renderHorse}
+                {renderRider}
             </div>
             <div className="mobile-span-3">
                 {renderTest}
@@ -96,9 +93,7 @@ const RiderResult: React.FC<FlatListItem<Result, Rider>> = ({ item: result }) =>
     )
 }
 
-
-
-const BestResult: React.FC<{riderId: number, testcode?: string, order?: string}> = ({riderId, testcode, order}) => {
+const BestResult: React.FC<{horseId: number, testcode?: string, order?: string}> = ({horseId, testcode, order}) => {
         const [result, setResult] = useState<Result>();
 
         useEffect(() => {
@@ -110,17 +105,17 @@ const BestResult: React.FC<{riderId: number, testcode?: string, order?: string}>
                 'filter[]': `mark > 0`,
                 expand: 'test,horse'
             });
-            params.append('filter[]', `riderId == ${riderId}`);
+            params.append('filter[]', `horseId == ${horseId}`);
             params.append('filter[]', `test.testcode == ${testcode}`);
 
             getResults(params).then(([results]) => {
                 setResult(results[0]);
             })
-        }, [riderId, testcode, order])
+        }, [horseId, testcode, order])
 
         useEffect(() => {
             setResult(undefined);
-        },[riderId, testcode])
+        },[horseId, testcode])
 
         const renderMark = useMemo(() => {
             if (!result || !result.test) return null;
@@ -133,7 +128,7 @@ const BestResult: React.FC<{riderId: number, testcode?: string, order?: string}>
         )
 }
 
-const BestRank: React.FC<{riderId: number, testcode: string}> = ({ riderId, testcode }) => {
+const BestRank: React.FC<{horseId: number, testcode: string}> = ({ horseId, testcode }) => {
     const [rank, setRank] = useState<string>();
     const [listname, setListname] = useState<string>();
 
@@ -146,7 +141,7 @@ const BestRank: React.FC<{riderId: number, testcode: string}> = ({ riderId, test
                 'order': 'rank asc',
             });
             params.append('filter[]', `test.testcode == ${testcode}`);
-            params.append('filter[]', `riders contains id == ${riderId}`,);
+            params.append('filter[]', `horses contains id == ${horseId}`,);
     
             const [results] = await getRankingResults(params)
 
@@ -168,7 +163,7 @@ const BestRank: React.FC<{riderId: number, testcode: string}> = ({ riderId, test
         setListname(undefined);
         
         getBestRank();
-    }, [riderId, testcode])
+    }, [horseId, testcode])
     return <FeaturedCard title="Best rank" featuredText={rank} additionalText={listname} />
 }
 
@@ -176,22 +171,22 @@ const Activity: React.FC<{numberOfResults?: number}> = ({ numberOfResults }) => 
     return <FeaturedCard title="Activity" featuredText={numberOfResults?.toFixed()} additionalText="results" />
 }
 
-export const RiderResults: React.FC = () => {
-    const [rider] = useRider();
+export const HorseResults: React.FC = () => {
+    const [horse] = useHorse();
     const { testcode } = useParams<{testcode: string}>();
 
     const [results, setResults] = useState<Result[]>([]);
     const [pagination, setPagination] = useState<Pagination>();
     const [loading, setLoading] = useState<boolean>(false);
 
-    const getNextPage = useCallback(async (riderId: number): Promise<void> => {
+    const getNextPage = useCallback(async (horseId: number): Promise<void> => {
         if (loading || (results.length > 0 && !pagination?.hasNext)) return;
         setLoading(true);
 
         const params = new URLSearchParams({ 
             page: pagination?.nextPage?.toString() ?? '1',
             perPage: '10',
-            'filter[]': `riderId == ${riderId}`,
+            'filter[]': `horseId == ${horseId}`,
             orderBy: 'test.competition.lastDate desc',
             expand: 'test'
         });
@@ -215,21 +210,21 @@ export const RiderResults: React.FC = () => {
         setPagination(undefined);
     }, [testcode])
 
-    if (!rider) return null;
+    if (!horse) return null;
 
     return (
         <>
             <h2 className="subtitle">{testcode} results</h2>
             <div className="grid-col-3">
-                <BestResult riderId={rider.id} testcode={results[0]?.test?.testcode} order={results[0]?.test?.order} />
-                <BestRank riderId={rider.id} testcode={testcode} />
+                <BestResult horseId={horse.id} testcode={results[0]?.test?.testcode} order={results[0]?.test?.order} />
+                <BestRank horseId={horse.id} testcode={testcode} />
                 <Activity numberOfResults={pagination?.totalItems} />
             </div>
             <FlatList
                 items={results}
-                RenderComponent={RiderResult}
-                onBottomReached={() => getNextPage(rider.id)}
-                parent={rider}
+                RenderComponent={HorseResult}
+                onBottomReached={() => getNextPage(horse.id)}
+                parent={horse}
                 hasMoreItems={(!pagination && results.length === 0) || (pagination && pagination.hasNext)}
             />
         </>

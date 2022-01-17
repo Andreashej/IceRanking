@@ -1,12 +1,7 @@
 import React, { FormEvent } from 'react';
-import { connect } from 'react-redux';
-
-import { getRanking, updateRanking, getProfile } from '../../../actions/index';
-
 import {InputText} from 'primereact/inputtext';
 import {InputNumber} from 'primereact/inputnumber';
 import { Button } from 'primereact/button';
-import { Toast } from 'primereact/toast';
 import { useRankingList } from '../../../contexts/rankinglist.context';
 
 export const RankingListEdit: React.FC = () => {
@@ -20,7 +15,7 @@ export const RankingListEdit: React.FC = () => {
     return (
         <>
             <h2 className="subheader">Ranking options</h2>
-            <form id="editRanking" className="content-card" onSubmit={submit}>
+            <form id="editRanking" onSubmit={submit}>
                 <span className="p-float-label">
                     <InputText id="name" value={rankingList?.listname} onChange={(e) => update?.({ listname: e.target.value })} />
                     <label htmlFor="name">Listname</label>

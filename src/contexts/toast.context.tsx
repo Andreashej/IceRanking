@@ -27,7 +27,7 @@ export const useToast = (): ToastContext['show'] => {
     const context = useContext(ToastContext);
 
     if (context === undefined) {
-        throw new Error('Missing RiderContext');
+        throw new Error('Missing ToastContext');
     }
 
     return context.show;

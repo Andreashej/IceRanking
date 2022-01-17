@@ -16,24 +16,19 @@ export const CompetitionEdit: React.FC = () => {
 
     return (
         <>
-        <div className="row">
-            <div className="col">
-                <h2 className="subtitle">Edit</h2>
-            </div>
-        </div>
-        <form id="editCompetition" className="mt-4" onSubmit={submit}>
-            <span className="p-float-label">
-                <InputText 
-                    id="competitionName" 
-                    value={competition.name} 
-                    onChange={(e) => {
-                        updateCompetition({ name: e.target.value })
-                    }} 
-                />
-                <label htmlFor="competitionName">Competition Name</label>
-            </span>
-            <div className="form-row">
-                <div className="col">
+            <h2 className="subtitle">Edit</h2>
+            <form id="editCompetition" onSubmit={submit}>
+                <span className="p-float-label">
+                    <InputText 
+                        id="competitionName" 
+                        value={competition.name} 
+                        onChange={(e) => {
+                            updateCompetition({ name: e.target.value })
+                        }} 
+                    />
+                    <label htmlFor="competitionName">Competition Name</label>
+                </span>
+                <div className="grid-col-2">
                     <span className="p-float-label">
                         <Calendar 
                             name="startdate" 
@@ -47,8 +42,6 @@ export const CompetitionEdit: React.FC = () => {
                         />
                         <label htmlFor="startdate">Start date</label>
                     </span>
-                </div>
-                <div className="col">
                     <span className="p-float-label">
                         <Calendar 
                             name="enddate" 
@@ -62,9 +55,8 @@ export const CompetitionEdit: React.FC = () => {
                         <label htmlFor="enddate">End date</label>
                     </span>
                 </div>
-            </div>
-            <Button type="submit" label="Save" className="p-button-success p-button-raised p-button-rounded" icon="pi pi-save" disabled={!isChanged} />
-        </form>
-    </>
+                <Button type="submit" label="Save" className="p-button-success p-button-raised p-button-rounded" icon="pi pi-save" disabled={!isChanged} />
+            </form>
+        </>
     )
 }

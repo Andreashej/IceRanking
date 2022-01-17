@@ -15,5 +15,5 @@ export type Ranking = {
 
     rankinglist?: RankingList;
     results?: RankingResult[];
-    tasksInProgress: Task[];
+    tasksInProgress?: Task[];
 }

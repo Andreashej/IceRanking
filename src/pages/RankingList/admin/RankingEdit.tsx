@@ -1,52 +1,68 @@
 import { Button } from 'primereact/button';
-import React, { FormEvent, useMemo, useState } from 'react';
+import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import { PrimeIcons } from 'primereact/api';
 import { useParams, useHistory } from 'react-router-dom';
 import { Ranking } from '../../../models/ranking.model';
-import { useRankingList } from '../../../contexts/rankinglist.context';
+import { useRankingList, useRankingListContext } from '../../../contexts/rankinglist.context';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import { SelectButton } from 'primereact/selectbutton';
 import { InputNumber } from 'primereact/inputnumber';
-import { patchRanking } from '../../../services/v2/ranking.service';
+import { createRanking, patchRanking } from '../../../services/v2/ranking.service';
 import { useToast } from '../../../contexts/toast.context';
 
 export const RankingEdit: React.FC = () => {
     const { testcode, shortname } = useParams<{testcode: string, shortname: string}>();
     const history = useHistory();
-    const [rankingList] = useRankingList();
+    const { resource: rankingList, fetch: fetchRankingList} = useRankingListContext();
 
     const showToast = useToast();
 
-    const initialRanking = useMemo<Ranking | undefined>(() => {
-        if (!rankingList || !rankingList.tests) return;
-
-        return rankingList.tests.find((ranking) => ranking.testcode === testcode);
+    const initialRanking = useMemo<Ranking | Omit<Ranking, 'id' | 'rankinglistId'>>(() => {
+        return rankingList?.tests?.find((ranking) => ranking.testcode === testcode) ?? {
+            testcode: "",
+            grouping: "rider",
+            order: "desc",
+            minMark: 5.5,
+            markType: "mark",
+            includedMarks: 2,
+            roundingPrecision: 2,
+        };
     }, [testcode, rankingList]);
 
-    const [ranking, setRanking] = useState<Ranking | undefined>(initialRanking);
+    const [ranking, setRanking] = useState<Ranking | Omit<Ranking, 'id' | 'rankinglistId'>>(initialRanking);
+
+    useEffect(() => {
+        setRanking(initialRanking);
+    }, [initialRanking])
 
     const submit = async (e: FormEvent) => {
         e.preventDefault();
-        if (ranking) {
-            try {
-                const updated = await patchRanking(ranking);
-
+        try {
+            if (!(Object.keys(ranking).includes('id')) && rankingList) {
+                const created = await createRanking(rankingList, ranking);
+                await fetchRankingList()
+                setRanking(created)
+            } else {
+                const updated = await patchRanking(ranking as Ranking);
+                await fetchRankingList();
                 setRanking(updated);
-                showToast({
-                    severity: 'success',
-                    summary: 'Ranking saved'
-                })
-            } catch (error: unknown) {
-                if (typeof error === 'string') {
-                    showToast({
-                        severity: 'error',
-                        summary: 'Error',
-                        detail: error
-                    });
-                }
             }
 
+            showToast({
+                severity: 'success',
+                summary: 'Ranking saved'
+            });
+            
+            if (ranking.testcode !== testcode) history.push(`/rankinglist/${rankingList?.shortname}/ranking/${ranking.testcode}/edit`)
+        } catch (error: unknown) {
+            if (typeof error === 'string') {
+                showToast({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: error
+                });
+            }
         }
     }
 
@@ -63,7 +79,7 @@ export const RankingEdit: React.FC = () => {
                     }}
                 />
             </div>
-            <form className="content-card" onSubmit={submit}>
+            <form onSubmit={submit}>
                 <div className="p-inputgroup mb-2">
                     <span className="p-inputgroup-addon">Testcode</span>
                     <InputText id="testcode" value={ranking?.testcode} onChange={(e) => setRanking((prevRanking) => {

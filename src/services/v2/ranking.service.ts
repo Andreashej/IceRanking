@@ -3,6 +3,7 @@ import { ApiResponse, Pagination } from "../../models/apiresponse.model";
 import axios from 'axios'
 import { Ranking } from "../../models/ranking.model";
 import { RankingResult } from "../../models/rankingresult.model";
+import { RankingList } from "../../models/rankinglist.model";
 
 export const getRanking = async (id: number, params?: URLSearchParams): Promise<Ranking> => {
     try { 
@@ -35,6 +36,19 @@ export const getRankings = async (params: URLSearchParams): Promise<[Ranking[], 
 export const patchRanking = async (ranking: Ranking) => {
     try {
         const response = await apiV2.patch<ApiResponse<Ranking>>(`/rankings/${ranking.id}`, ranking)
+
+        return response.data.data;
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            return Promise.reject(error.response?.data.message ?? error.message)
+        }
+        return Promise.reject(error);
+    }
+}
+
+export const createRanking = async (rankingList: RankingList, ranking: Omit<Ranking, 'id' | 'rankinglistId' >) => {
+    try {
+        const response = await apiV2.post<ApiResponse<Ranking>>(`/rankinglists/${rankingList.id}/rankings`, ranking)
 
         return response.data.data;
     } catch (error: unknown) {

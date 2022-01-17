@@ -1,7 +1,7 @@
 import { CompetitionProvider, useCompetitionContext } from "../../contexts/competition.context"
 import { useParams, Switch, Route, useHistory } from "react-router-dom";
 import Page from "../../components/partials/Page";
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { dateToString } from "../../tools";
 import { MenuItem } from "primereact/menuitem";
 import { CompetitionInfo } from "./CompetitionInfo";
@@ -9,9 +9,15 @@ import { CompetitionResults } from "./CompetitionResults";
 import { useIsLoggedIn } from "../../contexts/user.context";
 import { CompetitionEdit } from "./CompetitionEdit";
 import { CompetitionResultsUpload } from "./CompetitionResultsUpload";
+import { TestEdit } from "./TestEdit";
+import { PrimeIcons } from "primereact/api";
+import { Dialog } from "primereact/dialog";
+import { ListBox } from 'primereact/listbox';
+import { TestDialog } from "./TestDialog";
 
 const CompetitionPage: React.FC = ({ children }) => {
     const { resource: competition, loading, error } = useCompetitionContext();
+    const [showTestDialog, setShowTestDialog] = useState<boolean>(false);
 
     const isLoggedIn = useIsLoggedIn();
     
@@ -50,6 +56,13 @@ const CompetitionPage: React.FC = ({ children }) => {
 
         if (!isLoggedIn) return [menuItems, []];
 
+        menuItems[0].items.push({
+            label: 'Create test',
+            icon: PrimeIcons.PLUS,
+            className: "text-success p-button-text",
+            command: () => setShowTestDialog(true)
+        })
+
         const adminItems = [
             {
                 label: "Edit competition",
@@ -67,10 +80,13 @@ const CompetitionPage: React.FC = ({ children }) => {
     }, [competition, loading, error, history, isLoggedIn, pathname]);
 
     return (
-        <Page title={title} icon="calendar-alt" subtitle={subtitle} menuItems={menuItems} adminMenuItems={adminMenuItems}>
-            {competition && children}
-            {!loading && !competition && <div>{error}</div>}
-        </Page>
+        <>
+            <Page title={title} icon="calendar-alt" subtitle={subtitle} menuItems={menuItems} adminMenuItems={adminMenuItems}>
+                {competition && children}
+                {!loading && !competition && <div>{error}</div>}
+            </Page>
+            <TestDialog visible={showTestDialog} onHide={() => setShowTestDialog(false)}></TestDialog>
+        </>
     )
 }
 
@@ -84,6 +100,7 @@ export const Competition: React.FC = () => {
                     <Route exact path="/competition/:id" component={CompetitionInfo} />
                     <Route exact path="/competition/:id/edit" component={CompetitionEdit} />
                     <Route exact path="/competition/:id/upload" component={CompetitionResultsUpload} />
+                    <Route exact path="/competition/:id/test/:testcode/edit" component={TestEdit} />
                     <Route path="/competition/:id/test/:testcode" component={CompetitionResults} />
                 </Switch>
             </CompetitionPage>    

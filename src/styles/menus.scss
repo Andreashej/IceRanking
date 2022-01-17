@@ -19,6 +19,14 @@
                     box-shadow: none;
                     background-color: rgba($dark, .25);
                 }
+
+                
+            }
+            
+            &.step {
+                .p-disabled {
+                    opacity: 1;
+                }
             }
 
             &.active {

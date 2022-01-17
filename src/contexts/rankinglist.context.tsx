@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState, useContext } from 'react';
+import React, { createContext, useEffect, useState, useContext, useCallback } from 'react';
 import { getRankingList, getRankingLists, patchRankingList } from '../services/v2/rankinglist.service';
 import { ResourceContext } from '../models/resource-context.model';
 import { RankingList } from '../models/rankinglist.model';
@@ -49,59 +49,43 @@ export const RankingListProvider: React.FC<RankingListProviderProps> = ({ranking
         setIsChanged(true);
     }
 
-    useEffect(() => {
-        if (rankingListId) {
-            const fetchRankingList = async (): Promise<void> => {
-                try {
-    
-                    const rankingList = await getRankingList(rankingListId);
-                    setRankingList(rankingList);
-                } catch (error : unknown) {
-                    setRankingList(undefined);
-                    setError(error as string);
-                } finally {
-                    setLoading(false);
+    const fetchRankingList = useCallback(async (): Promise<void> => {
+        try {
+            if (rankingListId) {
+                const rankingList = await getRankingList(rankingListId);
+                setRankingList(rankingList);
+
+            } else if (rankingListShortname) {
+                const params = new URLSearchParams({
+                    'filter[]': `shortname == ${rankingListShortname}`,
+                    'expand': 'tests'
+                });
+
+                const [rankingLists] = await getRankingLists(params);
+                if (rankingLists.length > 0) {
+                    setRankingList(rankingLists[0]);
                 }
             }
-    
-            setLoading(true);
-            setError(undefined);
-            fetchRankingList();
+        } catch (error : unknown) {
+            setRankingList(undefined);
+            setError(error as string);
+        } finally {
+            setLoading(false);
         }
-    }, [rankingListId])
+    }, [rankingListId, rankingListShortname]);
 
     useEffect(() => {
-        if (rankingListShortname) {
-            const fetchRankingList = async (): Promise<void> => {
-                try {
-                    const params = new URLSearchParams({
-                        'filter[]': `shortname == ${rankingListShortname}`,
-                        'expand': 'tests'
-                    });
-
-                    const [rankingLists] = await getRankingLists(params);
-                    if (rankingLists.length > 0) {
-                        setRankingList(rankingLists[0]);
-                    }
-                } catch (error : unknown) {
-                    setRankingList(undefined);
-                    setError(error as string);
-                } finally {
-                    setLoading(false);
-                }
-            }
-    
-            setLoading(true);
-            setError(undefined);
-            fetchRankingList();
-        }
-    }, [rankingListShortname])
+        setLoading(true);
+        setError(undefined);
+        fetchRankingList();
+    }, [rankingListId, rankingListShortname, fetchRankingList])
     
     return (
         <RankingListContext.Provider value={{
             resource: rankingList,
             update: updateRankingList,
             save: saveRankingList,
+            fetch: fetchRankingList,
             loading,
             error,
             isChanged,

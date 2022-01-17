@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState, useContext } from 'react';
+import React, { createContext, useEffect, useState, useContext, useCallback } from 'react';
 import { getHorse, patchHorse } from '../services/v2/horse.service';
 import { ResourceContext } from '../models/resource-context.model';
 import { Horse } from '../models/horse.model';
@@ -48,30 +48,32 @@ export const HorseProvider: React.FC<HorseProviderProps> = ({horseId, children})
         setIsChanged(true);
     }
 
-    useEffect(() => {
-        const fetchHorse = async (): Promise<void> => {
-            try {
+    const fetchHorse = useCallback(async (): Promise<void> => {
+        try {
 
-                const horse = await getHorse(horseId);
-                setHorse(horse);
-            } catch (error : unknown) {
-                setHorse(undefined);
-                setError(error as string);
-            } finally {
-                setLoading(false);
-            }
+            const horse = await getHorse(horseId);
+            setHorse(horse);
+        } catch (error : unknown) {
+            setHorse(undefined);
+            setError(error as string);
+        } finally {
+            setLoading(false);
         }
+    }, [horseId]);
+
+    useEffect(() => {
 
         setLoading(true);
         setError(undefined);
         fetchHorse();
-    }, [horseId])
+    }, [horseId, fetchHorse])
     
     return (
         <HorseContext.Provider value={{
             resource: horse,
             update: updateHorse,
             save: saveHorse,
+            fetch: fetchHorse,
             loading,
             error,
             isChanged

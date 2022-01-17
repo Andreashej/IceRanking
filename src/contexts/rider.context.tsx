@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState, useContext } from 'react';
+import React, { createContext, useEffect, useState, useContext, useCallback } from 'react';
 import { getRider, patchRider } from '../services/v2/rider.service';
 import { Rider } from "../models/rider.model";
 import { ResourceContext } from '../models/resource-context.model';
@@ -49,30 +49,31 @@ export const RiderProvider: React.FC<RiderProviderProps> = ({riderId, children})
         setIsChanged(true);
     }
 
-    useEffect(() => {
-        const fetchRider = async (): Promise<void> => {
-            try {
-
-                const rider = await getRider(riderId);
-                setRider(rider);
-            } catch (error : unknown) {
-                setRider(undefined);
-                setError(error as string);
-            } finally {
-                setLoading(false);
-            }
+    const fetchRider = useCallback(async (): Promise<void> => {
+        try {
+            const rider = await getRider(riderId);
+            setRider(rider);
+        } catch (error : unknown) {
+            setRider(undefined);
+            setError(error as string);
+        } finally {
+            setLoading(false);
         }
+    },[riderId]);
+
+    useEffect(() => {
 
         setLoading(true);
         setError(undefined);
         fetchRider();
-    }, [riderId])
+    }, [riderId, fetchRider])
     
     return (
         <RiderContext.Provider value={{
             resource: rider,
             update: updateRider,
             save: saveRider,
+            fetch: fetchRider,
             loading,
             error,
             isChanged,

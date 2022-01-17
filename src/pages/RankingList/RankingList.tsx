@@ -10,6 +10,7 @@ import { useIsLoggedIn } from '../../contexts/user.context';
 import { MenuItem } from 'primereact/menuitem';
 import { RankingListEdit } from './admin/RankingListEdit';
 import { RankingEdit } from './admin/RankingEdit';
+import { PrimeIcons } from 'primereact/api';
 
 const RankingListPage: React.FC = ({children}) => {
     const { resource: rankingList, loading, error } = useRankingListContext()
@@ -50,6 +51,12 @@ const RankingListPage: React.FC = ({children}) => {
         ];
 
         if (!isLoggedIn) return [menuItems, []];
+
+        menuItems[0].items.push({
+            label: 'Create ranking',
+            icon: PrimeIcons.PLUS,
+            command: () => history.push(`/rankinglist/${rankingList.shortname}/ranking/create`)
+        })
         
         const url = `/rankinglist/${rankingList.shortname}/edit`;
 
@@ -80,6 +87,7 @@ export const RankingList: React.FC = () => {
             <RankingListPage>
                 <Switch>
                     <Route exact path="/rankinglist/:shortname" component={RankingEvents} />
+                    <Route exact path="/rankinglist/:shortname/ranking/create" component={RankingEdit} />
                     <Route exact path="/rankinglist/:shortname/ranking/:testcode" component={RankingResults} />
                     <Route path="/rankinglist/:shortname/edit" component={RankingListEdit} />
                     <Route path="/rankinglist/:shortname/ranking/:testcode/edit" component={RankingEdit} />

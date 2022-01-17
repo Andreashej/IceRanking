@@ -1,7 +1,8 @@
 import { Competition } from "../models/competition.model";
-import React, { createContext, useEffect, useState, useContext } from 'react';
+import React, { createContext, useEffect, useState, useContext, useCallback } from 'react';
 import { getCompetition, patchCompetition } from '../services/v2/competition.service';
 import { ResourceContext } from "../models/resource-context.model";
+import { Test } from "../models/test.model";
 
 type CompetitionContext = ResourceContext<Competition>;
 
@@ -48,35 +49,37 @@ export const CompetitionProvider: React.FC<CompetitionProviderProps> = ({competi
         setIsChanged(true);
     }
 
-    useEffect(() => {
-        const fetchCompetition = async (): Promise<void> => {
-            try {
-                const params = new URLSearchParams();
-                params.append('expand', 'tests');
-    
-                const competition = await getCompetition(competitionId, params);
-                setCompetition(competition);
-            } catch (error : unknown) {
-                setCompetition(undefined);
-                setError(error as string);
-            } finally {
-                setLoading(false);
-            }
+    const fetchCompetition = useCallback(async (): Promise<void> => {
+        try {
+            const params = new URLSearchParams();
+            params.append('expand', 'tests');
+
+            const competition = await getCompetition(competitionId, params);
+            setCompetition(competition);
+        } catch (error : unknown) {
+            setCompetition(undefined);
+            setError(error as string);
+        } finally {
+            setLoading(false);
         }
+    }, [competitionId]);
+
+    useEffect(() => {
 
         setLoading(true);
         setError(undefined);
         fetchCompetition();
-    }, [competitionId])
+    }, [competitionId, fetchCompetition])
     
     return (
         <CompetitionContext.Provider value={{
             resource: competition,
             update: updateCompetition,
             save: saveCompetition,
+            fetch: fetchCompetition,
             loading,
             error,
-            isChanged
+            isChanged,
         }}>
             {children}
         </CompetitionContext.Provider>
@@ -97,4 +100,12 @@ export const useCompetition = (): [Competition?, CompetitionContext['update']?, 
     const context = useCompetitionContext();
 
     return [context.resource, context.update, context.save, context.isChanged];
+}
+
+export const useTest = (testcode: string): Test | undefined => {
+    const context = useCompetitionContext();
+
+    const test = context.resource?.tests?.find((test) => test.testcode === testcode);
+
+    return test;
 }

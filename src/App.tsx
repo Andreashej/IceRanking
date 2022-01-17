@@ -7,14 +7,14 @@ import { Frontpage } from "./pages/Frontpage";
 import Footer from './components/Footer';
 import { RankingList } from './pages/RankingList/RankingList';
 import { Rider } from './pages/Rider/Rider';
-import Horse from './pages/Horse';
+import { Horse } from './pages/Horse/Horse';
 import { Competition } from './pages/Competition/Competition';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { faListOl, faUser, faHorseHead, faCalendarAlt, faQuestion, faTimes, faSearch, faCalendarPlus, faTachometerAlt, faCheckCircle, faCheck, faClock } from '@fortawesome/free-solid-svg-icons'
 import Dashboard from "./pages/Dashboard";
-import CompetitionCreate from "./pages/CompetitionCreate";
+import { CompetitionCreate } from "./pages/CompetitionCreate/CompetitionCreate";
 import { UserProvider } from "./contexts/user.context";
 import { ToastProvider } from "./contexts/toast.context";
     
