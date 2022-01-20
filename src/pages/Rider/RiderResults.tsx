@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Card } from 'primereact/card';
 import { Link, useParams } from 'react-router-dom';
 import { dateToString, markWithUnit } from '../../tools';
 import { FlatList, FlatListItem } from '../../components/partials/FlatList';
@@ -15,10 +14,8 @@ import { getHorse } from '../../services/v2/horse.service';
 import { getTest } from '../../services/v2/test.service';
 import { Skeleton } from '../../components/partials/Skeleton';
 import { FeaturedCard } from '../../components/partials/FeaturedCard';
-import { getRanking, getRankings } from '../../services/v2/ranking.service';
 import { getRankingResults } from '../../services/v2/rankingresult.service';
 import { getRankingList } from '../../services/v2/rankinglist.service';
-import { RankingResult } from '../../models/rankingresult.model';
 
 const RiderResult: React.FC<FlatListItem<Result, Rider>> = ({ item: result }) => {
     const ref = useRef(null);
@@ -133,26 +130,28 @@ const BestResult: React.FC<{riderId: number, testcode?: string, order?: string}>
         )
 }
 
-const BestRank: React.FC<{riderId: number, testcode: string}> = ({ riderId, testcode }) => {
+const BestRank: React.FC<{riderId: number, test?: Test}> = ({ riderId, test }) => {
     const [rank, setRank] = useState<string>();
     const [listname, setListname] = useState<string>();
 
     useEffect(() => {
         const getBestRank = async () => {
+            if (!test) return;
+            
             const params = new URLSearchParams({
                 limit: '1',
-                'filter[]': 'rank > 0',
+                'filter[]': 'mark > 0',
                 'expand': 'test',
-                'order': 'rank asc',
+                'order': `mark ${test.order}`,
             });
-            params.append('filter[]', `test.testcode == ${testcode}`);
+            params.append('filter[]', `test.testcode == ${test.testcode}`);
             params.append('filter[]', `riders contains id == ${riderId}`,);
     
             const [results] = await getRankingResults(params)
 
             if (!results || results.length === 0) {
                 setRank("N/A");
-                setListname(`Not currently ranked in ${testcode}`)
+                setListname(`Not currently ranked in ${test.testcode}`)
                 return;
             }
 
@@ -168,7 +167,7 @@ const BestRank: React.FC<{riderId: number, testcode: string}> = ({ riderId, test
         setListname(undefined);
         
         getBestRank();
-    }, [riderId, testcode])
+    }, [riderId, test])
     return <FeaturedCard title="Best rank" featuredText={rank} additionalText={listname} />
 }
 
@@ -222,7 +221,7 @@ export const RiderResults: React.FC = () => {
             <h2 className="subtitle">{testcode} results</h2>
             <div className="grid-col-3">
                 <BestResult riderId={rider.id} testcode={results[0]?.test?.testcode} order={results[0]?.test?.order} />
-                <BestRank riderId={rider.id} testcode={testcode} />
+                <BestRank riderId={rider.id} test={results[0]?.test} />
                 <Activity numberOfResults={pagination?.totalItems} />
             </div>
             <FlatList

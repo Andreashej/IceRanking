@@ -73,7 +73,6 @@ const HorseResult: React.FC<FlatListItem<Result, Horse>> = ({ item: result }) =>
         return (
             <>
                 <Link to={`/rider/${rider.id}/results/${test?.testcode}`}>{rider.fullname}</Link>
-                {/* <span className="text-muted d-none d-sm-block">{rider}</span> */}
             </>
         )
     }, [rider, test])
@@ -128,26 +127,27 @@ const BestResult: React.FC<{horseId: number, testcode?: string, order?: string}>
         )
 }
 
-const BestRank: React.FC<{horseId: number, testcode: string}> = ({ horseId, testcode }) => {
+const BestRank: React.FC<{horseId: number, test?: Test}> = ({ horseId, test }) => {
     const [rank, setRank] = useState<string>();
     const [listname, setListname] = useState<string>();
 
     useEffect(() => {
         const getBestRank = async () => {
+            if (!test) return;
             const params = new URLSearchParams({
                 limit: '1',
-                'filter[]': 'rank > 0',
+                'filter[]': 'mark > 0',
                 'expand': 'test',
-                'order': 'rank asc',
+                'order': `mark ${test.order}`,
             });
-            params.append('filter[]', `test.testcode == ${testcode}`);
+            params.append('filter[]', `test.testcode == ${test.testcode}`);
             params.append('filter[]', `horses contains id == ${horseId}`,);
     
             const [results] = await getRankingResults(params)
 
             if (!results || results.length === 0) {
                 setRank("N/A");
-                setListname(`Not currently ranked in ${testcode}`)
+                setListname(`Not currently ranked in ${test.testcode}`)
                 return;
             }
 
@@ -163,7 +163,7 @@ const BestRank: React.FC<{horseId: number, testcode: string}> = ({ horseId, test
         setListname(undefined);
         
         getBestRank();
-    }, [horseId, testcode])
+    }, [horseId, test])
     return <FeaturedCard title="Best rank" featuredText={rank} additionalText={listname} />
 }
 
@@ -217,7 +217,7 @@ export const HorseResults: React.FC = () => {
             <h2 className="subtitle">{testcode} results</h2>
             <div className="grid-col-3">
                 <BestResult horseId={horse.id} testcode={results[0]?.test?.testcode} order={results[0]?.test?.order} />
-                <BestRank horseId={horse.id} testcode={testcode} />
+                <BestRank horseId={horse.id} test={results[0]?.test} />
                 <Activity numberOfResults={pagination?.totalItems} />
             </div>
             <FlatList
