@@ -16,4 +16,5 @@ export type Ranking = {
     rankinglist?: RankingList;
     results?: RankingResult[];
     tasksInProgress?: Task[];
+    testgroups?: string[][]
 }

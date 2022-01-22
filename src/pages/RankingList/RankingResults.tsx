@@ -33,11 +33,12 @@ import { PrimeIcons } from 'primereact/api';
 type RankingResultMarkProps = {
     mark: Result;
     isQualifying: boolean;
+    ranking: Ranking;
 }
 
 type CompetitionProps = Required<Pick<Competition, "id" | "name" | "lastDate">>;
 
-const RankingResultMarkItem: React.FC<RankingResultMarkProps> = ({mark, isQualifying}) => {
+const RankingResultMarkItem: React.FC<RankingResultMarkProps> = ({mark, isQualifying, ranking}) => {
     const [competition, setCompetition] = useState<CompetitionProps>();
     const [rankingList] = useRankingList()
 
@@ -60,10 +61,10 @@ const RankingResultMarkItem: React.FC<RankingResultMarkProps> = ({mark, isQualif
         expiresAt.setTime(competition?.lastDate.getTime() + (rankingList.resultsValidDays * 24 * 60 * 60 * 1000));
     }
 
-
     return (
         <>
-            <Link style={{ fontWeight: isQualifying ? 'bold' : 'normal' }} to={`/horse/${mark.horseId}/results/${mark.test?.testcode}`}>{mark.horse?.horseName}</Link>
+            {ranking.grouping === "rider" && <Link style={{ fontWeight: isQualifying ? 'bold' : 'normal' }} to={`/horse/${mark.horseId}/results/${mark.test?.testcode}`}>{mark.horse?.horseName}</Link>}
+            {ranking.grouping === "horse" && <Link style={{ fontWeight: isQualifying ? 'bold' : 'normal' }} to={`/rider/${mark.riderId}/results/${mark.test?.testcode}`}>{mark.rider?.fullname}</Link>}
             <Link style={{ fontWeight: isQualifying ? 'bold' : 'normal' }}  to={`/competition/${competition?.id}/test/${mark.test?.testcode}`}>{competition?.name}</Link>
             <div id={`mark-${mark.id}-expires-at`} className="expires-at d-none d-md-block" data-pr-tooltip="Result is no longer valid for this rankinglist after this date.">
                 <Tooltip target={`#mark-${mark.id}-expires-at`} position="top"  />
@@ -148,10 +149,48 @@ const RankingResultListItem: React.FC<FlatListItem<RankingResult, Ranking>> = ({
         setLoading(false);
     }
 
-    const qualifyingMarks = useMemo<number[]>(() => {
-        return marks.sort((a, b) => b.mark - a.mark).slice(0, 2).map((mark) => mark.id);
-    }, [marks])
+    const [isQualifying, testcodes] = useMemo(() => {
+        let qualifying: number[] = [];
+        let testcodes: string[] = [];
+        ranking.testgroups?.forEach((testgroup) => {
+            testgroup.forEach((testcode) => testcodes.push(testcode))
 
+            const isQualifyingForTestgroup = marks.filter((mark) => mark.test && testgroup.includes(mark.test.testcode))
+                .sort((a, b) => b.mark - a.mark)
+                .slice(0, ranking.includedMarks)
+                .map<number>((mark) => mark.id);
+            
+            qualifying = [...qualifying, ...isQualifyingForTestgroup];
+        });
+
+        return [qualifying, testcodes];
+    }, [marks, ranking.includedMarks, ranking.testgroups])
+
+
+    const testMarks = testcodes.map(testcode => {
+        const marksForTest = marks.filter((mark) => mark.test?.testcode === testcode);
+
+        if (marksForTest.length === 0) return null;
+        
+       const marksList = marksForTest.map((mark) => {
+            return (
+                <RankingResultMarkItem 
+                    mark={mark} 
+                    key={mark.id}
+                    isQualifying={!!isQualifying.find(id => id === mark.id)} 
+                    ranking={ranking} 
+                />
+            )
+            }
+        )
+
+        return (
+            <React.Fragment key={testcode}>
+                {testcodes.length > 1 && <div className="section-header" style={{ gridColumn: "1 / -1" }}>{testcode}</div>}
+                {marksList}
+            </React.Fragment>
+        )
+    })
 
     return (
         <li 
@@ -174,7 +213,7 @@ const RankingResultListItem: React.FC<FlatListItem<RankingResult, Ranking>> = ({
                 <div className="header-col">Competition</div>
                 <div className="header-col" style={{ paddingLeft: "1rem" }}>Valid until</div>
                 <div className="header-col">Mark</div>
-                {marks.map((mark) => <RankingResultMarkItem mark={mark} key={mark.id} isQualifying={qualifyingMarks.includes(mark.id)} />)}
+                {testMarks}
             </div>
             <div className="mark" ref={markRef} style={{ gridColumn: "3 / 4", gridRow: "1 / 3" }}>
                 {markWithUnit(result.mark, ranking.roundingPrecision, ranking.markType)}
@@ -191,6 +230,7 @@ export const RankingResults: React.FC = () => {
     const [pagination, setPagination] = useState<Pagination>();
     const [loading, setLoading] = useState<boolean>(false);
     const [tasks, setTasks] = useState<Task[]>([]);
+    const [testgroups, setTestgroups] = useState<string[][]>([]);
 
     const isLoggedIn = useIsLoggedIn();
 
@@ -238,12 +278,14 @@ export const RankingResults: React.FC = () => {
     const fetchTasks = useCallback(async (rankingId) => {
         const params = new URLSearchParams({
             'expand': 'tasksInProgress',
-            'fields': 'tasksInProgress'
+            'fields': 'tasksInProgress,testgroups'
         })
-        const r = await getRanking(rankingId, params) as Required<Pick<Ranking, 'tasksInProgress'>>;
+        const r = await getRanking(rankingId, params) as Required<Pick<Ranking, 'tasksInProgress' | 'testgroups'>>;
 
         setTasks(r.tasksInProgress);
-    }, []);
+        // setTestgroups(r.testgroups);
+        if(ranking) ranking.testgroups = r.testgroups;
+    }, [ranking]);
 
     useEffect(() => {
         if (ranking) fetchTasks(ranking.id);
@@ -319,36 +361,4 @@ export const RankingResults: React.FC = () => {
             /> : renderTasks}
         </>
     )
-
-    // onRecompute() {
-    //     this.props.recomputeRankingTestResult(this.props.match.params.shortname, this.props.match.params.testcode).then(response => {
-    //         this.props.getRankingTest(this.props.match.params.shortname, this.props.match.params.testcode);
-    //     });
-    // }
-
-    // onRecomputeComplete() {
-    //     const {shortname, testcode} = this.props.match.params;
-
-    //     this.props.getRankingTests(shortname).then(() => {
-    //         if (this.props.test.tasks_in_progress.length === 0) {
-    //             this.props.getRankingTestResult(shortname, testcode);
-    //         }
-    //     });
-    // }
-
-    // renderToolbar() {
-    //     if (!this.props.test || !this.props.user) {
-    //         return false;
-    //     }
-
-    //     if (this.props.test.tasks_in_progress.length > 0) {
-    //         return this.props.test.tasks_in_progress.map(task => {
-    //             return <ProgressBar key={task.id} taskId={task.id} onComplete={() => this.onRecomputeComplete()} />
-    //         });
-    //     }
-
-    //     return (
-    //         <Button label="Recompute" className="mb-3" onClick={(e) => this.onRecompute(e)} />
-    //     );
-    // }
 }

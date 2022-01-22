@@ -1,6 +1,6 @@
 import { Message } from 'primereact/message';
 import React from 'react';
-import CompetitionUpload from '../../components/Task/CompetionUpload';
+// import CompetitionUpload from '../../components/Task/CompetionUpload';
 import { useCompetition } from '../../contexts/competition.context';
 
 export const CompetitionResultsUpload: React.FC = () => {
@@ -18,10 +18,10 @@ export const CompetitionResultsUpload: React.FC = () => {
                 <Message severity="warn" text="All current results will be deleted and replaced with the contents of the file" />
                 <p>Expected filename: {competition?.extId}.txt</p>
                 <div>
-                    <CompetitionUpload competitionId={competition?.extId} onComplete={() => { 
+                    {/* <CompetitionUpload competitionId={competition?.extId} onComplete={() => { 
                         // this.props.getCompetition(this.props.match.params.id)
                         window.location.reload();
-                        }} />
+                        }} /> */}
                 </div>
             </div>
         </div>

@@ -13,7 +13,7 @@ import { Competition } from './pages/Competition/Competition';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { faListOl, faUser, faHorseHead, faCalendarAlt, faQuestion, faTimes, faSearch, faCalendarPlus, faTachometerAlt, faCheckCircle, faCheck, faClock } from '@fortawesome/free-solid-svg-icons'
-import Dashboard from "./pages/Dashboard";
+import { Dashboard } from "./pages/Dashboard/Dashboard";
 import { CompetitionCreate } from "./pages/CompetitionCreate/CompetitionCreate";
 import { UserProvider } from "./contexts/user.context";
 import { ToastProvider } from "./contexts/toast.context";

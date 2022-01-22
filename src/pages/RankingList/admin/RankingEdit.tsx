@@ -10,6 +10,7 @@ import { SelectButton } from 'primereact/selectbutton';
 import { InputNumber } from 'primereact/inputnumber';
 import { createRanking, patchRanking } from '../../../services/v2/ranking.service';
 import { useToast } from '../../../contexts/toast.context';
+import { Form } from '../../../components/Form/Form';
 
 export const RankingEdit: React.FC = () => {
     const { testcode, shortname } = useParams<{testcode: string, shortname: string}>();
@@ -79,129 +80,133 @@ export const RankingEdit: React.FC = () => {
                     }}
                 />
             </div>
-            <form onSubmit={submit}>
-                <div className="p-inputgroup mb-2">
-                    <span className="p-inputgroup-addon">Testcode</span>
-                    <InputText id="testcode" value={ranking?.testcode} onChange={(e) => setRanking((prevRanking) => {
-                        return {
-                            ...prevRanking as Ranking,
-                            testcode: e.target.value
-                        }
-                    })} />
-                </div>
-                <div className="p-inputgroup mb-2">
-                    <span className="p-inputgroup-addon">Grouping</span>
-                    <Dropdown
-                        id="shortname" 
-                        value={ranking?.grouping}
-                        options={[
-                            {
-                            label: "Rider",
-                            value: "rider"
-                            },
-                            {
-                            label: "Horse",
-                            value: "horse"
-                            },
-                        ]}
-                        onChange={(e) => setRanking((prevRanking) => {
+            <Form
+                id="rankingEdit"
+                onSubmit={submit}
+                formElements={[
+                    {
+                        label: "Testcode",
+                        input: <InputText id="testcode" value={ranking?.testcode} onChange={(e) => setRanking((prevRanking) => {
                             return {
                                 ...prevRanking as Ranking,
-                                grouping: e.value
+                                testcode: e.target.value
                             }
-                        })} 
-                    />
-                </div>
-                <div className="p-inputgroup mb-2">
-                    <span className="p-inputgroup-addon">Ordering</span>
-                    <SelectButton
-                        id="order"
-                        value={ranking?.order}
-                        options={[
-                            {
-                                label: "Descending",
-                                value: "desc"
-                            },
-                            {
-                                label: "Ascending",
-                                value: "asc"
-                            },
-                        ]}
-                        onChange={(e) => setRanking((prevRanking) => {
-                            return {
-                                ...prevRanking as Ranking,
-                                order: e.value
-                            }
-                        })}
-                    />
-                </div>
-                <div className="p-inputgroup mb-2">
-                    <span className="p-inputgroup-addon">Minimum mark</span>
-                    <InputNumber
-                        value={ranking?.minMark}
-                        mode="decimal"
-                        step={0.1}
-                        minFractionDigits={1}
-                        maxFractionDigits={1}
-                        min={0}
-                        max={10}
-                        onChange={(e) => setRanking((prevRanking) => {
-                            return {
-                                ...prevRanking as Ranking,
-                                minMark: e.value
-                            }
-                        })}
-                    />
-                </div>
-                <div className="p-inputgroup mb-2">
-                    <span className="p-inputgroup-addon">Mark type</span>
-                    <SelectButton
-                        id="marktype"
-                        value={ranking?.markType}
-                        options={[
-                            {
-                                label: "Mark",
-                                value: "mark"
-                            },
-                            {
-                                label: "Time",
-                                value: "time"
-                            },
-                        ]}
-                        onChange={(e) => setRanking((prevRanking) => {
-                            return {
-                                ...prevRanking as Ranking,
-                                markType: e.value
-                            }
-                        })}
-                    />
-                </div>
-                <div className="p-inputgroup mb-2">
-                    <span className="p-inputgroup-addon">Required marks</span>
-                    <InputNumber 
-                        value={ranking?.includedMarks}
-                        onChange={(e) => setRanking((prevRanking) => {
-                            return {
-                                ...prevRanking as Ranking,
-                                includedMarks: e.value
-                            }
-                        })}
-                    />
-                </div>
-                <div className="p-inputgroup mb-2">
-                    <span className="p-inputgroup-addon">Rounding precision</span>
-                    <InputNumber
-                        value={ranking?.roundingPrecision}
-                        onChange={(e) => setRanking((prevRanking) => {
-                            return {
-                                ...prevRanking as Ranking,
-                                roundingPrecision: e.value
-                            }
-                        })}
-                    />
-                </div>
-                <Button type="submit" label="Save" className="p-button-success p-button-raised p-button-rounded" icon="pi pi-save" />
-            </form>
+                        })} />
+                    },
+                    {
+                        label: "Grouping",
+                        input: <Dropdown
+                            id="shortname" 
+                            value={ranking?.grouping}
+                            options={[
+                                {
+                                label: "Rider",
+                                value: "rider"
+                                },
+                                {
+                                label: "Horse",
+                                value: "horse"
+                                },
+                            ]}
+                            onChange={(e) => setRanking((prevRanking) => {
+                                return {
+                                    ...prevRanking as Ranking,
+                                    grouping: e.value
+                                }
+                            })} 
+                        />
+                    },
+                    {
+                        label: "Ordering",
+                        input: <SelectButton
+                            id="order"
+                            value={ranking?.order}
+                            options={[
+                                {
+                                    label: "Descending",
+                                    value: "desc"
+                                },
+                                {
+                                    label: "Ascending",
+                                    value: "asc"
+                                },
+                            ]}
+                            onChange={(e) => setRanking((prevRanking) => {
+                                return {
+                                    ...prevRanking as Ranking,
+                                    order: e.value
+                                }
+                            })}
+                        />
+                    },
+                    {
+                        label: "Minimum mark",
+                        input: <InputNumber
+                            value={ranking?.minMark}
+                            mode="decimal"
+                            step={0.05}
+                            minFractionDigits={2}
+                            maxFractionDigits={2}
+                            min={0}
+                            max={10}
+                            onChange={(e) => setRanking((prevRanking) => {
+                                return {
+                                    ...prevRanking as Ranking,
+                                    minMark: e.value
+                                }
+                            })}
+                        />
+                    },
+                    {
+                        label: "Mark type",
+                        input: <SelectButton
+                            id="marktype"
+                            value={ranking?.markType}
+                            options={[
+                                {
+                                    label: "Mark",
+                                    value: "mark"
+                                },
+                                {
+                                    label: "Time",
+                                    value: "time"
+                                },
+                            ]}
+                            onChange={(e) => setRanking((prevRanking) => {
+                                return {
+                                    ...prevRanking as Ranking,
+                                    markType: e.value
+                                }
+                            })}
+                        />
+                    },
+                    {
+                        label: "Required marks",
+                        input: <InputNumber 
+                            value={ranking?.includedMarks}
+                            onChange={(e) => setRanking((prevRanking) => {
+                                return {
+                                    ...prevRanking as Ranking,
+                                    includedMarks: e.value
+                                }
+                            })}
+                        />
+                    },
+                    {
+                        label: "Rouding precision",
+                        input: <InputNumber
+                            value={ranking?.roundingPrecision}
+                            onChange={(e) => setRanking((prevRanking) => {
+                                return {
+                                    ...prevRanking as Ranking,
+                                    roundingPrecision: e.value
+                                }
+                            })}
+                        />
+                    }
+                ]}
+                submitButton={<Button type="submit" label="Save" className="p-button-success p-button-raised p-button-rounded" icon="pi pi-save" />}
+            />
         </>
     )
 }

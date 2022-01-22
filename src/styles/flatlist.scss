@@ -108,9 +108,11 @@ ol.flatlist {
             padding: 0;
             display: grid;
             grid-template-columns: minmax(0,20ch) minmax(0,1fr) minmax(0,min-content) min-content;
+            padding-right: 1rem;
 
-            > *:nth-child(4n + 4) {
-                padding-right: 1rem;
+            .section-header {
+                margin-top: .5rem;
+                font-weight: bold;
             }
 
             @include respond-below(md) {
