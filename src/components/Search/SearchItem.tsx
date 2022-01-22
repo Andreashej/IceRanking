@@ -3,7 +3,6 @@ import React, { useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { SearchResult } from '../../models/searchresult.model';
 import { dateToString } from '../../tools';
-import { AutoCompleteItemTemplateType } from 'primereact/autocomplete';
 
 type ListItem = {
     icon: JSX.Element;

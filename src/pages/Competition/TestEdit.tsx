@@ -55,8 +55,7 @@ export const TestEdit: React.FC = () => {
         if (test) {
             try {
                 if (test.id) {
-                    const updated = await patchTest(test as Test);
-                    
+                    await patchTest(test as Test);
                     fetchCompetition();
                 }
 

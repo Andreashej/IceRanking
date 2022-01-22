@@ -1,7 +1,7 @@
 
 import { MenuItem } from 'primereact/menuitem';
 import React, { useState } from 'react';
-import { Route, Switch, useHistory, useParams } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import Page from '../../components/partials/Page';
 import { Competition } from '../../models/competition.model';
 import { CompetitionSetup } from './CompetitionSetup';

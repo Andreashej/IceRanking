@@ -1,8 +1,8 @@
 import { Button } from 'primereact/button';
 import { Dialog, DialogProps } from 'primereact/dialog';
-import { ListBox, ListBoxProps } from 'primereact/listbox';
-import React, { FormEvent, useEffect, useRef, useState } from 'react';
-import { useCompetition, useCompetitionContext, useTest } from '../../contexts/competition.context';
+import { ListBox } from 'primereact/listbox';
+import React, { useEffect, useState } from 'react';
+import { useCompetitionContext } from '../../contexts/competition.context';
 import { useToast } from '../../contexts/toast.context';
 import { Test } from '../../models/test.model';
 import { getTestCatalog } from '../../services/v2/test-catalog.service';

@@ -7,8 +7,6 @@ import { SearchItem } from './SearchItem';
 import { Button } from 'primereact/button';
 import { getSearchResults } from '../../services/v2/search.service';
 import { SearchResult } from '../../models/searchresult.model';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { dateToString } from '../../tools';
 
 type SearchBarProps = {
     show: boolean;

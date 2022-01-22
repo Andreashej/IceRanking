@@ -3,7 +3,7 @@ import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import { PrimeIcons } from 'primereact/api';
 import { useParams, useHistory } from 'react-router-dom';
 import { Ranking } from '../../../models/ranking.model';
-import { useRankingList, useRankingListContext } from '../../../contexts/rankinglist.context';
+import { useRankingListContext } from '../../../contexts/rankinglist.context';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import { SelectButton } from 'primereact/selectbutton';

@@ -230,7 +230,6 @@ export const RankingResults: React.FC = () => {
     const [pagination, setPagination] = useState<Pagination>();
     const [loading, setLoading] = useState<boolean>(false);
     const [tasks, setTasks] = useState<Task[]>([]);
-    const [testgroups, setTestgroups] = useState<string[][]>([]);
 
     const isLoggedIn = useIsLoggedIn();
 

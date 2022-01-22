@@ -4,7 +4,6 @@ import axios from 'axios'
 import { Test } from "../../models/test.model";
 import { Result } from "../../models/result.model";
 import { Competition } from "../../models/competition.model";
-import { dateToString } from "../../tools";
 
 export const getTest = async (id: number, params?: URLSearchParams): Promise<Test> => {
     try { 

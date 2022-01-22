@@ -4,7 +4,6 @@ import { Route, Switch, useHistory, useParams } from 'react-router-dom';
 import { RankingResults } from './RankingResults';
 import { RankingEvents } from './RankingEvents';
 import Page from '../../components/partials/Page';
-import RankingTestDefinitions from './admin/RankingTestDefinitions';
 import { RankingListProvider, useRankingListContext } from '../../contexts/rankinglist.context';
 import { useIsLoggedIn } from '../../contexts/user.context';
 import { MenuItem } from 'primereact/menuitem';
