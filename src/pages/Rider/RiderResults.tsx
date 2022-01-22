@@ -2,11 +2,10 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom';
 import { dateToString, markWithUnit } from '../../tools';
 import { FlatList, FlatListItem } from '../../components/partials/FlatList';
-import { useRider } from '../../contexts/rider.context';
+import { RiderProps, useRider } from '../../contexts/rider.context';
 import { Result } from '../../models/result.model';
 import { Pagination } from '../../models/apiresponse.model';
 import { getResults } from '../../services/v2/result.service';
-import { Rider } from '../../models/rider.model';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import { Horse } from '../../models/horse.model';
 import { Test } from '../../models/test.model';
@@ -17,7 +16,7 @@ import { FeaturedCard } from '../../components/partials/FeaturedCard';
 import { getRankingResults } from '../../services/v2/rankingresult.service';
 import { getRankingList } from '../../services/v2/rankinglist.service';
 
-const RiderResult: React.FC<FlatListItem<Result, Rider>> = ({ item: result }) => {
+const RiderResult: React.FC<FlatListItem<Result, RiderProps>> = ({ item: result }) => {
     const ref = useRef(null);
     const isVisible = useIntersectionObserver(ref, { rootMargin: '50px' });
 

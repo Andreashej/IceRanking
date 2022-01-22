@@ -5,7 +5,7 @@ import { FlatList, FlatListItem } from '../../components/partials/FlatList';
 import { Result } from '../../models/result.model';
 import { Pagination } from '../../models/apiresponse.model';
 import { getResults } from '../../services/v2/result.service';
-import { Rider } from '../../models/rider.model';
+import { Person } from '../../models/person.model';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import { Horse } from '../../models/horse.model';
 import { Test } from '../../models/test.model';
@@ -15,18 +15,18 @@ import { FeaturedCard } from '../../components/partials/FeaturedCard';
 import { getRankingResults } from '../../services/v2/rankingresult.service';
 import { getRankingList } from '../../services/v2/rankinglist.service';
 import { useHorse } from '../../contexts/horse.context';
-import { getRider } from '../../services/v2/rider.service';
+import { getPerson } from '../../services/v2/person.service';
 
 const HorseResult: React.FC<FlatListItem<Result, Horse>> = ({ item: result }) => {
     const ref = useRef(null);
     const isVisible = useIntersectionObserver(ref, { rootMargin: '50px' });
 
-    const [rider, setRider] = useState<Rider>();
+    const [rider, setRider] = useState<Person>();
     const [test, setTest] = useState<Test>();
 
     useEffect(() => {
         if (isVisible) {
-            getRider(result.riderId).then((rider) => {
+            getPerson(result.riderId).then((rider) => {
                 setRider(rider);
             });
 

@@ -1,9 +1,11 @@
 import React, { createContext, useEffect, useState, useContext, useCallback } from 'react';
-import { getRider, patchRider } from '../services/v2/rider.service';
-import { Rider } from "../models/rider.model";
+import { getPerson, patchPerson } from '../services/v2/person.service';
+import { Person } from "../models/person.model";
 import { ResourceContext } from '../models/resource-context.model';
 
-type RiderContext = ResourceContext<Rider>;
+export type RiderProps = Required<Pick<Person, "id" | "firstname" | "lastname" | "fullname" | "testlist">>;
+
+type RiderContext = ResourceContext<RiderProps>;
 
 const RiderContext = createContext<RiderContext | undefined>(undefined);
 
@@ -12,7 +14,7 @@ type RiderProviderProps = {
 }
 
 export const RiderProvider: React.FC<RiderProviderProps> = ({riderId, children}) => {
-    const [rider, setRider] = useState<Rider>();
+    const [rider, setRider] = useState<RiderProps>();
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>();
     const [isChanged, setIsChanged] = useState<boolean>(false);
@@ -21,7 +23,7 @@ export const RiderProvider: React.FC<RiderProviderProps> = ({riderId, children})
         if (!rider) return;
 
         try {
-            const savedRider = await patchRider(rider);
+            const savedRider = await patchPerson(rider) as RiderProps;
             setRider((prevRider) => {
                 return {
                     ...prevRider,
@@ -51,7 +53,10 @@ export const RiderProvider: React.FC<RiderProviderProps> = ({riderId, children})
 
     const fetchRider = useCallback(async (): Promise<void> => {
         try {
-            const rider = await getRider(riderId);
+            const params = new URLSearchParams({
+                'fields': 'id,firstname,lastname,fullname,testlist'
+            })
+            const rider = await getPerson(riderId, params) as RiderProps;
             setRider(rider);
         } catch (error : unknown) {
             setRider(undefined);
@@ -93,7 +98,7 @@ export const useRiderContext = (): RiderContext => {
     return context;
 }
 
-export const useRider = (): [Rider?, RiderContext['update']?, RiderContext['save']?, RiderContext['isChanged']?] => {
+export const useRider = (): [RiderProps?, RiderContext['update']?, RiderContext['save']?, RiderContext['isChanged']?] => {
     const context = useRiderContext();
 
     return [context.resource, context.update, context.save, context.isChanged];

@@ -5,28 +5,28 @@ import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { FlatList, FlatListItem } from '../../components/partials/FlatList';
 import { Skeleton } from '../../components/partials/Skeleton';
-import { useCompetition, useCompetitionContext } from '../../contexts/competition.context';
+import { useCompetitionContext } from '../../contexts/competition.context';
 import { useToast } from '../../contexts/toast.context';
 import { useIsLoggedIn } from '../../contexts/user.context';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import { Pagination } from '../../models/apiresponse.model';
 import { Horse } from '../../models/horse.model';
 import { Result } from '../../models/result.model';
-import { Rider } from '../../models/rider.model';
+import { Person } from '../../models/person.model';
 import { Test } from '../../models/test.model';
 import { getHorse } from '../../services/v2/horse.service';
-import { getRider } from '../../services/v2/rider.service';
+import { getPerson } from '../../services/v2/person.service';
 import { deleteTest, getTestResults } from '../../services/v2/test.service';
 
 const CompetitionResultItem: React.FC<FlatListItem<Result, Test>> = ({ item: result, parent: test }) => {
-    const [rider, setRider] = useState<Rider>();
+    const [rider, setRider] = useState<Person>();
     const [horse, setHorse] = useState<Horse>();
     const ref = useRef(null);
     const isVisible = useIntersectionObserver(ref, { rootMargin: '50px' })
 
     useEffect(() => {
         if (isVisible) {
-            getRider(result.riderId).then((rider) => {
+            getPerson(result.riderId).then((rider) => {
                 setRider(rider);
             })
     

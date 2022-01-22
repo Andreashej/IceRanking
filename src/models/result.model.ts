@@ -1,5 +1,5 @@
 import { Horse } from "./horse.model";
-import { Rider } from "./rider.model";
+import { Person } from "./person.model";
 import { Test } from "./test.model";
 
 export type Result = {
@@ -13,5 +13,5 @@ export type Result = {
 
     test?: Test;
     horse?: Horse;
-    rider?: Rider;
+    rider?: Person;
 }

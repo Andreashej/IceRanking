@@ -1,6 +1,6 @@
 import { Horse } from "./horse.model";
 import { Ranking } from "./ranking.model";
-import { Rider } from "./rider.model";
+import { Person } from "./person.model";
 
 export type RankingResult = {
     id: number;
@@ -12,6 +12,6 @@ export type RankingResult = {
 
     // Expandable attributes
     test?: Ranking;
-    rider?: Rider | null;
+    rider?: Person| null;
     horse?: Horse | null;
 }

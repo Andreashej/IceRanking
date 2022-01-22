@@ -1,11 +1,11 @@
 import { apiV2 } from ".";
 import { ApiResponse, Pagination } from "../../models/apiresponse.model";
 import axios from 'axios'
-import { Rider } from "../../models/rider.model";
+import { Person } from "../../models/person.model";
 
-export const getRider = async (id: number, params?: URLSearchParams): Promise<Rider> => {
+export const getPerson = async (id: number, params?: URLSearchParams): Promise<Person> => {
     try { 
-        const response = await apiV2.get<ApiResponse<Rider>>(`/riders/${id}`, {
+        const response = await apiV2.get<ApiResponse<Person>>(`/persons/${id}`, {
             params
         });
 
@@ -19,9 +19,9 @@ export const getRider = async (id: number, params?: URLSearchParams): Promise<Ri
     }
 }
 
-export const getRiders = async (params: URLSearchParams): Promise<[Rider[], Pagination?]> => {
+export const getPersons = async (params: URLSearchParams): Promise<[Person[], Pagination?]> => {
     try {
-        const response = await apiV2.get<ApiResponse<Rider[]>>(`/riders`, { params });
+        const response = await apiV2.get<ApiResponse<Person[]>>(`/persons`, { params });
 
         return [response.data.data, response.data.pagination];
     } catch (error: unknown) {
@@ -32,9 +32,9 @@ export const getRiders = async (params: URLSearchParams): Promise<[Rider[], Pagi
     }
 }
 
-export const patchRider = async (rider: Rider) => {
+export const patchPerson = async (rider: Person) => {
     try {
-        const response = await apiV2.patch<ApiResponse<Rider>>(`/riders/${rider.id}`, rider)
+        const response = await apiV2.patch<ApiResponse<Person>>(`/persons/${rider.id}`, rider)
 
         return response.data.data;
     } catch (error: unknown) {

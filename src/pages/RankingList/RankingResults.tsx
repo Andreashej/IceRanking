@@ -12,9 +12,9 @@ import { RankingResult } from '../../models/rankingresult.model';
 import { Pagination } from '../../models/apiresponse.model';
 import { getRanking, getResultForRanking } from '../../services/v2/ranking.service';
 import { getHorse } from '../../services/v2/horse.service';
-import { getRider } from '../../services/v2/rider.service';
+import { getPerson } from '../../services/v2/person.service';
 import { Horse } from '../../models/horse.model';
-import { Rider } from '../../models/rider.model';
+import { Person } from '../../models/person.model';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import { dateToString, markWithUnit } from '../../tools';
 import { Link } from 'react-router-dom';
@@ -23,14 +23,12 @@ import { getRankingResultMarks } from '../../services/v2/rankingresult.service';
 import { Competition } from '../../models/competition.model';
 import { getCompetition } from '../../services/v2/competition.service';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Toolbar } from 'primereact/toolbar';
 import { Button } from 'primereact/button';
 import { useIsLoggedIn } from '../../contexts/user.context';
 import { Task } from '../../models/task.model';
 import { TaskBar } from '../../components/Task/TaskBar';
 import { createTask } from '../../services/v2/task.service';
 import { PrimeIcons } from 'primereact/api';
-import { RankingList } from '../../models/rankinglist.model';
 
 type RankingResultMarkProps = {
     mark: Result;
@@ -79,7 +77,7 @@ const RankingResultMarkItem: React.FC<RankingResultMarkProps> = ({mark, isQualif
 }
 
 const RankingResultListItem: React.FC<FlatListItem<RankingResult, Ranking>> = ({ item: result, parent: ranking }) => {
-    const [rider, setRider] = useState<Rider>();
+    const [rider, setRider] = useState<Person>();
     const [horse, setHorse] = useState<Horse>();
     const [marks, setMarks] = useState<Result[]>([]);
     const [height, setHeight] = useState<number>();
@@ -105,7 +103,7 @@ const RankingResultListItem: React.FC<FlatListItem<RankingResult, Ranking>> = ({
     useEffect(() => {
         const fetchRider = async () => {
             if (result.riderId) {
-                const rider = await getRider(result.riderId);
+                const rider = await getPerson(result.riderId);
                 setRider(rider);
             }
         }
