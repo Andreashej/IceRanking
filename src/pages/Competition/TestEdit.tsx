@@ -6,6 +6,7 @@ import { MultiSelect } from 'primereact/multiselect';
 import { SelectButton } from 'primereact/selectbutton';
 import React, { FormEvent, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
+import { Form } from '../../components/Form/Form';
 import { useCompetitionContext, useTest } from '../../contexts/competition.context';
 import { useToast } from '../../contexts/toast.context';
 import { RankingList } from '../../models/rankinglist.model';
@@ -96,82 +97,96 @@ export const TestEdit: React.FC = () => {
                     }}
                 />
             </div>}
-            <form id="editTest" onSubmit={submit} style={{ display: 'grid', gridTemplateColumns: 'max-content 1fr', alignItems: 'center', gap: '1rem'}}>
-                <div>Testcode</div>
-                <InputText id="testcode" value={test?.testcode} onChange={(e) => setTest((prev) => {
-                    return {
-                        ...prev as Test,
-                        testcode: e.target.value
-                    }
-                })} />
-                <div>Ordering</div>
-                <SelectButton
-                    id="order"
-                    value={test?.order}
-                    options={[
-                        {
-                            label: "Descending",
-                            value: "desc"
-                        },
-                        {
-                            label: "Ascending",
-                            value: "asc"
-                        },
-                    ]}
-                    onChange={(e) => setTest((prev) => {
-                        return {
-                            ...prev as Test,
-                            order: e.value
-                        }
-                    })}
-                />
-                <div>Mark type</div>
-                <SelectButton
-                    id="marktype"
-                    value={test?.markType}
-                    options={[
-                        {
-                            label: "Mark",
-                            value: "mark"
-                        },
-                        {
-                            label: "Time",
-                            value: "time"
-                        },
-                    ]}
-                    onChange={(e) => setTest((prev) => {
-                        return {
-                            ...prev as Test,
-                            markType: e.value
-                        }
-                    })}
-                />
-                <div>Rounding precision</div>
-                <InputNumber
-                    value={test?.roundingPrecision}
-                    onChange={(e) => setTest((prev) => {
-                        return {
-                            ...prev as Test,
-                            roundingPrecision: e.value
-                        }
-                    })}
-                />
-                <div>Ranking Lists</div>
-                <MultiSelect
-                    placeholder="Rankinglists"
-                    value={test.includeInRanking?.map(rankinglist => rankinglist.shortname)}
-                    onChange={(e) => {
-                        setTest((prev) => {
+            <Form 
+                id="editTest" 
+                onSubmit={submit}
+                formElements={[
+                    {
+                        label: "Testcode",
+                        input: <InputText id="testcode" value={test.testcode} onChange={(e) => setTest((prev) => {
                             return {
                                 ...prev as Test,
-                                includeInRanking: e.value.map((shortname: string) => {return { shortname }}) as RankingList[]
+                                testcode: e.target.value
                             }
-                        });
-                    }}
-                    options={rankingLists.map((rankingList) => { return { label: rankingList.shortname, value: rankingList.shortname }})} 
-                />
-                <Button type="submit" label={test?.id ? 'Save' : 'Create'} className="p-button-success p-button-raised p-button-rounded" icon="pi pi-save" />
-            </form>
+                        })} />
+                    },
+                    {
+                        label: "Ordering",
+                        input: <SelectButton
+                            id="order"
+                            value={test?.order}
+                            options={[
+                                {
+                                    label: "Descending",
+                                    value: "desc"
+                                },
+                                {
+                                    label: "Ascending",
+                                    value: "asc"
+                                },
+                            ]}
+                            onChange={(e) => setTest((prev) => {
+                                return {
+                                    ...prev as Test,
+                                    order: e.value
+                                }
+                            })}
+                        />
+                    },
+                    {
+                        label: "Mark Type",
+                        input: <SelectButton
+                            id="marktype"
+                            value={test?.markType}
+                            options={[
+                                {
+                                    label: "Mark",
+                                    value: "mark"
+                                },
+                                {
+                                    label: "Time",
+                                    value: "time"
+                                },
+                            ]}
+                            onChange={(e) => setTest((prev) => {
+                                return {
+                                    ...prev as Test,
+                                    markType: e.value
+                                }
+                            })}
+                        />
+                    },
+                    {
+                        label: "Rounding precision",
+                        input: <InputNumber
+                            value={test?.roundingPrecision}
+                            onChange={(e) => setTest((prev) => {
+                                return {
+                                    ...prev as Test,
+                                    roundingPrecision: e.value
+                                }
+                            })}
+                        />
+                    },
+                    {
+                        label: "Ranking Lists",
+                        input: <MultiSelect
+                            placeholder="Rankinglists"
+                            value={test.includeInRanking?.map(rankinglist => rankinglist.shortname)}
+                            onChange={(e) => {
+                                setTest((prev) => {
+                                    return {
+                                        ...prev as Test,
+                                        includeInRanking: e.value.map((shortname: string) => {return { shortname }}) as RankingList[]
+                                    }
+                                });
+                            }}
+                            options={rankingLists.map((rankingList) => { return { label: rankingList.shortname, value: rankingList.shortname }})} 
+                        />
+                    },
+                ]}
+                submitButton={<Button type="submit" label={test?.id ? 'Save' : 'Create'} className="p-button-success p-button-raised p-button-rounded" icon="pi pi-save" />}
+            />
         </>
     )
 }

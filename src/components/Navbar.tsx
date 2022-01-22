@@ -7,7 +7,7 @@ import { SplitButton } from 'primereact/splitbutton';
 
 import { UserLogin } from './User/UserLogin';
 
-import SearchBar from "./Search/SearchBar";
+import { SearchBar } from "./Search/SearchBar";
 import { useIsLoggedIn, useProfile } from "../contexts/user.context";
 
 const UserSection: React.FC = () => {

@@ -1,3 +1,4 @@
+import { PersonAlias } from "./personalias.model";
 import { User } from "./user.model";
 
 export type Person = {
@@ -11,4 +12,5 @@ export type Person = {
 
     testlist?: string[];
     user?: User;
+    aliases?: PersonAlias[];
 }

@@ -2,8 +2,9 @@ import React, { createContext, useEffect, useState, useContext, useCallback } fr
 import { getPerson, patchPerson } from '../services/v2/person.service';
 import { Person } from "../models/person.model";
 import { ResourceContext } from '../models/resource-context.model';
+import { useToast } from './toast.context';
 
-export type RiderProps = Required<Pick<Person, "id" | "firstname" | "lastname" | "fullname" | "testlist">>;
+export type RiderProps = Required<Pick<Person, "id" | "firstname" | "lastname" | "fullname" | "testlist" | "email" >>;
 
 type RiderContext = ResourceContext<RiderProps>;
 
@@ -18,6 +19,7 @@ export const RiderProvider: React.FC<RiderProviderProps> = ({riderId, children})
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>();
     const [isChanged, setIsChanged] = useState<boolean>(false);
+    const showToast = useToast();
     
     const saveRider: RiderContext['save'] = async () => {
         if (!rider) return;
@@ -32,7 +34,11 @@ export const RiderProvider: React.FC<RiderProviderProps> = ({riderId, children})
             });
             setIsChanged(false);
         } catch (error: unknown) {
-            console.log(error);
+            showToast({
+                severity: "error",
+                summary: "Could not save person",
+                detail: error as string
+            });
         }
     }
 
@@ -54,7 +60,7 @@ export const RiderProvider: React.FC<RiderProviderProps> = ({riderId, children})
     const fetchRider = useCallback(async (): Promise<void> => {
         try {
             const params = new URLSearchParams({
-                'fields': 'id,firstname,lastname,fullname,testlist'
+                'fields': 'id,firstname,lastname,fullname,testlist,email'
             })
             const rider = await getPerson(riderId, params) as RiderProps;
             setRider(rider);

@@ -5,10 +5,10 @@ import Page from '../../components/partials/Page';
 import { Route, Switch, useParams, useHistory } from 'react-router-dom';
 import { RiderResults } from './RiderResults';
 import RiderInfo from './RiderInfo';
-import RiderSettings from './admin/RiderSettings';
 import { RiderProvider, useRiderContext } from '../../contexts/rider.context';
 import { MenuItem } from 'primereact/menuitem';
 import { useIsLoggedIn } from '../../contexts/user.context';
+import { RiderEdit } from './RiderEdit';
 
 
 const RiderPage: React.FC = ({ children }) => {
@@ -52,8 +52,8 @@ const RiderPage: React.FC = ({ children }) => {
         const adminItems = [
             {
                 label: "Edit rider",
-                command: () => history.push(`/rider/${rider.id}/admin/edit`),
-                className: pathname.includes("/admin/edit") ? 'active' : ''
+                command: () => history.push(`/rider/${rider.id}/edit`),
+                className: pathname.includes("/edit") ? 'active' : ''
             },
         ]
 
@@ -77,7 +77,7 @@ export const Rider: React.FC = () => {
                 <Switch>
                     <Route exact path="/rider/:id" component={RiderInfo} />
                     <Route path="/rider/:id/results/:testcode" component={RiderResults} />
-                    <Route path="/rider/:id/admin/edit" component={RiderSettings} />
+                    <Route path="/rider/:id/edit" component={RiderEdit} />
                 </Switch>
             </RiderPage>
         </RiderProvider>
