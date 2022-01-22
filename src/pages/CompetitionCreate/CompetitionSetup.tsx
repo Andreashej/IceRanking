@@ -1,25 +1,52 @@
 import { PrimeIcons } from 'primereact/api';
+import { AutoComplete, AutoCompleteCompleteMethodParams } from 'primereact/autocomplete';
 import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
+import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
 import React, { FormEvent, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useToast } from '../../contexts/toast.context';
 import { Competition } from '../../models/competition.model';
+import { Person } from '../../models/person.model';
 import { createCompetition } from '../../services/v2/competition.service';
+import { getPersons } from '../../services/v2/person.service';
+import { EmailDialog } from './EmailDialog';
 
-export const CompetitionSetup: React.FC = () => {
+type CompetitionSetupProps = {
+    onCreated?: (competition: Competition) => void;
+}
+
+export const CompetitionSetup: React.FC<CompetitionSetupProps> = ({ onCreated }) => {
     const [competition, setCompetition] = useState<Partial<Competition>>({ name: "", country: 'DK' });
-    const history = useHistory()
+    const [personSuggestions, setPersonSuggestions] = useState<Person[]>([]);
+    const [personSearchTerm, setPersonSearchTerm] = useState('');
+    const [emailDialog, setEmailDialog] = useState(false);
 
     const showToast = useToast();
+
+    const searchPersons = (event: AutoCompleteCompleteMethodParams) => {
+        if (event.query.length === 0) {
+            setPersonSuggestions([]);
+            return;
+        }
+
+        const params = new URLSearchParams({
+            'filter[]': `fullname like %${event.query}%`,
+            'limit': '10'
+        });
+ 
+        getPersons(params).then(([persons]) => {
+            setPersonSuggestions(persons);
+        })
+    }
 
     const submit = async (e: FormEvent) => {
         e.preventDefault();
         try {
             const newCompetition = await createCompetition(competition);
-            history.push(`/competition/${newCompetition.id}/tests`);
+            onCreated?.(newCompetition);
         } catch (error: unknown) {
             if (typeof error === 'object') {
                 const err = error as Record<string, string>;
@@ -74,13 +101,38 @@ export const CompetitionSetup: React.FC = () => {
                     <Dropdown options={[{ label: "Denmark", value: "DK" }]} id="country" value={competition.country} onChange={(e) => setCompetition((prev) => {
                         return {
                             ...prev as Competition,
-                            name: e.target.value
+                            country: e.target.value
                         }
                     })} />
                     <label htmlFor="country">Country</label>
                 </span>
+                <span className="p-float-label">
+                    <AutoComplete 
+                        itemTemplate={(person) => person.fullname}
+                        suggestions={personSuggestions} 
+                        completeMethod={searchPersons} 
+                        value={personSearchTerm} 
+                        onChange={(e) => setPersonSearchTerm(e.value)}
+                        onSelect={(e) => {
+                            setCompetition((prev) => {
+                                return {
+                                    ...prev,
+                                    contactPersonId: e.value.id,
+                                    contactPerson: e.value
+                                }
+                            })
+                            setPersonSearchTerm(e.value.fullname)
+                            if (!e.value.email) {
+                                setEmailDialog(true);
+                            }
+                        }}
+                        dropdown
+                    />
+                    <label htmlFor="contactPerson">Contact Person</label>
+                </span>
                 <Button label="Next" className="p-button-rounded p-button-raised p-button-info" icon={PrimeIcons.ARROW_RIGHT} iconPos="right" type="submit" />
             </form>
+            {competition.contactPerson && <EmailDialog initialPerson={competition.contactPerson} show={emailDialog} onHide={() => setEmailDialog(false)} />}
         </>
     )
 }

@@ -23,10 +23,10 @@ export const RiderProvider: React.FC<RiderProviderProps> = ({riderId, children})
         if (!rider) return;
 
         try {
-            const savedRider = await patchPerson(rider) as RiderProps;
-            setRider((prevRider) => {
+            const savedRider = await patchPerson(rider) as RiderProps
+            setRider((prev) => {
                 return {
-                    ...prevRider,
+                    ...prev,
                     ...savedRider
                 }
             });

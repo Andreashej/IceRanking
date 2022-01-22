@@ -1,4 +1,5 @@
 import { Competition } from "./competition.model";
+import { RankingList } from "./rankinglist.model";
 import { Result } from "./result.model";
 
 export type Test = {
@@ -11,4 +12,5 @@ export type Test = {
 
     competition?: Competition;
     results?: Result[];
+    includeInRanking?: RankingList[];
 }

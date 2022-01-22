@@ -35,8 +35,10 @@ type RankingResultMarkProps = {
     isQualifying: boolean;
 }
 
+type CompetitionProps = Required<Pick<Competition, "id" | "name" | "lastDate">>;
+
 const RankingResultMarkItem: React.FC<RankingResultMarkProps> = ({mark, isQualifying}) => {
-    const [competition, setCompetition] = useState<Competition>();
+    const [competition, setCompetition] = useState<CompetitionProps>();
     const [rankingList] = useRankingList()
 
     const competitionId = mark.test?.competitionId;
@@ -44,7 +46,7 @@ const RankingResultMarkItem: React.FC<RankingResultMarkProps> = ({mark, isQualif
     useEffect(() => {
         if (competitionId) {
             const fetchCompetition = async () => {
-                const competition = await getCompetition(competitionId)
+                const competition = await getCompetition(competitionId) as CompetitionProps;
                 
                 setCompetition(competition);
             }

@@ -11,8 +11,6 @@ import { CompetitionEdit } from "./CompetitionEdit";
 import { CompetitionResultsUpload } from "./CompetitionResultsUpload";
 import { TestEdit } from "./TestEdit";
 import { PrimeIcons } from "primereact/api";
-import { Dialog } from "primereact/dialog";
-import { ListBox } from 'primereact/listbox';
 import { TestDialog } from "./TestDialog";
 
 const CompetitionPage: React.FC = ({ children }) => {

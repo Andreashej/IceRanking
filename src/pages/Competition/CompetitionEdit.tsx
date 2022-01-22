@@ -1,17 +1,41 @@
+import { AutoComplete, AutoCompleteCompleteMethodParams } from 'primereact/autocomplete';
 import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
 import { InputText } from 'primereact/inputtext';
-import React, { FormEvent } from 'react';
+import { SelectButton } from 'primereact/selectbutton';
+import React, { FormEvent, useState } from 'react';
 import { useCompetition } from '../../contexts/competition.context';
+import { Person } from '../../models/person.model';
+import { getPersons } from '../../services/v2/person.service';
+import { EmailDialog } from '../CompetitionCreate/EmailDialog';
 
 export const CompetitionEdit: React.FC = () => {
     const [competition, updateCompetition, saveCompetition, isChanged] = useCompetition();
+    const [personSearchTerm, setPersonSearchTerm] = useState(competition?.contactPerson?.fullname);
+    const [emailDialog, setEmailDialog] = useState(false);
+    const [personSuggestions, setPersonSuggestions] = useState<Person[]>([]);
     
     if (!competition || !updateCompetition || !saveCompetition) return null;
 
     const submit = (e: FormEvent) => {
         e.preventDefault();
         saveCompetition()
+    }
+
+    const searchPersons = (event: AutoCompleteCompleteMethodParams) => {
+        if (event.query.length === 0) {
+            setPersonSuggestions([]);
+            return;
+        }
+
+        const params = new URLSearchParams({
+            'filter[]': `fullname like %${event.query}%`,
+            'limit': '10'
+        });
+ 
+        getPersons(params).then(([persons]) => {
+            setPersonSuggestions(persons);
+        })
     }
 
     return (
@@ -55,8 +79,41 @@ export const CompetitionEdit: React.FC = () => {
                         <label htmlFor="enddate">End date</label>
                     </span>
                 </div>
+                <SelectButton 
+                    id="competitionState" 
+                    value={competition.state} 
+                    options={['PENDING', 'NORMAL', 'BLOCKED', 'CANCELLED', 'UNLISTED']}
+                    onChange={(e) => {
+                        updateCompetition({ state: e.target.value })
+                    }}
+                    className="mb-4"
+                />
+                <span className="p-float-label">
+                    <AutoComplete 
+                        itemTemplate={(person) => person.fullname}
+                        suggestions={personSuggestions} 
+                        completeMethod={searchPersons} 
+                        value={personSearchTerm} 
+                        onChange={(e) => setPersonSearchTerm(e.value)}
+                        onSelect={(e) => {
+                            updateCompetition({
+                                contactPersonId: e.value.id,
+                                contactPerson: e.value
+                            });
+
+                            setPersonSearchTerm(e.value.fullname);
+
+                            if (!e.value.email) {
+                                setEmailDialog(true);
+                            }
+                        }}
+                        dropdown
+                    />
+                    <label htmlFor="contactPerson">Contact Person</label>
+                </span>
                 <Button type="submit" label="Save" className="p-button-success p-button-raised p-button-rounded" icon="pi pi-save" disabled={!isChanged} />
             </form>
+            <EmailDialog show={emailDialog} onHide={() => setEmailDialog(false)} initialPerson={competition.contactPerson} />
         </>
     )
 }

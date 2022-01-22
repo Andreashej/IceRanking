@@ -32,9 +32,9 @@ export const getPersons = async (params: URLSearchParams): Promise<[Person[], Pa
     }
 }
 
-export const patchPerson = async (rider: Person) => {
+export const patchPerson = async (person: Person) => {
     try {
-        const response = await apiV2.patch<ApiResponse<Person>>(`/persons/${rider.id}`, rider)
+        const response = await apiV2.patch<ApiResponse<Person>>(`/persons/${person.id}`, person)
 
         return response.data.data;
     } catch (error: unknown) {

@@ -23,7 +23,7 @@ export const getTest = async (id: number, params?: URLSearchParams): Promise<Tes
 
 export const createTest = async (competition: Competition, test: Pick<Test, 'testcode'>) => {
     try {
-        const response = await apiV2.post<ApiResponse<Competition>>(`/competitions/${competition.id}/tests`, test)
+        const response = await apiV2.post<ApiResponse<Test>>(`/competitions/${competition.id}/tests`, test)
 
         return response.data.data;
     } catch (error: unknown) {
@@ -49,7 +49,10 @@ export const getTests = async (params: URLSearchParams): Promise<[Test[], Pagina
 
 export const patchTest = async (test: Test): Promise<Test> => {
     try {
-        const response = await apiV2.patch<ApiResponse<Test>>(`/tests/${test.id}`, test);
+        const response = await apiV2.patch<ApiResponse<Test>>(`/tests/${test.id}`, {
+            ...test,
+            rankinglists: test.includeInRanking?.map(rankinglist => rankinglist.shortname)
+        });
 
         return response.data.data;
     } catch (error: unknown) {

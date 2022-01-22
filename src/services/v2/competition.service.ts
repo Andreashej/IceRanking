@@ -51,10 +51,17 @@ export const createCompetition = async (competition: Partial<Competition>) => {
 
 export const patchCompetition = async (competition: Competition) => {
     try {
+        const firstDate = competition.firstDate ? {
+            firstDate: dateToString(competition.firstDate, 'Y-M-d')
+        } : {};
+
+        const lastDate = competition.lastDate ? {
+            lastDate: dateToString(competition.lastDate, 'Y-M-d')
+        } : {}
         const response = await apiV2.patch<ApiResponse<Competition>>(`/competitions/${competition.id}`, {
             ...competition,
-            firstDate: dateToString(competition.firstDate, 'Y-M-d'),
-            lastDate: dateToString(competition.lastDate, 'Y-M-d')
+            ...firstDate,
+            ...lastDate
         })
 
         return response.data.data;

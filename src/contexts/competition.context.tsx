@@ -4,7 +4,9 @@ import { getCompetition, patchCompetition } from '../services/v2/competition.ser
 import { ResourceContext } from "../models/resource-context.model";
 import { Test } from "../models/test.model";
 
-type CompetitionContext = ResourceContext<Competition>;
+export type CompetitionProps = Required<Competition>
+
+type CompetitionContext = ResourceContext<CompetitionProps>;
 
 const CompetitionContext = createContext<CompetitionContext | undefined>(undefined);
 
@@ -13,7 +15,7 @@ type CompetitionProviderProps = {
 }
 
 export const CompetitionProvider: React.FC<CompetitionProviderProps> = ({competitionId, children}) => {
-    const [competition, setCompetition] = useState<Competition>();
+    const [competition, setCompetition] = useState<CompetitionProps>();
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>();
     const [isChanged, setIsChanged] = useState<boolean>(false);
@@ -22,10 +24,10 @@ export const CompetitionProvider: React.FC<CompetitionProviderProps> = ({competi
         if (!competition) return;
 
         try {
-            const savedCompetition = await patchCompetition(competition);
-            setCompetition((prevCompetition) => {
+            const savedCompetition = await patchCompetition(competition) as CompetitionProps;
+            setCompetition((prev) => {
                 return {
-                    ...prevCompetition,
+                    ...prev,
                     ...savedCompetition
                 }
             });
@@ -52,9 +54,9 @@ export const CompetitionProvider: React.FC<CompetitionProviderProps> = ({competi
     const fetchCompetition = useCallback(async (): Promise<void> => {
         try {
             const params = new URLSearchParams();
-            params.append('expand', 'tests');
+            params.append('expand', 'tests,contactPerson');
 
-            const competition = await getCompetition(competitionId, params);
+            const competition = await getCompetition(competitionId, params) as CompetitionProps;
             setCompetition(competition);
         } catch (error : unknown) {
             setCompetition(undefined);
@@ -96,7 +98,7 @@ export const useCompetitionContext = (): CompetitionContext => {
     return context;
 }
 
-export const useCompetition = (): [Competition?, CompetitionContext['update']?, CompetitionContext['save']?, CompetitionContext['isChanged']?] => {
+export const useCompetition = (): [CompetitionContext['resource']?, CompetitionContext['update']?, CompetitionContext['save']?, CompetitionContext['isChanged']?] => {
     const context = useCompetitionContext();
 
     return [context.resource, context.update, context.save, context.isChanged];
