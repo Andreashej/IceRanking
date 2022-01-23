@@ -15,6 +15,7 @@ import { Skeleton } from '../../components/partials/Skeleton';
 import { FeaturedCard } from '../../components/partials/FeaturedCard';
 import { getRankingResults } from '../../services/v2/rankingresult.service';
 import { getRankingList } from '../../services/v2/rankinglist.service';
+import { cancellablePromise } from '../../tools/cancellablePromise';
 
 const RiderResult: React.FC<FlatListItem<Result, RiderProps>> = ({ item: result }) => {
     const ref = useRef(null);
@@ -25,13 +26,22 @@ const RiderResult: React.FC<FlatListItem<Result, RiderProps>> = ({ item: result 
 
     useEffect(() => {
         if (isVisible) {
-            getHorse(result.horseId).then((horse) => {
+            const { promise: horsePromise, cancel: horseCancel } = cancellablePromise(getHorse(result.horseId))
+            
+            horsePromise.then((horse) => {
                 setHorse(horse);
             });
 
-            getTest(result.testId, new URLSearchParams({ expand: 'competition' })).then((test) => {
+            const {promise: testPromise, cancel: testCancel } = cancellablePromise(getTest(result.testId, new URLSearchParams({ expand: 'competition' })));
+            
+            testPromise.then((test) => {
                 setTest(test);
             })
+
+            return () => {
+                horseCancel();
+                testCancel();
+            }
         }
     }, [result, isVisible])
 
@@ -109,9 +119,13 @@ const BestResult: React.FC<{riderId: number, testcode?: string, order?: string}>
             params.append('filter[]', `riderId == ${riderId}`);
             params.append('filter[]', `test.testcode == ${testcode}`);
 
-            getResults(params).then(([results]) => {
+            const { promise, cancel } = cancellablePromise(getResults(params));
+
+            promise.then(([results]) => {
                 setResult(results[0]);
-            })
+            });
+
+            return cancel;
         }, [riderId, testcode, order])
 
         useEffect(() => {
@@ -134,6 +148,7 @@ const BestRank: React.FC<{riderId: number, test?: Test}> = ({ riderId, test }) =
     const [listname, setListname] = useState<string>();
 
     useEffect(() => {
+        let cancel = () => {};
         const getBestRank = async () => {
             if (!test) return;
             
@@ -158,7 +173,10 @@ const BestRank: React.FC<{riderId: number, test?: Test}> = ({ riderId, test }) =
             
             if (!results[0].test) return;
 
-            const rankinglist = await getRankingList(results[0].test.rankinglistId);
+            const { promise, cancel: c } = cancellablePromise(getRankingList(results[0].test.rankinglistId));
+            cancel = c;
+
+            const rankinglist = await promise;
             
             setListname((rankinglist).shortname);
         }
@@ -166,6 +184,8 @@ const BestRank: React.FC<{riderId: number, test?: Test}> = ({ riderId, test }) =
         setListname(undefined);
         
         getBestRank();
+
+        return cancel;
     }, [riderId, test])
     return <FeaturedCard title="Best rank" featuredText={rank} additionalText={listname} />
 }
@@ -182,8 +202,11 @@ export const RiderResults: React.FC = () => {
     const [pagination, setPagination] = useState<Pagination>();
     const [loading, setLoading] = useState<boolean>(false);
 
+    let cancelLoading = useRef(() => {});
+
     const getNextPage = useCallback(async (riderId: number): Promise<void> => {
         if (loading || (results.length > 0 && !pagination?.hasNext)) return;
+        cancelLoading.current();
         setLoading(true);
 
         const params = new URLSearchParams({ 
@@ -197,7 +220,9 @@ export const RiderResults: React.FC = () => {
         params.append('filter[]', `test.testcode == ${testcode}`)
 
         try {
-            const [results, pagination] = await getResults(params)
+            const { promise, cancel } = cancellablePromise(getResults(params));
+            cancelLoading.current = cancel
+            const [results, pagination] = await promise;
 
             setResults(((oldValue) => [...oldValue, ...results]));
             setPagination(pagination);
@@ -211,6 +236,7 @@ export const RiderResults: React.FC = () => {
     useEffect(() => {
         setResults([]);
         setPagination(undefined);
+        setLoading(false);
     }, [testcode])
 
     if (!rider) return null;

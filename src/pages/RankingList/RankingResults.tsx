@@ -11,15 +11,13 @@ import { FlatList, FlatListItem } from '../../components/partials/FlatList';
 import { RankingResult } from '../../models/rankingresult.model';
 import { Pagination } from '../../models/apiresponse.model';
 import { getRanking, getResultForRanking } from '../../services/v2/ranking.service';
-import { getHorse } from '../../services/v2/horse.service';
-import { getPerson } from '../../services/v2/person.service';
 import { Horse } from '../../models/horse.model';
 import { Person } from '../../models/person.model';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import { dateToString, markWithUnit } from '../../tools';
 import { Link } from 'react-router-dom';
 import { Result } from '../../models/result.model';
-import { getRankingResultMarks } from '../../services/v2/rankingresult.service';
+import { getRankingResult, getRankingResultMarks } from '../../services/v2/rankingresult.service';
 import { Competition } from '../../models/competition.model';
 import { getCompetition } from '../../services/v2/competition.service';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -29,6 +27,7 @@ import { Task } from '../../models/task.model';
 import { TaskBar } from '../../components/Task/TaskBar';
 import { createTask } from '../../services/v2/task.service';
 import { PrimeIcons } from 'primereact/api';
+import { cancellablePromise } from '../../tools/cancellablePromise';
 
 type RankingResultMarkProps = {
     mark: Result;
@@ -46,13 +45,18 @@ const RankingResultMarkItem: React.FC<RankingResultMarkProps> = ({mark, isQualif
 
     useEffect(() => {
         if (competitionId) {
+            let cancel = () => {};
             const fetchCompetition = async () => {
-                const competition = await getCompetition(competitionId) as CompetitionProps;
+                const {promise, cancel: c} = cancellablePromise(getCompetition(competitionId))
+                cancel = c;
+
+                const competition = await promise as CompetitionProps;
                 
                 setCompetition(competition);
             }
 
             fetchCompetition()
+            return cancel;
         }
     }, [competitionId])
 
@@ -93,26 +97,25 @@ const RankingResultListItem: React.FC<FlatListItem<RankingResult, Ranking>> = ({
     const [rankingList] = useRankingList();
 
     useEffect(() => {
-        const fetchHorse = async () => {
-            if (result.horseId) {
-                const horse = await getHorse(result.horseId);
-                setHorse(horse);
-            }
-        }
+        let cancel = () => {};
+        const fetchResult = async () => {
+            const params = new URLSearchParams({
+                'expand': 'rider,horse'
+            })
+            const { promise, cancel: c } = cancellablePromise<RankingResult>(getRankingResult(result.id, params));
 
-        if (isVisible) fetchHorse();
-    }, [result.horseId, isVisible])
-    
-    useEffect(() => {
-        const fetchRider = async () => {
-            if (result.riderId) {
-                const rider = await getPerson(result.riderId);
-                setRider(rider);
-            }
-        }
+            cancel = c;
 
-        if (isVisible) fetchRider();
-    }, [result.riderId, isVisible]);
+            const r = await promise;
+
+            if(r.horse) setHorse(r.horse);
+            if(r.rider) setRider(r.rider);
+
+        }
+        
+        if (isVisible) fetchResult()
+        return cancel;
+    }, [result.id, isVisible]);
 
     useLayoutEffect(() => {
         if (markRef.current) {
@@ -125,6 +128,11 @@ const RankingResultListItem: React.FC<FlatListItem<RankingResult, Ranking>> = ({
             setHeight(isExpanded ? rankRef.current.clientHeight + 20 : markRef.current.clientHeight)
         }
     }, [isExpanded])
+
+    let cancelPromise = () => {};
+    useEffect(() => {
+        return cancelPromise;
+    }, []);
 
     const toggle = async () => {
         if (marks.length === 0 && rankingList) {
@@ -140,7 +148,10 @@ const RankingResultListItem: React.FC<FlatListItem<RankingResult, Ranking>> = ({
                 'expand': `test,${grouping}`,
             });
 
-            const [marks] = await getRankingResultMarks(result.id, params);
+            const { promise, cancel } = cancellablePromise(getRankingResultMarks(result.id, params));
+            cancelPromise = cancel;
+
+            const [marks] = await promise;
             
             setMarks(marks);
 
@@ -211,7 +222,7 @@ const RankingResultListItem: React.FC<FlatListItem<RankingResult, Ranking>> = ({
             <div className="expanded" style={{ gridColumn: "2 / -1" }}>
                 <div className="header-col">{ranking.grouping === 'horse' ? 'Rider' : 'Horse'}</div>
                 <div className="header-col">Competition</div>
-                <div className="header-col" style={{ paddingLeft: "1rem" }}>Valid until</div>
+                <div className="header-col d-none d-md-block" style={{ paddingLeft: "1rem" }}>Valid until</div>
                 <div className="header-col">Mark</div>
                 {testMarks}
             </div>
@@ -248,9 +259,12 @@ export const RankingResults: React.FC = () => {
         return <p>This ranking is based on the best {ranking.includedMarks} marks per {ranking.grouping} in {ranking.testcode}. Only marks above {ranking.minMark} are taken into account.</p>
     }, [ranking, rankingList])
 
+    const cancelLoading = useRef(() => {});
+
     const getNextPage = useCallback(async (rankingId: number): Promise<void> => {
         if (loading || (results.length > 0 && !pagination?.hasNext)) return;
         setLoading(true);
+        cancelLoading.current();
 
         const params = new URLSearchParams({ 
             page: pagination?.nextPage?.toString() ?? '1',
@@ -258,7 +272,9 @@ export const RankingResults: React.FC = () => {
         });
 
         try {
-            const [results, pagination] = await getResultForRanking(rankingId, params)
+            const { promise, cancel } = cancellablePromise(getResultForRanking(rankingId, params));
+            cancelLoading.current = cancel;
+            const [results, pagination] = await promise;
 
             setResults(((oldValue) => [...oldValue, ...results]));
             setPagination(pagination);
@@ -272,6 +288,7 @@ export const RankingResults: React.FC = () => {
     useEffect(() => {
         setResults([]);
         setPagination(undefined);
+        setLoading(false);
     }, [testcode])
 
     const fetchTasks = useCallback(async (rankingId) => {
@@ -282,7 +299,7 @@ export const RankingResults: React.FC = () => {
         const r = await getRanking(rankingId, params) as Required<Pick<Ranking, 'tasksInProgress' | 'testgroups'>>;
 
         setTasks(r.tasksInProgress);
-        // setTestgroups(r.testgroups);
+
         if(ranking) ranking.testgroups = r.testgroups;
     }, [ranking]);
 

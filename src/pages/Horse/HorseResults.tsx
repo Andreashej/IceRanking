@@ -16,6 +16,8 @@ import { getRankingResults } from '../../services/v2/rankingresult.service';
 import { getRankingList } from '../../services/v2/rankinglist.service';
 import { useHorse } from '../../contexts/horse.context';
 import { getPerson } from '../../services/v2/person.service';
+import { cancellablePromise } from '../../tools/cancellablePromise';
+import { promises } from 'stream';
 
 const HorseResult: React.FC<FlatListItem<Result, Horse>> = ({ item: result }) => {
     const ref = useRef(null);
@@ -26,13 +28,20 @@ const HorseResult: React.FC<FlatListItem<Result, Horse>> = ({ item: result }) =>
 
     useEffect(() => {
         if (isVisible) {
-            getPerson(result.riderId).then((rider) => {
+            const { promise: personPromise, cancel: personCancel } = cancellablePromise(getPerson(result.riderId));
+            personPromise.then((rider) => {
                 setRider(rider);
             });
 
-            getTest(result.testId, new URLSearchParams({ expand: 'competition' })).then((test) => {
+            const {promise: testPromise, cancel: testCancel } = cancellablePromise(getTest(result.testId, new URLSearchParams({ expand: 'competition' })));
+            testPromise.then((test) => {
                 setTest(test);
-            })
+            });
+
+            return () => {
+                personCancel();
+                testCancel();
+            }
         }
     }, [result, isVisible])
 
@@ -107,9 +116,12 @@ const BestResult: React.FC<{horseId: number, testcode?: string, order?: string}>
             params.append('filter[]', `horseId == ${horseId}`);
             params.append('filter[]', `test.testcode == ${testcode}`);
 
-            getResults(params).then(([results]) => {
+            const { promise, cancel } = cancellablePromise(getResults(params))
+            promise.then(([results]) => {
                 setResult(results[0]);
-            })
+            });
+
+            return cancel;
         }, [horseId, testcode, order])
 
         useEffect(() => {
@@ -132,6 +144,8 @@ const BestRank: React.FC<{horseId: number, test?: Test}> = ({ horseId, test }) =
     const [listname, setListname] = useState<string>();
 
     useEffect(() => {
+        let resultCancel = () => {};
+        let rankingListCancel = () => {};
         const getBestRank = async () => {
             if (!test) return;
             const params = new URLSearchParams({
@@ -142,8 +156,11 @@ const BestRank: React.FC<{horseId: number, test?: Test}> = ({ horseId, test }) =
             });
             params.append('filter[]', `test.testcode == ${test.testcode}`);
             params.append('filter[]', `horses contains id == ${horseId}`,);
-    
-            const [results] = await getRankingResults(params)
+            
+            const { promise: resultPromise, cancel: rc } = cancellablePromise(getRankingResults(params));
+            resultCancel = rc;
+
+            const [results] = await resultPromise;
 
             if (!results || results.length === 0) {
                 setRank("N/A");
@@ -155,7 +172,9 @@ const BestRank: React.FC<{horseId: number, test?: Test}> = ({ horseId, test }) =
             
             if (!results[0].test) return;
 
-            const rankinglist = await getRankingList(results[0].test.rankinglistId);
+            const { promise: rankingListPromise, cancel: rlc } = cancellablePromise(getRankingList(results[0].test.rankinglistId))
+            rankingListCancel = rlc;
+            const rankinglist = await rankingListPromise;
             
             setListname((rankinglist).shortname);
         }
@@ -163,6 +182,10 @@ const BestRank: React.FC<{horseId: number, test?: Test}> = ({ horseId, test }) =
         setListname(undefined);
         
         getBestRank();
+        return () => {
+            resultCancel();
+            rankingListCancel();
+        }
     }, [horseId, test])
     return <FeaturedCard title="Best rank" featuredText={rank} additionalText={listname} />
 }
@@ -179,9 +202,12 @@ export const HorseResults: React.FC = () => {
     const [pagination, setPagination] = useState<Pagination>();
     const [loading, setLoading] = useState<boolean>(false);
 
+    const cancelLoading = useRef(() => {});
+
     const getNextPage = useCallback(async (horseId: number): Promise<void> => {
         if (loading || (results.length > 0 && !pagination?.hasNext)) return;
         setLoading(true);
+        cancelLoading.current();
 
         const params = new URLSearchParams({ 
             page: pagination?.nextPage?.toString() ?? '1',
@@ -194,7 +220,10 @@ export const HorseResults: React.FC = () => {
         params.append('filter[]', `test.testcode == ${testcode}`)
 
         try {
-            const [results, pagination] = await getResults(params)
+            const { promise, cancel } = cancellablePromise(getResults(params))
+            cancelLoading.current = cancel;
+
+            const [results, pagination] = await promise;
 
             setResults(((oldValue) => [...oldValue, ...results]));
             setPagination(pagination);
@@ -208,6 +237,7 @@ export const HorseResults: React.FC = () => {
     useEffect(() => {
         setResults([]);
         setPagination(undefined);
+        setLoading(false);
     }, [testcode])
 
     if (!horse) return null;

@@ -14,9 +14,9 @@ import { Horse } from '../../models/horse.model';
 import { Result } from '../../models/result.model';
 import { Person } from '../../models/person.model';
 import { Test } from '../../models/test.model';
-import { getHorse } from '../../services/v2/horse.service';
-import { getPerson } from '../../services/v2/person.service';
 import { deleteTest, getTestResults } from '../../services/v2/test.service';
+import { getResult } from '../../services/v2/result.service';
+import { cancellablePromise } from '../../tools/cancellablePromise';
 
 const CompetitionResultItem: React.FC<FlatListItem<Result, Test>> = ({ item: result, parent: test }) => {
     const [rider, setRider] = useState<Person>();
@@ -26,15 +26,21 @@ const CompetitionResultItem: React.FC<FlatListItem<Result, Test>> = ({ item: res
 
     useEffect(() => {
         if (isVisible) {
-            getPerson(result.riderId).then((rider) => {
-                setRider(rider);
-            })
-    
-            getHorse(result.horseId).then((horse) => {
-                setHorse(horse);
-            })
+            const params = new URLSearchParams({
+                fields: 'rider,horse',
+                expand: 'rider,horse'
+            });
+
+            const p = getResult(result.id, params);
+            const { promise, cancel } = cancellablePromise<Result>(p);
+            promise.then((result) => {
+                if (result.horse) setHorse(result.horse);
+                if (result.rider) setRider(result.rider);
+            });
+            
+            return cancel;
         }
-    }, [result.horseId, result.riderId, isVisible])
+    }, [result.id, isVisible])
 
     const formatMark = (mark: number) => {
         const roundedMark = mark.toFixed(test.roundingPrecision);
@@ -72,9 +78,12 @@ export const CompetitionResults: React.FC = () => {
 
     const test = useMemo(() => competition?.tests?.find(test => test.testcode === testcode), [testcode, competition?.tests]);
 
+    const cancelLoading = useRef(() => {})
+
     const getNextPage = useCallback(async (testId: number): Promise<void> => {
         if (loading || (results.length > 0 && !pagination?.hasNext)) return;
         setLoading(true);
+        cancelLoading.current();
 
         const params = new URLSearchParams({ 
             page: pagination?.nextPage?.toString() ?? '1',
@@ -82,7 +91,9 @@ export const CompetitionResults: React.FC = () => {
         });
 
         try {
-            const [results, pagination] = await getTestResults(testId, params)
+            const { promise, cancel } = cancellablePromise(getTestResults(testId, params));
+            cancelLoading.current = cancel;
+            const [results, pagination] = await promise;
 
             setResults(((oldValue) => [...oldValue, ...results]));
             setPagination(pagination);
@@ -96,6 +107,7 @@ export const CompetitionResults: React.FC = () => {
     useEffect(() => {
         setResults([]);
         setPagination(undefined);
+        setLoading(false);
     }, [testcode])
 
     const tooltipOptions: TooltipOptions = {
