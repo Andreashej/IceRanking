@@ -69,7 +69,7 @@ const RankingResultMarkItem: React.FC<RankingResultMarkProps> = ({mark, isQualif
         <>
             {ranking.grouping === "rider" && <Link style={{ fontWeight: isQualifying ? 'bold' : 'normal' }} to={`/horse/${mark.horseId}/results/${mark.test?.testcode}`}>{mark.horse?.horseName}</Link>}
             {ranking.grouping === "horse" && <Link style={{ fontWeight: isQualifying ? 'bold' : 'normal' }} to={`/rider/${mark.riderId}/results/${mark.test?.testcode}`}>{mark.rider?.fullname}</Link>}
-            <Link style={{ fontWeight: isQualifying ? 'bold' : 'normal' }}  to={`/competition/${competition?.id}/test/${mark.test?.testcode}`}>{competition?.name}</Link>
+            <Link className="d-none d-sm-block" style={{ fontWeight: isQualifying ? 'bold' : 'normal' }}  to={`/competition/${competition?.id}/test/${mark.test?.testcode}`}>{competition?.name}</Link>
             <div id={`mark-${mark.id}-expires-at`} className="expires-at d-none d-md-block" data-pr-tooltip="Result is no longer valid for this rankinglist after this date.">
                 <Tooltip target={`#mark-${mark.id}-expires-at`} position="top"  />
                 <span style={{ fontWeight: isQualifying ? 'bold' : 'normal', padding: "0 1rem" }}><FontAwesomeIcon icon="clock" /> {dateToString(expiresAt, 'd/m/Y')}</span>
@@ -221,7 +221,7 @@ const RankingResultListItem: React.FC<FlatListItem<RankingResult, Ranking>> = ({
             </div>}
             <div className="expanded" style={{ gridColumn: "2 / -1" }}>
                 <div className="header-col">{ranking.grouping === 'horse' ? 'Rider' : 'Horse'}</div>
-                <div className="header-col">Competition</div>
+                <div className="header-col d-none d-sm-block">Competition</div>
                 <div className="header-col d-none d-md-block" style={{ paddingLeft: "1rem" }}>Valid until</div>
                 <div className="header-col">Mark</div>
                 {testMarks}
