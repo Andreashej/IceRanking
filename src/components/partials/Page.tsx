@@ -8,6 +8,7 @@ import Header from './Header';
 import { MenuItem } from 'primereact/menuitem';
 import { useHistory } from 'react-router-dom';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { useFullscreen } from '../../App';
 
 type PageProps = {
     title: string | null;
@@ -20,6 +21,7 @@ type PageProps = {
 
 const Page: React.FC<PageProps> = ({title, subtitle, pretitle, icon, menuItems = [], adminMenuItems = [], children}) => {
     const [sidebarVisibility, setSidebarVisibility] = useState(false);
+    const [fullscreen] = useFullscreen();
     const history = useHistory();
 
     const mobileMenuBtn = <Button icon={`pi pi-bars`} className="fab p-button-primary p-button-raised" onClick={()=>setSidebarVisibility(!sidebarVisibility)} />;
@@ -40,6 +42,10 @@ const Page: React.FC<PageProps> = ({title, subtitle, pretitle, icon, menuItems =
 
         return unlisten;
     });
+
+    if (fullscreen) {
+        return <>{children}</>;
+    }
 
     return (
         <>

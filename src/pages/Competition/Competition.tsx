@@ -12,6 +12,7 @@ import { CompetitionResultsUpload } from "./CompetitionResultsUpload";
 import { TestEdit } from "./TestEdit";
 import { PrimeIcons } from "primereact/api";
 import { TestDialog } from "./TestDialog";
+import { BigScreenController } from "../BigScreen/BigScreenController";
 
 const CompetitionPage: React.FC = ({ children }) => {
     const { resource: competition, loading, error } = useCompetitionContext();
@@ -72,6 +73,11 @@ const CompetitionPage: React.FC = ({ children }) => {
                 className: pathname.includes(`/upload`) ? 'active' : '',
                 command: () => history.push(`/competition/${competition?.id}/upload`)
             },
+            {
+                label: "Bigscreen",
+                className: pathname.includes(`/bigscreen`) ? 'active' : '',
+                command: () => history.push(`/competition/${competition?.id}/bigscreencontroller`)
+            },
         ]
 
         return [menuItems, adminItems];
@@ -100,6 +106,7 @@ export const Competition: React.FC = () => {
                     <Route exact path="/competition/:id/upload" component={CompetitionResultsUpload} />
                     <Route exact path="/competition/:id/test/:testcode/edit" component={TestEdit} />
                     <Route path="/competition/:id/test/:testcode" component={CompetitionResults} />
+                    <Route path="/competition/:id/bigscreencontroller/:screenGroupId" component={BigScreenController} />
                 </Switch>
             </CompetitionPage>    
         </CompetitionProvider>

@@ -1,0 +1,89 @@
+.bigscreen {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background-color: $dark;
+    color: white;
+    line-height: 1;
+
+    // display: grid;
+    // grid-template-columns: repeat(16, 1fr);
+
+    > * {
+        font-size: 5%;
+    }
+}
+
+.bigscreen-controller {
+    background-color: $darkgray;
+    height: 100vh;
+
+    .screen-group-switch {
+        display: flex;
+        gap: .5rem;
+
+        button {
+            padding: 2rem;
+            background: $lightgray;
+            border: 1px solid rgba($dark, .5);
+            border-bottom: 0;
+
+            &.active {
+                background: $dark;
+                color: white;
+            }
+        }
+    }
+
+    .displays {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-areas:
+            "preview preview program program"
+            "input1 input2 input3 input4"
+            "input5 input6 input7 input8";
+
+        > * {
+            aspect-ratio: 16 / 9;
+            border: 3px solid $lightgray;
+            position: relative;
+            overflow: hidden;
+
+            .label {
+                background-color: rgba($darkgray, .5);
+                color: white;
+                padding: .125rem .35rem;
+                border-radius: .125rem;
+
+                position: absolute;
+                bottom: .25rem;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        .preview {
+            grid-area: preview;
+            border-color: $green;
+        }
+
+        .program {
+            grid-area: program;
+            border-color: $red;
+        }
+    }
+
+    .controls {
+        display: flex;
+        justify-content: space-between;
+
+        .control-group {
+            padding: 1rem;
+
+            button {
+                padding: 1rem;
+                border-radius: 50rem;
+            }
+        }
+    }
+}
