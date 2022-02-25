@@ -13,6 +13,7 @@ $lightgray: #f8f9fa;
 @import '~primereact/resources/themes/saga-blue/theme.css';
 @import '~primereact/resources/primereact.min.css';
 @import '~primeicons/primeicons.css';
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700');
 
 @import 'footer';
 @import 'forms';
@@ -26,6 +27,7 @@ $lightgray: #f8f9fa;
 @import 'page';
 @import 'animations';
 @import 'flatlist';
+@import 'grid-table';
 @import 'bigscreen';
 
 
@@ -53,4 +55,27 @@ img.logo {
 .p-toolbar {
     padding: 0;
     border: none;
+}
+
+.fab {
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.fab-tooltip {
+    transform: translateX(-1rem);
+
+    .p-tooltip-text {
+        background-color: rgba($darkgray, .75);
+        color: white;
+        min-width: max-content;
+    }
+
+    .p-tooltip-arrow {
+        display: none;
+    }
 }

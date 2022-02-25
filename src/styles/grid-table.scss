@@ -1,0 +1,30 @@
+.table {
+    display: grid;
+
+    > * {
+        padding: .5rem;
+        
+        &:not(.last) {
+            border-bottom: $dark solid 1px;
+        }
+    }
+
+    .table-header {
+        font-weight: bold;
+        background-color: $dark;
+        color: white;
+    }
+
+    .table-row {
+        display: flex;
+        align-items: center;
+    }
+
+    .even {
+        background-color: $info;
+    }
+
+    .odd {
+        background-color: white;
+    }
+}

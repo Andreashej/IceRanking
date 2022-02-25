@@ -4,6 +4,7 @@ import axios from 'axios'
 import { Test } from "../../models/test.model";
 import { Result } from "../../models/result.model";
 import { Competition } from "../../models/competition.model";
+import { StartListEntry } from "../../models/startlist.model";
 
 export const getTest = async (id: number, params?: URLSearchParams): Promise<Test> => {
     try { 
@@ -76,6 +77,19 @@ export const deleteTest = async (test: Test): Promise<void> => {
 export const getTestResults = async (id: number, params?: URLSearchParams ): Promise<[Result[], Pagination?]> => {
     try {
         const response = await apiV2.get<ApiResponse<Result[]>>(`/tests/${id}/results`, { params });
+
+        return [response.data.data, response.data.pagination];
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            return Promise.reject(error.response?.data.message ?? error.message)
+        }
+        return Promise.reject(error);
+    }
+}
+
+export const getTestStartList = async (id: number, params?: URLSearchParams ): Promise<[StartListEntry[], Pagination?]> => {
+    try {
+        const response = await apiV2.get<ApiResponse<StartListEntry[]>>(`/tests/${id}/startlist`, { params });
 
         return [response.data.data, response.data.pagination];
     } catch (error: unknown) {

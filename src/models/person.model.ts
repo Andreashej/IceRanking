@@ -9,6 +9,7 @@ export type Person = {
     numberOfResults?: number;
     userId?: number;
     email?: string;
+    ageGroup?: string;
 
     testlist?: string[];
     user?: User;

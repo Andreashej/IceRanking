@@ -2,7 +2,7 @@ export const markToDouble = (mark, precision) => {
     return ((mark * 100) / 100).toFixed(precision)
 }
 
-const zeroPad = (number) => {
+export const zeroPad = (number) => {
     if (number > 9) return `${number}`;
     return `0${number}`;
 }

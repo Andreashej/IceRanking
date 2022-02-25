@@ -13,13 +13,13 @@ import { BigScreenPage } from "./pages/BigScreen/BigScreen";
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
-import { faListOl, faUser, faHorseHead, faCalendarAlt, faQuestion, faTimes, faSearch, faCalendarPlus, faTachometerAlt, faCheckCircle, faCheck, faClock } from '@fortawesome/free-solid-svg-icons'
+import { faWifi, faListOl, faUser, faHorseHead, faCalendarAlt, faQuestion, faTimes, faSearch, faCalendarPlus, faTachometerAlt, faCheckCircle, faCheck, faClock, faDesktop, faBullhorn, faAddressCard, faListUl } from '@fortawesome/free-solid-svg-icons'
 import { Dashboard } from "./pages/Dashboard/Dashboard";
 import { CompetitionCreate } from "./pages/CompetitionCreate/CompetitionCreate";
 import { UserProvider } from "./contexts/user.context";
 import { ToastProvider } from "./contexts/toast.context";
     
-library.add(fab, faListOl, faUser, faHorseHead, faCalendarAlt, faQuestion, faTimes, faSearch, faCalendarPlus, faTachometerAlt, faCheck, faCheckCircle, faClock);
+library.add(fab, faListOl, faUser, faHorseHead, faCalendarAlt, faQuestion, faTimes, faSearch, faCalendarPlus, faTachometerAlt, faCheck, faCheckCircle, faClock, faDesktop, faWifi, faBullhorn, faAddressCard, faListUl);
 
 
 type FullscreenContextProps = [boolean, (fullscreen: boolean) => void]

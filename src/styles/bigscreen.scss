@@ -1,89 +1,617 @@
+
 .bigscreen {
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-    background-color: $dark;
-    color: white;
-    line-height: 1;
-
-    // display: grid;
-    // grid-template-columns: repeat(16, 1fr);
-
-    > * {
-        font-size: 5%;
+    --red: #dc3545;
+    --blue: #0b7ad1;
+    --green: #28a745;
+    --yellow: #ffe04a;
+    --purple: purple;
+    --default: #24305E;
+    font-size: 5vmin;
+    
+    body {
+        font-family: 'Ubuntu', sans-serif!important;
+        background-image: url(../../public/assets/img/bigscreen-bg.jpg);
+        // background-color: lime;
+    
+        &::before {
+            background-color: rgba($dark, .8);
+            content: "";
+            position: absolute;
+            inset: 0;
+        }
     }
+
+    .logo {
+        position: absolute;
+        top: 5vmin;
+        right: 5vmin;
+        background-image: var(--logo);
+        width: 6.5rem;
+        height: 2rem;
+        background-repeat: no-repeat;
+        background-position: top right;
+        background-size: contain;
+        transform-origin: top right;
+    }
+
+    .template {
+
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+        color: white;
+        line-height: 1;
+        display: grid;
+    
+        h1 {
+            font-size: 2rem;
+            margin: 0;
+        }
+    
+        h2 {
+            font-size: 1.6rem;
+            margin: 0;
+        }
+    
+        h3 {
+            font-size: 1.2rem;
+            margin: 0;
+        }
+    
+        h4 {
+            font-size: .8rem;
+            margin: 0;
+        }
+        
+    
+        > * {
+            z-index: 2;
+        }
+
+        .header {
+            border-left: .5rem solid $dark;
+            position: relative;
+            background: $dark;
+            border-radius: .25rem .25rem .125rem .125rem;
+            padding: .25rem;
+            background: radial-gradient(ellipse 60% 25% at bottom center, var(--blue) 0, $dark);
+            // display: flex;
+            overflow: hidden;
+            font-size: 1.2rem;
+            
+            .header-text {
+                color: white;
+                font-variant: small-caps; 
+            }
+
+            .header-logo {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                padding: 0 .25rem 0 1rem;
+
+                background-color: white;
+                clip-path: polygon(1rem 0%, 100% 0, 100% 100%, 0% 100%);
+
+                img {
+                    max-height: 100%;
+                }
+            }
+        }
+
+        .lower-third {
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 0!important;
+
+            .extra {
+                font-size: .8rem;
+                background-color: $lightgray;
+                color: $dark;
+                padding: .125rem .5rem;
+                display: grid;
+                border-radius: 0 0 .125rem .125rem;
+
+                > * {
+                    display: flex;
+                    
+                    > * {
+                        padding: .125rem .25rem;
+                    }
+                    
+                }
+
+                
+                &:not(:last-child) {
+                    border-bottom-right-radius: 0;
+                }
+                
+            }
+
+            .light {
+                font-weight: 300;
+            }
+
+            .sign {
+                background-color: var(--blue);
+                color: white;
+                border-radius: .125rem;
+            }
+
+            .card {
+                height: 100%;
+                width: 2ch;
+                border-radius: .125rem;
+                margin-left: .125rem;
+            }
+
+            .footer {
+                display: flex;
+                align-self: flex-end;
+                background: none;
+                border-bottom-right-radius: .125rem;
+                overflow: hidden;
+
+                > * {
+                    padding: .125rem 1rem;
+                    font-size: .8rem;
+                    font-variant: small-caps;
+                    background-color: $dark;
+                    clip-path: polygon(0 0, calc(100% - 1rem) 0, 100% 100%, 1rem 100%);
+
+                    &:not(:first-of-type) {
+                        margin-left: -1rem;
+                    }
+
+                    &:last-child {
+                        padding-right: .5rem;
+                        clip-path: polygon(0 0, 100% 0, 100% 100%, 1rem 100%);
+                    }
+                }
+
+            }
+        }
+
+        &.show {
+            .header, .logo {
+                transform: scale(0);
+                animation: scaleIn 500ms cubic-bezier(0.3, 0.26, 0.4, 1.29) 0ms forwards;
+            }
+        }
+
+        &.hide {
+            .header, .logo {
+                transform: scale(1);
+                animation: scaleOut 250ms ease-out 0ms forwards;
+            }
+        }
+    
+        &.collectingring {
+            grid-template-columns: 2vmin minmax(0,1fr) 30% 2vmin;
+            grid-template-rows: 2vmin 15vmin 1fr 2vmin;
+            grid-template-areas: 
+                ". . . ."
+                ". header header ."
+                ". group timer ."
+                ". footer footer .";
+            row-gap: .5rem;
+            column-gap: 2rem;
+    
+            .screen-header {
+                display: flex;
+                justify-content: space-between;
+    
+                .clock {
+                    background-color: white;
+                    color: $dark;
+                    padding: .25em;
+                    border-radius: .25em;
+                    height: min-content;
+                    font-size: 1.6rem;
+                    width: 20vw;
+                    text-align: center;
+                }
+            }
+    
+            .connection-lost {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                
+                position: absolute;
+                inset: 0;
+                background-color: rgba($dark, .5);
+                color: white;
+    
+                div {
+                    text-align: center;
+    
+                    div {
+                        display: flex;
+                        justify-content: center;
+                        gap: .5rem;
+    
+                        .p-progress-spinner {
+                            margin: 0;
+                        }
+    
+                    }
+                }
+            }
+            
+        }
+
+        &.equipageinfo, &.equipageresult, &.custom {
+            grid-template-columns: 1fr 75vw 1fr;
+            grid-template-rows: 1fr min-content 2vh;
+            grid-template-areas: 
+                ". . ."
+                ". listarea ."
+                ". . .";
+            
+            .flatlist {
+                row-gap: 1rem;
+            }
+        }
+
+        &.startlist, &.resultlist {
+            grid-template-columns: 1fr 75vw 1fr;
+            grid-template-rows: 1fr min-content min-content 2vh;
+            grid-template-areas: 
+                ". . ."
+                ". header ."
+                ". listarea ."
+                ". . .";
+            row-gap: .5rem;
+            column-gap: .5rem;
+
+            .list-container {
+                font-size: .8rem;
+            }
+        }
+
+        .flatlist {
+            display: grid;
+            gap: .2rem;
+            margin: 0;
+            color: $dark;
+
+            .flatlist-item {
+                font-size: .65rem;
+                margin-bottom: 0;
+                background-color: transparent;
+                width: 100%;
+                box-shadow: none;
+                border-radius: 0;
+                gap: .125rem;
+                position: relative;
+                
+                
+                > .row-content {
+                    .row-marker {
+                        position: absolute;
+                        top: 0;
+                        bottom: 0;
+                        left: 0;
+    
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+    
+                        clip-path: polygon(0% 0%, 100% 0, calc(100% - .5rem) 100%, 0% 100%);
+    
+                        min-width: 5ch;
+    
+                        background-color: var(--blue);
+                        color: white;
+                        padding: .2rem .5rem .2rem .25rem;
+                        text-align: center;
+                        font-size: 80%;
+
+                        border-radius: .125rem 0 0 .125rem;
+    
+                    }
+
+                    background-color: $lightgray;
+                    padding: .25rem;
+                    padding-left: 5ch;
+                    border-radius: .125rem;
+                    overflow: hidden;
+                    display: grid;
+
+                    grid-template-columns: 1fr 1fr 10ch;
+                    grid-template-rows: 1fr;
+
+                    > * {
+                        margin: 0;
+
+                    }
+
+                }
+
+                .row-end-marker {
+                    color: white;
+                    padding: 0;
+                    border-radius: .125rem;
+                    padding: .125rem .25rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    &.primary {
+                        background-color: var(--green);
+                    }
+
+                    &.secondary {
+                        background-color: var(--yellow);
+                        color: black;
+                    }
+                }
+
+    
+                @for $i from 1 through 10 {
+                    &:nth-of-type(#{$i}).show {
+                        transform: scale(0);
+                        animation: scaleIn 500ms cubic-bezier(0.3, 0.26, 0.4, 1.29) $i * 100ms forwards;
+                    }
+    
+                    &:nth-of-type(#{$i}).hide {
+                        transform: scale(1);
+                        animation: scaleOut 250ms ease-in $i * 50ms forwards;
+                    }
+                }
+    
+            }
+        }
+
+        &.groupinfo {
+            display: grid;
+            grid-template-columns: 2vmin 1fr 2vmin;
+            grid-template-rows: 1fr min-content 2vmin;
+            grid-template-areas: 
+                ". . ."
+                ". listarea ."
+                ". . .";
+
+            .flatlist {
+                grid-template-columns: 1fr 1fr 1fr;
+                grid-template-rows: repeat(3, min-content);
+                grid-auto-flow: column;
+            }
+        }
+
+        .blue {
+            border-color: var(--blue)!important;
+        }
+    
+        .green {
+            border-color: var(--green)!important;
+        }
+    
+        .yellow {
+            border-color: var(--yellow)!important;
+        }
+    
+        .purple {
+            border-color: var(--purple)!important;
+        }
+    
+        .white {
+            border-color: white!important;
+        }
+    
+        .black {
+            border-color: black!important;
+        }
+        
+    }
+
 }
 
 .bigscreen-controller {
-    background-color: $darkgray;
     height: 100vh;
+    display: grid;
+    grid-template-rows: min-content 1fr min-content;
+    grid-template-columns: 1fr 5rem;
+    grid-template-areas: 
+        "header header"
+        "main main"
+        "actions actions";
 
-    .screen-group-switch {
+    .header {
+        grid-area: header;
         display: flex;
-        gap: .5rem;
+        justify-content: space-between;
+        align-items: center;
+        padding: .5rem;
+        width: 100%;
+        color: white;
 
-        button {
-            padding: 2rem;
-            background: $lightgray;
-            border: 1px solid rgba($dark, .5);
-            border-bottom: 0;
+        background-color: $dark;
 
-            &.active {
-                background: $dark;
-                color: white;
+        a {
+            color: white;
+            font-size: 2rem;
+
+            &:hover {
+                text-decoration: none;
+                color: $pink;
             }
         }
-    }
-
-    .displays {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        grid-template-areas:
-            "preview preview program program"
-            "input1 input2 input3 input4"
-            "input5 input6 input7 input8";
 
         > * {
-            aspect-ratio: 16 / 9;
-            border: 3px solid $lightgray;
-            position: relative;
-            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
 
-            .label {
-                background-color: rgba($darkgray, .5);
+        .logo {
+            height: 2rem;
+            margin-right: 1rem;
+        }
+
+        .status {
+
+            .p-chip {
+                margin-right: .5rem;
                 color: white;
-                padding: .125rem .35rem;
-                border-radius: .125rem;
 
-                position: absolute;
-                bottom: .25rem;
-                left: 50%;
-                transform: translateX(-50%);
+                &.success {
+                    background-color: var(--green)
+                }
+    
+                &.error {
+                    background-color: var(--red);
+                }
             }
-        }
-
-        .preview {
-            grid-area: preview;
-            border-color: $green;
-        }
-
-        .program {
-            grid-area: program;
-            border-color: $red;
         }
     }
 
-    .controls {
+    .main {
+        grid-area: main;
+        overflow-y: scroll;
+        padding: 1rem;
+
+        .table-row {
+            &.preview {
+                background-color: var(--green)
+            }
+        }
+    }
+
+    .template-selector {
+        display: flex;
+        gap: 1rem; 
+    }
+
+    .template-btn {
+        text-align: center;
+        padding: .25rem;
+        background-color: lighten($dark, 65%);
+        width: 6rem;
+        height: 100%;
+        border: 1px solid $dark;
+        border-radius: .25rem;
+
+        svg {
+            font-size: 2rem;
+        }
+
+        div {
+            font-size: .75rem;
+        }
+
+        &.program {
+            background-color: var(--red);
+            color: white;
+        }
+
+        &.preview {
+            background-color: var(--green);
+        }
+    }
+
+    .template-actions {
+        grid-area: template-actions;
+        align-self: end;
+        padding: 0.5rem;
+    }
+
+    .actions {
+        padding: .5rem;
+        border-top: $dark solid 1px;
+        box-shadow: $darkgray 0 0 .5rem;
         display: flex;
         justify-content: space-between;
 
-        .control-group {
-            padding: 1rem;
-
-            button {
-                padding: 1rem;
-                border-radius: 50rem;
-            }
+        > * {
+            display: flex;
+            gap: 1rem;
+            min-width: fit-content;
         }
     }
+}
+
+.timer {
+    position: relative;
+
+    .time-left {
+        position: absolute;
+        inset: 0;
+        font-size: 14vmin;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .digit {
+            width: 8.5vmin;
+            height: 14vmin;
+            text-align: center;
+        }
+
+        .divider {
+            height: 14vmin;
+            line-height: .85;
+        }
+    }
+    
+    /* Removes SVG styling that would hide the time label */
+    .base-timer__circle {
+        fill: none;
+        stroke: none;
+    }
+    
+    .base-timer__circle.done {
+        fill: var(--red);
+    }
+    
+    /* The SVG path that displays the timer's progress */
+    .base-timer__path-elapsed {
+        stroke-width: 7px;
+        stroke: grey;
+    }
+    
+    .base-timer__path-remaining {
+        /* Just as thick as the original ring */
+        stroke-width: 7px;
+      
+        /* Rounds the line endings to create a seamless circle */
+        stroke-linecap: round;
+      
+        /* Makes sure the animation starts at the top of the circle */
+        transform: rotate(90deg);
+        transform-origin: center;
+      
+        /* One second aligns with the speed of the countdown timer */
+        transition: 1000ms linear all;
+      
+        /* Allows the ring to change color when the color value updates */
+        stroke: currentColor;
+
+        &.red {
+            color: var(--red);
+        }
+
+        &.green {
+            color: var(--green);
+        }
+
+        &.yellow {
+            color: var(--yellow);
+        }
+      }
+      
+      .base-timer__svg {
+        /* Flips the svg and makes the animation to move left-to-right */
+        transform: scaleX(-1);
+      }
+}
+
+.color-card {
+    width: 100%;
+    height: 100%; 
+    border-radius: .25rem;
+    background-color: var(--red);
 }
