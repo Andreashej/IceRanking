@@ -1,19 +1,16 @@
-import { STATUS_CODES } from 'http';
-import { Button } from 'primereact/button';
-import React, { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState, VoidFunctionComponent } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useFullscreen } from '../../App';
-import useResizeObserver from '../../hooks/useResizeObserver';
 import { BigScreen } from '../../models/bigscreen.model';
 import { Competition } from '../../models/competition.model';
 import { ScreenGroup } from '../../models/screengroup.model';
-import { Test } from '../../models/test.model';
 import { CollectingRingTemplate } from './templates/CollectingRingTemplate';
 import { CurrentEquipage } from './templates/CurrentEquipage';
 import { CurrentGroup } from './templates/CurrentGroup';
 import { Custom } from './templates/Custom';
 import { DefaultTemplate } from './templates/DefaultTemplate';
 import { ResultList } from './templates/ResultList';
+import { SectionMarks } from './templates/SectionMarks';
 import { StartList } from './templates/StartList';
 
 type ReducerAction = {
@@ -42,7 +39,6 @@ const initialTemplateState = {
 }
 
 const templateReducer = (state: TemplateState, action: ReducerAction) => {
-    console.log(state, action);
     switch(action.type) {
         case 'setTemplate':
             if (state.currentTemplate) {
@@ -59,6 +55,7 @@ const templateReducer = (state: TemplateState, action: ReducerAction) => {
                 }
             }
         case 'swapTemplates':
+            console.log(state.nextTemplate);
             return {
                 ...state,
                 currentTemplate: state.nextTemplate,
@@ -84,7 +81,6 @@ export type ScreenContext = {
     screen?: BigScreen;
     screenGroup?: ScreenGroup;
     competition?: Competition;
-    test?: Test;
     socket?: Socket;
     onTemplateHidden?: () => void;
     show?: boolean;
@@ -100,7 +96,6 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
     const socket = useRef<Socket>();
     const [screen, setScreen] = useState<BigScreen>();
     const [screenGroup, setScreenGroup] = useState<ScreenGroup>();
-    // const [nextScreenGroup, setNextScreenGroup] = useState<ScreenGroup>();
     const [_, setFullscreen] = useFullscreen();
     const screenRef = useRef<HTMLDivElement>(null);
     const [templateState, dispatch] = useReducer(templateReducer, initialTemplateState)
@@ -133,7 +128,6 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
         }
 
         const onScreenGroupChanged = (screenGroup: ScreenGroup) => {
-            console.log(screenGroup)
             setScreenGroup(screenGroup);
         }
 
@@ -144,13 +138,6 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
             })
         }
 
-        const onTestChanged = (test: Test) => {
-            setScreenGroup({
-                ...screenGroup as ScreenGroup,
-                test
-            });
-        };
-
         const onHide = () => {
             dispatch({ type: 'hide' })
         };
@@ -159,7 +146,6 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
         socket.current.on('Screen.Created', onScreenCreated);
         socket.current.on('Screen.ScreenGroupChanged', onScreenGroupChanged)
         socket.current.on('ScreenGroup.TemplateChanged', onTemplateChanged);
-        socket.current.on('ScreenGroup.TestChanged', onTestChanged);
         socket.current.on('ScreenGroup.HideAll', onHide);
 
         return () => {
@@ -167,7 +153,6 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
             socket.current?.off('Screen.Created', onScreenCreated);
             socket.current?.off('Screen.ScreenGroupChanged', onScreenGroupChanged)
             socket.current?.off('ScreenGroup.TemplateChanged', onTemplateChanged);
-            socket.current?.off('ScreenGroup.TestChanged', onTestChanged);
             socket.current?.off('ScreenGroup.HideAll', onHide);
         }
     },[setFullscreen, screenGroupId, screenGroup, templateState.currentTemplate])
@@ -184,24 +169,70 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
     const renderTemplate = useMemo(() => {
         switch (templateState.currentTemplate?.template) {
             case 'collectingring':
-                return <CollectingRingTemplate currentGroup={templateState.currentTemplate.templateData.currentGroup} test={screenGroup?.test} endTime={new Date(templateState.currentTemplate.templateData.endTime)} />;
+                return (
+                    <CollectingRingTemplate 
+                        currentGroup={templateState.currentTemplate.templateData.group} 
+                        test={templateState.currentTemplate.templateData.test} 
+                        endTime={new Date(templateState.currentTemplate.templateData.endTime)} 
+                    />
+                );
             case 'startlist':
-                return <StartList startList={templateState.currentTemplate.templateData} />;
+                return (
+                    <StartList 
+                        test={templateState.currentTemplate.templateData.test} 
+                        startList={templateState.currentTemplate.templateData.startList} 
+                        phase={templateState.currentTemplate.templateData.phase}
+                    />
+                );
             case 'resultlist':
-                return <ResultList results={templateState.currentTemplate.templateData} />;
+                return (
+                    <ResultList 
+                        test={templateState.currentTemplate.templateData.test} 
+                        results={templateState.currentTemplate.templateData.resultList} 
+                        phase={templateState.currentTemplate.templateData.phase}
+                    />
+                );
             case 'groupinfo':
-                return <CurrentGroup currentGroup={templateState.currentTemplate.templateData} />;
+                return (
+                    <CurrentGroup 
+                        currentGroup={templateState.currentTemplate.templateData.group} 
+                    />
+                );
             case 'equipageinfo':
-                return <CurrentEquipage type='info' currentGroup={templateState.currentTemplate.templateData} />;
+                return (
+                    <CurrentEquipage 
+                        test={templateState.currentTemplate.templateData.test} 
+                        type='info' 
+                        currentGroup={templateState.currentTemplate.templateData.group} 
+                    />
+                );
             case 'equipageresult':
-                return <CurrentEquipage type='result' currentGroup={templateState.currentTemplate.templateData} />;
+                return (
+                    <CurrentEquipage 
+                        test={templateState.currentTemplate.templateData.test} 
+                        type='result' 
+                        currentGroup={templateState.currentTemplate.templateData.group} 
+                    />
+                );
+            case 'sectionmarks':
+                return (
+                    <SectionMarks 
+                        section={templateState.currentTemplate.templateData.section}
+                        group={templateState.currentTemplate.templateData.group}
+                    />
+                )
             case 'custom':
-                return <Custom title={templateState.currentTemplate.templateData.title} subtitle={templateState.currentTemplate.templateData.subtitle} />
+                return (
+                    <Custom 
+                        title={templateState.currentTemplate.templateData.title} 
+                        subtitle={templateState.currentTemplate.templateData.subtitle} 
+                    />
+                );
             
             default:
                 return <DefaultTemplate />;
         }
-    }, [templateState, screenGroup?.test]);
+    }, [templateState]);
 
     return (
         <ScreenContext.Provider value={{ 
@@ -209,7 +240,6 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
             screenGroup, 
             socket: socket?.current, 
             competition: screenGroup?.competition, 
-            test: screenGroup?.test,
             onTemplateHidden,
             show: templateState.show
         }}>

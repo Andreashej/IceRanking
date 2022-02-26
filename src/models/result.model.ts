@@ -13,37 +13,38 @@ export type Result = {
     sta: number;
     riderClass: string;
     color: string;
+    scope?: "A" | "B" | null;
 
     test?: Test;
     horse?: Horse;
     rider?: Person;
-    marks?: Array<Mark & Flag & Time>;
+    marks?: Array<JudgeMark>;
 }
 
 type BaseMark = {
     markType: "mark" | "flag" | "time";
+    type: "judge" | "section";
     judgeNo: number;
     judgeId: string;
 
-    resultId: number | null;
     sectionMarkId: number | null;
-
-    result?: Result;
-    sectionMarks?: BaseMark[]
-
+    
+    mark: number;
+    flagOk: boolean;
+    
     redCard: boolean;
     yellowCard: boolean;
     blueCard: boolean
 }
 
-export type Mark = BaseMark & {
-    mark: number
+export type JudgeMark = BaseMark & {
+    resultId: number | null;
+    
+    result?: Result;
+    sectionMarks?: SectionMark[]
 }
 
-export type Flag = BaseMark & {
-    isOk: boolean;
-}
-
-export type Time = BaseMark & {
-    time: number;
+export type SectionMark = BaseMark & {
+    sectionNo: number;
+    judgeMarkId: number;
 }

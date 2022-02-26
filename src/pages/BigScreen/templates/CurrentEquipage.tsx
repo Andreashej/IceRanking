@@ -4,32 +4,18 @@ import { Result } from '../../../models/result.model';
 import { StartListEntry } from '../../../models/startlist.model';
 import { Test } from '../../../models/test.model';
 import { markToDouble } from '../../../tools';
-import { useScreenContext } from '../BigScreen';
 import { AnimatedFlatList } from './components/AnimatedFlatList';
+import { JudgeCard, judgeNoToLetter } from './components/JudgeCard';
 import { LowerThird } from './components/LowerThird';
 
-const judgeNoToLetter = (no: number) => {
-    switch (no) {
-        case 1: return 'A';
-        case 2: return 'B';
-        case 3: return 'C';
-        case 4: return 'D';
-        case 5: return 'E';
-    }
-}
 
-const JudgeCard: React.FC<{ color: string }> = ({color}) => {
-    return (
-        <div className="card" style={{ backgroundColor: `var(--${color})` }}></div>
-    )
-}
 
 const EquipageResult: React.FC<FlatListItem<Result, Test>> = ({ item: result, onHidden, show, parent: test}) => {
 
     const marks = result.marks?.map((mark) => {
         const m = markToDouble(mark.mark, test.roundingPrecision - 1);
         return (
-            <div>
+            <div key={`${mark.judgeId}.${result.sta}`}>
                 <span>{judgeNoToLetter(mark.judgeNo)}</span>
                 <span className="sign">{m}</span>
                 {mark.redCard && <JudgeCard color="red" />}
@@ -84,18 +70,15 @@ const EquipageInfo: React.FC<FlatListItem<StartListEntry, Test>> = ({ item, onHi
 type CurrentEquipageProps = {
     type: 'info' | 'result';
     currentGroup: StartListEntry[] | Result[];
+    test: Test;
 }
 
-export const CurrentEquipage: React.FC<CurrentEquipageProps> = ({ type, currentGroup }) => {
+export const CurrentEquipage: React.FC<CurrentEquipageProps> = ({ type, currentGroup, test }) => {
     const renderTemplate = type === 'info' ? EquipageInfo : EquipageResult;
-
-    const { test } = useScreenContext()
-
-    console.log(test);
 
     return (
         <>
-            <AnimatedFlatList parent={test} items={currentGroup} RenderComponent={renderTemplate} itemsPerPage={3} usePlaceholder={false} />
+            <AnimatedFlatList parent={test} items={currentGroup} RenderComponent={renderTemplate} itemsPerPage={1} timePerPage={10000} usePlaceholder={false} />
         </>
     )
 }

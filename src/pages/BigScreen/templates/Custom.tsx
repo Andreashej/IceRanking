@@ -21,7 +21,7 @@ const CustomListItem: React.FC<FlatListItem<CustomProps, null>> = ({ item, onHid
 export const Custom: React.FC<CustomProps> = (props) => {
     return (
         <>
-            <AnimatedFlatList items={[props]} RenderComponent={CustomListItem} itemsPerPage={1} usePlaceholder={false} />
+            <AnimatedFlatList items={[{id: "custom", ...props}]} RenderComponent={CustomListItem} itemsPerPage={1} usePlaceholder={false} />
         </>
     )
 }

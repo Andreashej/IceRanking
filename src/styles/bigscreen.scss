@@ -73,17 +73,27 @@
             position: relative;
             background: $dark;
             border-radius: .25rem .25rem .125rem .125rem;
-            padding: .25rem;
-            background: radial-gradient(ellipse 60% 25% at bottom center, var(--blue) 0, $dark);
-            // display: flex;
             overflow: hidden;
             font-size: 1.2rem;
             
+            &:not(:first-child) {
+                border-top-left-radius: 0;
+            }
+            
+            
             .header-text {
+                padding: .25rem;
                 color: white;
                 font-variant: small-caps; 
+                background: radial-gradient(ellipse 60% 25% at bottom center, var(--blue) 0, $dark);
             }
 
+            .header-subtitle {
+                font-size: .8rem;
+                padding: .125rem .25rem;
+                font-weight: 300;
+            }
+            
             .header-logo {
                 position: absolute;
                 top: 0;
@@ -105,6 +115,19 @@
             display: flex;
             flex-direction: column;
             gap: 0!important;
+
+            .tag {
+                font-weight: 300;
+                color: white;
+                width: max-content;
+                // margin-left: .5rem;
+                background-color: var(--blue);
+                padding: .125rem .25rem;
+                padding-right: 1rem;
+                border-top-left-radius: .125rem;
+                clip-path: polygon(0 0, calc(100% - 1rem) 0%, 100% 100%, 0% 100%);
+
+            }
 
             .extra {
                 font-size: .8rem;
@@ -243,7 +266,7 @@
             
         }
 
-        &.equipageinfo, &.equipageresult, &.custom {
+        &.equipageinfo, &.equipageresult, &.custom, &.sectionmarks {
             grid-template-columns: 1fr 75vw 1fr;
             grid-template-rows: 1fr min-content 2vh;
             grid-template-areas: 
@@ -256,7 +279,7 @@
             }
         }
 
-        &.startlist, &.resultlist {
+        &.startlist, &.resultlist, &.resultlistsections {
             grid-template-columns: 1fr 75vw 1fr;
             grid-template-rows: 1fr min-content min-content 2vh;
             grid-template-areas: 
@@ -340,11 +363,11 @@
                     justify-content: center;
                     align-items: center;
 
-                    &.primary {
+                    &.afin {
                         background-color: var(--green);
                     }
 
-                    &.secondary {
+                    &.bfin {
                         background-color: var(--yellow);
                         color: black;
                     }

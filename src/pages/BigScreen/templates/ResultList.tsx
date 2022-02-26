@@ -1,8 +1,7 @@
-import React, { AnimationEventHandler, useEffect, useState } from 'react';
+import React, { AnimationEventHandler, useMemo } from 'react';
 import { FlatListItem } from '../../../components/partials/FlatList';
 import { Result } from '../../../models/result.model';
 import { Test } from '../../../models/test.model';
-import { useScreenContext } from '../BigScreen';
 import { AnimatedFlatList } from './components/AnimatedFlatList';
 
 const ResultListItem: React.FC<FlatListItem<Result, Test>> = ({ item: result, show, onHidden, onShown }) => {
@@ -31,22 +30,37 @@ const ResultListItem: React.FC<FlatListItem<Result, Test>> = ({ item: result, sh
                     <b>{result.mark}</b>
                 </div>
             </div>
-            {/* <div className="row-end-marker">
-                A
-            </div> */}
+            {result.scope && <div className={`row-end-marker ${result.scope.toLowerCase()}`}>
+                {result.scope[0]}
+            </div>}
         </li>
     )
 }
 
 type ResultListProps = {
     results: Result[];
+    test: Test;
+    phase: "PREL" | "AFIN" | "BFIN" | "CFIN" | "FIN";
 }
 
-export const ResultList: React.FC<ResultListProps> = ({ results }) => {
-    const { screenGroup } = useScreenContext();
+export const ResultList: React.FC<ResultListProps> = ({ results, test, phase }) => {
+    const phaseText = useMemo(() => {
+        switch(phase) {
+            case 'PREL':
+                return "Preliminary";
+            case 'AFIN':
+                return 'A-final';
+            case 'BFIN':
+                return 'B-final';
+            case 'CFIN':
+                return 'C-final';
+            default:
+                return '';
+        }
+    }, [phase])
 
     return <AnimatedFlatList 
-        header={<>{screenGroup?.test?.testName} - <small>Results</small></>}
+        header={<>{test.testName} {phaseText} - <small>Results</small></>}
         headerImg="assets/img/ICeCompass_Logo_Final6.png"
         items={results} 
         RenderComponent={ResultListItem} 

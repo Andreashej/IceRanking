@@ -26,7 +26,7 @@ const GroupInfo: React.FC<FlatListItem<StartListEntry, Test>> = ({ item, onHidde
 }
 
 type CurrentGroupProps = {
-    currentGroup: StartListEntry[] | Result[];
+    currentGroup: StartListEntry[];
 }
 
 export const CurrentGroup: React.FC<CurrentGroupProps> = ({ currentGroup }) => {

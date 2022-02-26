@@ -11,5 +11,4 @@ export type ScreenGroup = {
     
     screens?: BigScreen[];
     competition?: Competition;
-    test?: Test;
 }

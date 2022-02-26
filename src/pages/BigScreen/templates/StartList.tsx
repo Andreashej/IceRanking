@@ -36,14 +36,30 @@ const StartListItem: React.FC<FlatListItem<StartListEntry, Test>> = ({ item, sho
 
 type StartListProps = {
     startList: StartListEntry[]
+    test: Test;
+    phase: "PREL" | "AFIN" | "BFIN" | "CFIN" | "FIN";
 }
 
 
-export const StartList: React.FC<StartListProps> = ({ startList }) => {
-    const { screenGroup } = useScreenContext();
+export const StartList: React.FC<StartListProps> = ({ startList, test, phase }) => {
+    const phaseText = useMemo(() => {
+        switch(phase) {
+            case 'PREL':
+                return "Preliminary";
+            case 'AFIN':
+                return 'A-final';
+            case 'BFIN':
+                return 'B-final';
+            case 'CFIN':
+                return 'C-final';
+            default:
+                return '';
+        }
+    }, [phase])
+
 
     return <AnimatedFlatList 
-        header={<>{screenGroup?.test?.testName} - <small>Start List</small></>} 
+        header={<>{test.testName} {phaseText} - <small>Start List</small></>} 
         headerImg="assets/img/ICeCompass_Logo_Final6.png" 
         items={startList} RenderComponent={StartListItem} 
         itemsPerPage={10} 

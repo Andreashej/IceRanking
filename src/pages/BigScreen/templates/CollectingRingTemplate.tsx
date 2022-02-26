@@ -6,6 +6,7 @@ import { StartListEntry } from '../../../models/startlist.model';
 import { AnimatedFlatList } from './components/AnimatedFlatList';
 import { FlatListItem } from '../../../components/partials/FlatList';
 import { Test } from '../../../models/test.model';
+import { Header } from './components/Header';
 
 
 const GroupItem: React.FC<FlatListItem<StartListEntry, Test>> = ({ item: startListEntry, show = true, onHidden, onShown }) => {
@@ -31,18 +32,6 @@ const GroupItem: React.FC<FlatListItem<StartListEntry, Test>> = ({ item: startLi
     )
 }
 
-const CollectingRingHeader: React.FC<{ startGroup?: number, test?: Test }> = ({ startGroup, test }) => {
-    const headerText = startGroup ? 'Please go to Collecting Ring' : 'Waiting for next call';
-
-    return (
-        <>
-            <div className="header-text">
-                {test?.testName} - <small>{headerText}</small>
-            </div>
-        </>
-    )
-}
-
 type CollectingRingTemplateProps = {
     currentGroup: StartListEntry[];
     test?: Test;
@@ -50,7 +39,7 @@ type CollectingRingTemplateProps = {
 }
 
 export const CollectingRingTemplate: React.FC<CollectingRingTemplateProps> = ({ currentGroup, test, endTime }) => {
-    const { socket, screenGroup, show, onTemplateHidden } = useScreenContext();
+    const { socket, show, onTemplateHidden } = useScreenContext();
     const [groupOnCall, setGroupOnCall] = useState<StartListEntry[]>([]);
     const [nextGroupOnCall, setNextGroupOnCall] = useState<StartListEntry[]>([]);
     const [timerEnded, setTimerEnded] = useState<boolean>(false);
@@ -99,7 +88,7 @@ export const CollectingRingTemplate: React.FC<CollectingRingTemplateProps> = ({ 
     }, [nextGroupOnCall, listHidden, groupOnCall, timerEnded])
 
     useEffect(() => {
-        if (!show) onTemplateHidden?.();
+        // if (!show) onTemplateHidden?.();
     }, [show, onTemplateHidden])
 
     const onTimerEnd = () => {
@@ -108,20 +97,22 @@ export const CollectingRingTemplate: React.FC<CollectingRingTemplateProps> = ({ 
         }, 180000);
     }
 
+    const headerText = groupOnCall.length > 0 ? 'Please go to Collecting Ring' : 'Waiting for next call';
+
     return (
         <>
             <div className="screen-header" style={{ gridArea: "header" }}>
                 <div>
-                    <small>{screenGroup?.competition?.name}</small>
                     <h2>Collecting Ring</h2>
                 </div>
                 <div className="clock">{time}</div>
             </div>
             <div className="countdown" style={{ gridArea: "timer"}}><Timer endTime={endTime} onTimerEnd={onTimerEnd} /></div>
             <div style={{ gridArea: "group" }}>
-                <div className="header" style={{ marginBottom: ".5rem" }}>
+                <Header headerContent={<>{test?.testName} - <small>{headerText}</small></>} style={{ marginBottom: ".5rem" }} />
+                {/* <div className="header" style={{ marginBottom: ".5rem" }}>
                     <CollectingRingHeader test={test} startGroup={(groupOnCall.length > 0) && !timerEnded ? groupOnCall[0].startGroup : undefined} />
-                </div>
+                </div> */}
                 <AnimatedFlatList
                     items={groupOnCall} 
                     RenderComponent={GroupItem} 

@@ -8,13 +8,14 @@ type AnimatedFlatListProps<T = any, P = any> = FlatListProps<T, P> & {
     itemsPerPage?: number;
     timePerPage?: number;
     header?: JSX.Element;
+    subHeader?: JSX.Element;
     headerImg?: string;
     parentShow?: boolean;
     usePlaceholder?: boolean;
 
 }
 
-export const AnimatedFlatList: React.FC<AnimatedFlatListProps> = ({ header, headerImg, items, itemsPerPage = 6, timePerPage = 10000, RenderComponent, parentShow = true, onHidden, usePlaceholder = true, ...rest }) => {
+export const AnimatedFlatList: React.FC<AnimatedFlatListProps> = ({ header, headerImg, items, itemsPerPage = 6, timePerPage = 10000, RenderComponent, parentShow = true, onHidden, usePlaceholder = true, subHeader, ...rest }) => {
     const { onTemplateHidden, show: showTemplate } = useScreenContext();
     const [currentPage, setCurrentPage] = useState(0);
     const [show, setShow] = useState<boolean>(showTemplate ?? true);
@@ -87,7 +88,7 @@ export const AnimatedFlatList: React.FC<AnimatedFlatListProps> = ({ header, head
 
     return (
         <>
-            {header && <Header headerContent={header} imgSrc={headerImg} onHidden={() => setHeaderShown(showTemplate ?? true)} style={{ gridArea: "header"}} />}
+            {header && <Header headerContent={header} imgSrc={headerImg} onHidden={() => setHeaderShown(showTemplate ?? true)} style={{ gridArea: "header"}} subHeaderContent={subHeader} />}
             <div style={{ gridArea: "listarea" }} ref={listRef}>
                 {currentPageItems.length > 0 && <FlatList 
                     items={currentPageItems} 
