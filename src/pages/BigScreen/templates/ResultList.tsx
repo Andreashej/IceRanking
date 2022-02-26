@@ -61,7 +61,7 @@ export const ResultList: React.FC<ResultListProps> = ({ results, test, phase }) 
 
     return <AnimatedFlatList 
         header={<>{test.testName} {phaseText} - <small>Results</small></>}
-        headerImg="assets/img/ICeCompass_Logo_Final6.png"
+        headerImg={test.sponsorLogo ?? "assets/img/ICeCompass_Logo_Final6.png"}
         items={results} 
         RenderComponent={ResultListItem} 
         itemsPerPage={10} 
