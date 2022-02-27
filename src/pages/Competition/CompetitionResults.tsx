@@ -86,6 +86,7 @@ export const CompetitionResults: React.FC = () => {
         cancelLoading.current();
 
         const params = new URLSearchParams({ 
+            "filter[]": "phase == PREL",
             page: pagination?.nextPage?.toString() ?? '1',
             perPage: '100',
         });
