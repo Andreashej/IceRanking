@@ -125,6 +125,7 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
         const onScreenCreated = (screen: BigScreen) => {
             if (screen.id) localStorage.setItem('bigscreenId', screen.id.toString());
             setScreen(screen);
+            document.body.classList.add(screen.role);
         }
 
         const onScreenGroupChanged = (screenGroup: ScreenGroup) => {

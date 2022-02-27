@@ -3,6 +3,7 @@ import { ScreenGroup } from "./screengroup.model";
 
 export type BigScreen = {
     id: number;
+    role: string;
     clientId?: string;
     screenGroupId?: number;
     competitionId?: number;

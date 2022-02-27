@@ -10,14 +10,21 @@
     
     body {
         font-family: 'Ubuntu', sans-serif!important;
-        background-image: url(../../public/assets/img/bigscreen-bg.jpg);
-        // background-color: lime;
-    
-        &::before {
-            background-color: rgba($dark, .8);
-            content: "";
-            position: absolute;
-            inset: 0;
+
+        &.default {
+            background-image: url(../../public/assets/img/bigscreen-bg.jpg);
+            // background-color: lime;
+        
+            &::before {
+                background-color: rgba($dark, .8);
+                content: "";
+                position: absolute;
+                inset: 0;
+            }
+        }
+
+        &.overlay {
+            background-color: lime;
         }
     }
 
