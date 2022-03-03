@@ -28,6 +28,14 @@
         }
     }
 
+    .osd {
+        position: absolute;
+        inset: 0;
+        padding: 1rem;
+        background: rgba($darkgray, .5);
+        color: white;
+    }
+
     .logo {
         position: absolute;
         top: 5vmin;
@@ -644,4 +652,85 @@
     height: 100%; 
     border-radius: .25rem;
     background-color: var(--red);
+}
+
+.screen-group-editor {
+    .screen-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: .5rem;
+    }
+
+    .drag-target {
+        background-color: rgba($darkgray, .5)
+    }
+}
+
+.screen-editor {
+    border: .25rem solid $darkgray;
+    border-radius: .5rem;
+    background-color: #0b7ad1;
+    color: white;
+    aspect-ratio: 16 / 9;
+    padding: .25rem;
+    position: relative;
+
+    .actions {
+        position: absolute;
+        right: .25rem;
+
+        button {
+            background: none;
+            border: none;
+            color: white;
+        }
+    }
+
+    &.add {
+        &:hover {
+            &::before {
+                position: absolute;
+                font-size: 4rem;
+                background-color: rgba($darkgray, .5);
+                content: "+";
+                inset: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-top: -5px;
+            }
+        }
+
+        .loading, .check {
+            position: absolute;
+            inset: 0;
+            font-size: 2.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            display: none;
+        }
+
+        &.claiming {
+            &::before {
+                content: "";
+            }
+
+            .loading {
+                display: flex;
+            }
+        }
+
+        &.claimed {
+            &::before {
+                content: "";
+            }
+
+            pointer-events: none;
+
+            .check {
+                display: flex;
+            }
+        }
+    }
 }

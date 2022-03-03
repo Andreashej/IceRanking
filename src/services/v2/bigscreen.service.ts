@@ -56,11 +56,35 @@ export const getScreens = async (params?: URLSearchParams): Promise<[BigScreen[]
     }
 }
 
+export const getScreen = async (id: number, params?: URLSearchParams): Promise<BigScreen> => {
+    try {
+        const response = await apiV2.get<ApiResponse<BigScreen>>(`/bigscreens/${id}`, { params });
+
+        return response.data.data;
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            return Promise.reject(error.response?.data.message ?? error.message)
+        }
+        return Promise.reject(error);
+    }
+}
+
 export const patchScreen = async (screen: Partial<BigScreen>): Promise<BigScreen> => {
     try {
         const response = await apiV2.patch<ApiResponse<BigScreen>>(`/bigscreens/${screen.id}`, screen)
 
         return response.data.data;
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            return Promise.reject(error.response?.data.message ?? error.message)
+        }
+        return Promise.reject(error);
+    }
+}
+
+export const deleteScreen = async (screen: BigScreen): Promise<void> => {
+    try {
+        await apiV2.delete<ApiResponse<void>>(`/bigscreens/${screen.id}`);
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
             return Promise.reject(error.response?.data.message ?? error.message)

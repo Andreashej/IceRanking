@@ -142,16 +142,27 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
         const onHide = () => {
             dispatch({ type: 'hide' })
         };
+
+        const onScreenUpdated = (screen: BigScreen) => {
+            console.log(screen);
+            document.body.classList.remove('overlay', 'default')
+            document.body.classList.add(screen.role)
+            setScreen(screen);
+            setScreenGroup(screen.screenGroup);
+        }
         
         socket.current.on('connect', onConnect);
         socket.current.on('Screen.Created', onScreenCreated);
+        socket.current.on('Screen.Updated', onScreenUpdated);
         socket.current.on('Screen.ScreenGroupChanged', onScreenGroupChanged)
         socket.current.on('ScreenGroup.TemplateChanged', onTemplateChanged);
         socket.current.on('ScreenGroup.HideAll', onHide);
+        socket.current.on('ScreenGroup.Updated', onScreenGroupChanged)
 
         return () => {
             socket.current?.off('connect', onConnect);
             socket.current?.off('Screen.Created', onScreenCreated);
+            socket.current?.off('Screen.Updated', onScreenUpdated);
             socket.current?.off('Screen.ScreenGroupChanged', onScreenGroupChanged)
             socket.current?.off('ScreenGroup.TemplateChanged', onTemplateChanged);
             socket.current?.off('ScreenGroup.HideAll', onHide);
@@ -247,6 +258,10 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
             <div className={`template ${templateState.show ? 'show' : 'hide'} ${templateState.currentTemplate?.template}`} ref={screenRef}>
                 {renderTemplate}
             </div>
+            {screenGroup?.showOsd && <div className="osd">
+                <div>Screen ID: {screen?.id}</div>
+                <div>Screen Group: {screenGroup.name}</div>
+            </div>}
         </ScreenContext.Provider>
     )
 }

@@ -40,10 +40,12 @@ const CompetitionPage: React.FC = ({ children }) => {
         if (loading || error || !competition || !competition.tests) return [[], []];
 
         const testItems = competition.tests?.map<MenuItem>((test): MenuItem => {
+            const path = `/competition/${competition.id}/test/${test.testName}`;
+            
             return {
-                label: test.testcode,
-                className: pathname.includes(`/test/${test.testcode}`) ? 'active' : '',
-                command: () => history.push(`/competition/${competition.id}/test/${test.testcode}`)
+                label: test.testName,
+                className: pathname === path ? 'active' : '',
+                command: () => history.push(path)
             };
         });
 

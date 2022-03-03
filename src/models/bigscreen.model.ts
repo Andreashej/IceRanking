@@ -5,7 +5,7 @@ export type BigScreen = {
     id: number;
     role: string;
     clientId?: string;
-    screenGroupId?: number;
+    screenGroupId?: number | null;
     competitionId?: number;
 
     screenGroup?: ScreenGroup;

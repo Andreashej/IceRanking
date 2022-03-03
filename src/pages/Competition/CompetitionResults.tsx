@@ -76,7 +76,7 @@ export const CompetitionResults: React.FC = () => {
 
     const { testcode } = useParams<{ testcode: string; }>()
 
-    const test = useMemo(() => competition?.tests?.find(test => test.testcode === testcode), [testcode, competition?.tests]);
+    const test = useMemo(() => competition?.tests?.find(test => test.testName === testcode), [testcode, competition?.tests]);
 
     const cancelLoading = useRef(() => {})
 

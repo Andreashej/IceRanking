@@ -1,24 +1,172 @@
 import React, { FormEvent, useCallback, useEffect, useState } from 'react';
 import { ScreenGroup } from '../../models/screengroup.model';
 import { useCompetition } from '../../contexts/competition.context';
-import { createScreenGroup, getScreenGroups, patchScreen } from '../../services/v2/bigscreen.service';
+import { createScreenGroup, deleteScreen, getScreen, getScreenGroups, getScreens, patchScreen, patchScreenGroup } from '../../services/v2/bigscreen.service';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { PrimeIcons } from 'primereact/api';
 import { BigScreen } from '../../models/bigscreen.model';
-import { Tree, TreeDragDropParams, TreeNodeTemplateType } from 'primereact/tree';
-import TreeNode from 'primereact/treenode';
 import { useToast } from '../../contexts/toast.context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { useHistory } from 'react-router-dom';
+import { Dialog } from 'primereact/dialog';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { InputSwitch } from 'primereact/inputswitch';
+
+type ScreenGroupProps = {
+    screenGroup: ScreenGroup;
+}
+
+type ScreenProps = {
+    screenId: BigScreen['id'];
+}
+
+const ScreenEditor: React.FC<ScreenProps> = ({screenId}) => {
+    const [screen, setScreen] = useState<BigScreen>();
+    const elementId = `screen-${screenId}`;
+
+    useEffect(() => {
+        getScreen(screenId).then((screen) => setScreen(screen));
+    }, [screenId])
+
+    const dragStart: React.DragEventHandler<HTMLDivElement> = (event) => {
+        // const element = event.target as HTMLDivElement;
+
+        // element.style.visibility = 'hidden';
+
+        event.dataTransfer.setData("text", elementId);
+    } 
+
+    const dragEnd: React.DragEventHandler<HTMLDivElement> = (event) => {
+        // event.preventDefault();
+        // const element = event.target as HTMLDivElement;
+        // element.style.visibility = 'visible';
+    } 
+
+    const toggleScreenRole = async () => {
+        const patchedScreen = await patchScreen({id: screen?.id, role: screen?.role === 'overlay' ? 'default' : 'overlay' });
+
+        console.log(patchedScreen);
+
+        setScreen(patchedScreen);
+    }
+
+    const unClaim = async () => {
+        if (!screen) return;
+
+        await deleteScreen(screen);
+
+        const element = document.getElementById(elementId)
+        element?.remove();
+    }
+
+    if (!screen) return null;
+
+    return (
+        <div 
+            id={elementId} 
+            className={`screen-editor ${screen.role}`}
+            draggable
+            onDragStart={dragStart} 
+            onDragEnd={dragEnd}
+            data-screen-id={screen.id}
+            data-screen-source-group={screen.screenGroupId}
+        >
+            <div className="actions">
+                <button><FontAwesomeIcon icon="sync" onClick={toggleScreenRole} /></button>
+                <button><FontAwesomeIcon icon="times" onClick={unClaim} /></button>
+            </div>
+            <div>
+                ID: {screen.id}
+            </div>
+            <div>
+                Role: {screen.role}
+            </div>
+        </div>
+    )
+}
+
+const ScreenGroupEditor: React.FC<ScreenGroupProps> = ({screenGroup}) => {
+    const [osd, setOsd] = useState<boolean>(screenGroup.showOsd);
+    const showToast = useToast();
+
+    useEffect(() => {
+        patchScreenGroup({ id: screenGroup.id, showOsd: osd })
+    }, [screenGroup.id, osd])
+
+    const onDragOver: React.DragEventHandler<HTMLDivElement> = (event) => {
+        event.preventDefault();
+    }
+
+    const onDragEnter: React.DragEventHandler<HTMLDivElement> = (event) => {
+        event.preventDefault()
+        const element = event.target as HTMLDivElement;
+
+        element.classList.add("drag-target");
+    }
+
+    const onDragLeave: React.DragEventHandler<HTMLDivElement> = (event) => {
+        event.preventDefault()
+        const element = event.target as HTMLDivElement;
+
+        element.classList.remove("drag-target")
+    }
+
+    const onDrop: React.DragEventHandler<HTMLDivElement> = (event) => {
+        event.preventDefault();
+
+        const element = event.target as HTMLDivElement
+        const draggedElementId = event.dataTransfer.getData("text")
+
+        const draggedElement = document.getElementById(draggedElementId) as HTMLDivElement
+
+        patchScreen({ id: parseInt(draggedElement.dataset.screenId as string), screenGroupId: screenGroup.id })
+            .catch((err) => {
+                showToast({
+                    severity: 'error',
+                    summary: "Failed to move screen",
+                    detail: err as string
+                });
+
+                const sourceGroup = document.getElementById(`drag-target-${draggedElement.dataset.screenSourceGroup}`);
+                sourceGroup?.appendChild(draggedElement);
+            })
+            .finally(() => {
+                element.classList.remove("drag-target")
+            });
+
+
+        element.appendChild(draggedElement);
+    }
+
+    return (
+        <div className='card screen-group-editor'>
+            <div className="card-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <h3 className='mb-0'>{screenGroup.name}</h3>
+                <div className="d-flex align-items-center"><span className="mr-2">Show OSD</span><InputSwitch checked={osd} onChange={(e) => setOsd(e.value)} /></div>
+            </div>
+            <div 
+                id={`drag-target-${screenGroup.id}`} 
+                className='card-body screen-container' 
+                style={{ display: "grid", minHeight: "6rem" }} 
+                draggable={false}
+                onDrop={onDrop} 
+                onDragEnter={onDragEnter}
+                onDragLeave={onDragLeave}
+                onDragOver={onDragOver}
+            >
+                {screenGroup.screens?.map((screen) => <ScreenEditor key={screen.id} screenId={screen.id} />)}
+            </div>
+        </div>
+    )
+}
 
 export const ScreenGroupSetup: React.FC = () => {
     const [competition] = useCompetition();
     const [screenGroups, setScreenGroups] = useState<ScreenGroup[]>([]);
     const [newScreenGroupName, setNewName] = useState<string>('');
+    const [claimDialogShown, setClaimDialogShown] = useState<boolean>(false);
+    const [unassignedScreens, setUnassignedScreens] = useState<BigScreen[]>([]);
     const showToast = useToast();
-    const history = useHistory();
 
     const getScreenGroupsForCompetitions = useCallback(async () => {
         return getScreenGroups(new URLSearchParams({
@@ -28,8 +176,23 @@ export const ScreenGroupSetup: React.FC = () => {
     }, [competition])
 
     useEffect(() => {
-        getScreenGroupsForCompetitions().then(([sgs]) => setScreenGroups(sgs));
+        if (!competition) return;
+
+        
+    }, [competition])
+
+    useEffect(() => {
+        getScreenGroupsForCompetitions().then(([sgs]) => setScreenGroups(sgs))
     }, [getScreenGroupsForCompetitions])
+
+    useEffect(() => {
+        if (!claimDialogShown) return;
+
+        const params = new URLSearchParams({
+            'filter[]': 'competitionId == null'
+        })
+        getScreens(params).then(([screens]) => setUnassignedScreens(screens));
+    }, [claimDialogShown])
 
     const createNew = (e: FormEvent) => {
         e.preventDefault();
@@ -47,72 +210,41 @@ export const ScreenGroupSetup: React.FC = () => {
         })
     }
 
-    const screenGroupTreeItems = screenGroups.map<TreeNode>((sg) => {
-        return {
-            key: sg.id,
-            label: sg.name,
-            droppable: true,
-            icon: 'tachometer-alt',
-            className: "screen-group",
-            children: sg.screens?.map<TreeNode>((s) => {
-                return {
-                    key: s.id !== null ? s.id : 0,
-                    label: `Screen ID: ${s.id.toString()}`,
-                    droppable: false,
-                    draggable: true,
-                    icon: 'desktop'
-                }
+    const claim = async (screen: BigScreen): Promise<void> => {
+        if (!competition) return;
+
+        const elementRef = document.getElementById(`screen-claim-${screen.id}`);
+
+        elementRef?.classList.add("claiming");
+
+        try {
+            await patchScreen({ id: screen.id, competitionId: competition.id});
+
+            const [screenGroups] = await getScreenGroupsForCompetitions()
+            setScreenGroups(screenGroups)
+
+            elementRef?.classList.add("claimed");
+        } catch (error) {
+            showToast({
+                'summary': "Could not claim screen",
+                'detail': error as string,
+                'severity': 'error'
             })
+        } finally {
+            elementRef?.classList.remove("claiming");
         }
-    });
 
-    const screenTreeNode: TreeNodeTemplateType = (node, options) => {
-        
-        return (
-            <div className={options.className} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                <div style={{ display: "flex", alignItems: 'center' }}>
-                    {node.icon && <FontAwesomeIcon icon={node.icon as IconProp} style={{ height: "2em", width: "2em", marginRight: ".5rem" }} />}
-                    <span>{node.label}</span>
-                </div>
-                {node.className?.includes('screen-group') && <div>
-                    <Button className="p-button-text p-button-info" icon={PrimeIcons.EXTERNAL_LINK} label="Open Control Panel" onClick={() => {
-                        history.push(`/competition/1452/bigscreencontroller/${node.key}`)
-                    }} />
-                </div>}
-            </div>
-        )
-    }
-
-    const changeScreenGroup = (event: TreeDragDropParams) => {
-        if (!event.dragNode.key || !event.dropNode.key) return;
-
-        const screenToUpdate: Partial<BigScreen> = { id: event.dragNode.key as number, screenGroupId: event.dropNode.key as number };
-
-        patchScreen(screenToUpdate).then((updatedScreen) => {
-            showToast({
-                severity: 'success',
-                summary: "Screen Group Changed",
-                detail: `Screen ${updatedScreen.id} was moved to group ${screenGroups[event.dropIndex].name}`
-            });
-            getScreenGroupsForCompetitions().then(([sgs]) => setScreenGroups(sgs));
-        }).catch((err) => {
-            showToast({
-                severity: 'error',
-                summary: "Failed to move screen",
-                detail: err as string
-            })
-        });
     }
 
     return (
         <>
-            <h2 className="subtitle">Setup Screens</h2>
-            <Tree 
-                value={screenGroupTreeItems} 
-                dragdropScope="screenGroups" 
-                onDragDrop={changeScreenGroup}
-                nodeTemplate={screenTreeNode} 
-            />
+            <div className="grid-col-2">
+                <h2 className="subtitle">Setup Screens</h2>
+                <div style={{ textAlign: "right"}}>
+                    <Button label='Claim screens' icon={PrimeIcons.DESKTOP} className="p-button-rounded p-button-raised p-button-success" onClick={() => setClaimDialogShown(true)} />
+                </div>
+            </div>
+            {screenGroups.map((screenGroup) => <ScreenGroupEditor key={screenGroup.id} screenGroup={screenGroup} />)}
             <form onSubmit={createNew}>
                 <div className="p-float-label">
                     <InputText id="new-group" value={newScreenGroupName} onChange={(e) => setNewName(e.target.value)} />
@@ -120,6 +252,22 @@ export const ScreenGroupSetup: React.FC = () => {
                 </div>
                 <Button label="Create" icon={PrimeIcons.PLUS} className="p-button-success p-button-rounded p-button-raised" />
             </form>
+            <Dialog header="Claim screens" visible={claimDialogShown} onHide={() => setClaimDialogShown(false)} style={{width: "50%"}}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(100px, 1fr))", gap: ".5rem"}}>
+                    {unassignedScreens.map((screen) => {
+                        return <div 
+                            key={screen.id}
+                            id={`screen-claim-${screen.id}`} 
+                            className="screen-editor add" 
+                            onClick={() => claim(screen)}
+                        >
+                                <div className="loading"><ProgressSpinner style={{ width: "2.5rem", height: "2.5rem"}} /></div>
+                                <div className='check'><FontAwesomeIcon icon="check-circle" /></div>
+                            ID: {screen.id}
+                        </div>
+                    })}
+                </div>
+            </Dialog>
         </>
     )
 }
