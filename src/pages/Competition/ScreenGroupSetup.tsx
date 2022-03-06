@@ -141,7 +141,7 @@ const ScreenGroupEditor: React.FC<ScreenGroupProps> = ({screenGroup}) => {
     return (
         <div className='card screen-group-editor'>
             <div className="card-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <h3 className='mb-0'>{screenGroup.name}</h3>
+                <h3 className='mb-0'>{screenGroup.name} (ID: {screenGroup.id})</h3>
                 <div className="d-flex align-items-center"><span className="mr-2">Show OSD</span><InputSwitch checked={osd} onChange={(e) => setOsd(e.value)} /></div>
             </div>
             <div 

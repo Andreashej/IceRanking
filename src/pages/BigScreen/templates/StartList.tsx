@@ -1,9 +1,7 @@
-import React, { AnimationEventHandler, useEffect, useMemo, useRef, useState } from 'react';
-import { FlatList, FlatListItem } from '../../../components/partials/FlatList';
-import { useTest } from '../../../contexts/test.context';
+import React, { AnimationEventHandler, useMemo } from 'react';
+import { FlatListItem } from '../../../components/partials/FlatList';
 import { StartListEntry } from '../../../models/startlist.model';
 import { Test } from '../../../models/test.model';
-import { useScreenContext } from '../BigScreen';
 import { AnimatedFlatList } from './components/AnimatedFlatList';
 
 const StartListItem: React.FC<FlatListItem<StartListEntry, Test>> = ({ item, show, onHidden, onShown }) => {
@@ -37,13 +35,13 @@ const StartListItem: React.FC<FlatListItem<StartListEntry, Test>> = ({ item, sho
 type StartListProps = {
     startList: StartListEntry[]
     test: Test;
-    phase: "PREL" | "AFIN" | "BFIN" | "CFIN" | "FIN";
+    phase: "PREL" | "AFIN" | "BFIN" | "CFIN" | "FIN";
 }
 
 
 export const StartList: React.FC<StartListProps> = ({ startList, test, phase }) => {
     const phaseText = useMemo(() => {
-        switch(phase) {
+        switch(phase) {
             case 'PREL':
                 return "Preliminary";
             case 'AFIN':

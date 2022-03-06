@@ -20,7 +20,7 @@ type ReducerAction = {
 
 type TemplateProps = {
     template: string;
-    templateData: any | null;
+    templateData: any | null;
 }
 
 type TemplateState = {
@@ -55,7 +55,8 @@ const templateReducer = (state: TemplateState, action: ReducerAction) => {
                 }
             }
         case 'swapTemplates':
-            console.log(state.nextTemplate);
+            if (!state.nextTemplate) return state;
+
             return {
                 ...state,
                 currentTemplate: state.nextTemplate,
@@ -144,7 +145,6 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
         };
 
         const onScreenUpdated = (screen: BigScreen) => {
-            console.log(screen);
             document.body.classList.remove('overlay', 'default')
             document.body.classList.add(screen.role)
             setScreen(screen);
@@ -244,7 +244,7 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
             default:
                 return <DefaultTemplate />;
         }
-    }, [templateState]);
+    }, [templateState.currentTemplate]);
 
     return (
         <ScreenContext.Provider value={{ 
