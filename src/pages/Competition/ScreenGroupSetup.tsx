@@ -42,10 +42,8 @@ const ScreenEditor: React.FC<ScreenProps> = ({screenId}) => {
         // element.style.visibility = 'visible';
     } 
 
-    const toggleScreenRole = async () => {
-        const patchedScreen = await patchScreen({id: screen?.id, role: screen?.role === 'overlay' ? 'default' : 'overlay' });
-
-        console.log(patchedScreen);
+    const setScreenRole: React.ChangeEventHandler<HTMLSelectElement> = async (event) => {
+        const patchedScreen = await patchScreen({id: screen?.id, role: event.target.value });
 
         setScreen(patchedScreen);
     }
@@ -72,14 +70,19 @@ const ScreenEditor: React.FC<ScreenProps> = ({screenId}) => {
             data-screen-source-group={screen.screenGroupId}
         >
             <div className="actions">
-                <button><FontAwesomeIcon icon="sync" onClick={toggleScreenRole} /></button>
+                {/* <button><FontAwesomeIcon icon="sync" onClick={toggleScreenRole} /></button> */}
                 <button><FontAwesomeIcon icon="times" onClick={unClaim} /></button>
             </div>
             <div>
                 ID: {screen.id}
             </div>
             <div>
-                Role: {screen.role}
+                Background: 
+                <select value={screen.role} onChange={setScreenRole} className="inline-select">
+                    <option value="standalone">Standalone</option>
+                    <option value="key">Key Color</option>
+                    <option value="vmix">vMix</option>
+                </select>
             </div>
         </div>
     )

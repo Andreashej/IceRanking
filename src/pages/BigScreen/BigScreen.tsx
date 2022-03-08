@@ -145,7 +145,7 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
         };
 
         const onScreenUpdated = (screen: BigScreen) => {
-            document.body.classList.remove('overlay', 'default')
+            document.body.classList.remove('standalone', 'key', 'vmix')
             document.body.classList.add(screen.role)
             setScreen(screen);
             setScreenGroup(screen.screenGroup);
