@@ -1,5 +1,5 @@
 
-.bigscreen {
+html.bigscreen {
     --red: #dc3545;
     --blue: #0b7ad1;
     --green: #28a745;
@@ -11,7 +11,7 @@
     body {
         font-family: 'Ubuntu', sans-serif!important;
 
-        &.default {
+        &.standalone {
             background-image: url(../../public/assets/img/bigscreen-bg.jpg);
             // background-color: lime;
         
@@ -23,8 +23,12 @@
             }
         }
 
-        &.overlay {
-            background-color: lime;
+        &.vmix {
+            background: unset;
+        }
+
+        &.key {
+            background: lime;
         }
     }
 
@@ -733,4 +737,11 @@
             }
         }
     }
+}
+
+.inline-select {
+    background: none;
+    color: white;
+    border: none;
+    border-bottom: 1px solid white;
 }
