@@ -61,7 +61,7 @@ const Page: React.FC<PageProps> = ({title, subtitle, pretitle, icon, menuItems =
                 <div className="header">
                     <h2>{title}</h2>
                 </div>
-                <Menu model={menuItems} className="mobile-menu" />
+                <Menu model={allMenuItems} className="mobile-menu" />
             </Sidebar>}
         </>
     )
