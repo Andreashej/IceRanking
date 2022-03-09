@@ -41,10 +41,11 @@ const CompetitionPage: React.FC = ({ children }) => {
 
         const testItems = competition.tests?.map<MenuItem>((test): MenuItem => {
             const path = `/competition/${competition.id}/test/${test.testName}`;
+            const matchPaths = [path, path + '/edit']
             
             return {
                 label: test.testName,
-                className: pathname === path ? 'active' : '',
+                className: matchPaths.includes(pathname) ? 'active' : '',
                 command: () => history.push(path)
             };
         });
@@ -68,7 +69,7 @@ const CompetitionPage: React.FC = ({ children }) => {
         const adminItems = [
             {
                 label: "Edit competition",
-                className: pathname.includes(`/edit`) ? 'active' : '',
+                className: pathname === `/competition/${competition?.id}/edit` ? 'active' : '',
                 command: () => history.push(`/competition/${competition?.id}/edit`)
             },
             {

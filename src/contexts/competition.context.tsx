@@ -107,7 +107,7 @@ export const useCompetition = (): [CompetitionContext['resource']?, CompetitionC
 export const useTest = (testcode: string): Test | undefined => {
     const context = useCompetitionContext();
 
-    const test = context.resource?.tests?.find((test) => test.testcode === testcode);
+    const test = context.resource?.tests?.find((test) => test.testcode === testcode || test.testName === testcode);
 
     return test;
 }
