@@ -5,6 +5,7 @@ import { InputText } from 'primereact/inputtext';
 import { SelectButton } from 'primereact/selectbutton';
 import React, { FormEvent, useState } from 'react';
 import { useCompetition } from '../../contexts/competition.context';
+import { useToast } from '../../contexts/toast.context';
 import { Person } from '../../models/person.model';
 import { getPersons } from '../../services/v2/person.service';
 import { EmailDialog } from '../CompetitionCreate/EmailDialog';
@@ -14,6 +15,7 @@ export const CompetitionEdit: React.FC = () => {
     const [personSearchTerm, setPersonSearchTerm] = useState(competition?.contactPerson?.fullname);
     const [emailDialog, setEmailDialog] = useState(false);
     const [personSuggestions, setPersonSuggestions] = useState<Person[]>([]);
+    const showToast = useToast();
     
     if (!competition || !updateCompetition || !saveCompetition) return null;
 
@@ -35,6 +37,15 @@ export const CompetitionEdit: React.FC = () => {
  
         getPersons(params).then(([persons]) => {
             setPersonSuggestions(persons);
+        })
+    }
+
+    const copyText = async () => {
+        console.log("click")
+        await navigator.clipboard.writeText(competition.extId);
+        showToast({
+            'severity': 'success',
+            'summary': "External ID copied to clipboard!"
         })
     }
 
@@ -113,6 +124,13 @@ export const CompetitionEdit: React.FC = () => {
                 </span>
                 <Button type="submit" label="Save" className="p-button-success p-button-raised p-button-rounded" icon="pi pi-save" disabled={!isChanged} />
             </form>
+            <div>
+                <span className="p-float-label mt-4">
+                    <InputText onClick={copyText} style={{ cursor: 'pointer', caretColor: 'transparent' }} id="extId" value={competition.extId} />
+                    <label className='p-float-label'>External ID</label>
+                    <p><small className="text-muted">Used by integrations to other systems, e.g. IcetestNG. Click to copy.</small></p>
+                </span>
+            </div>
             <EmailDialog show={emailDialog} onHide={() => setEmailDialog(false)} initialPerson={competition.contactPerson} />
         </>
     )
