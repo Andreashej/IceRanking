@@ -4,7 +4,9 @@ import { Result } from '../../../models/result.model';
 import { Test } from '../../../models/test.model';
 import { AnimatedFlatList } from './components/AnimatedFlatList';
 
-const ResultListItem: React.FC<FlatListItem<Result, Test>> = ({ item: result, show, onHidden, onShown }) => {
+type Phase = "PREL" | "AFIN" | "BFIN" | "CFIN" | "FIN";
+
+const ResultListItem: React.FC<FlatListItem<Result, Phase>> = ({ item: result, show, onHidden, onShown, parent: phase }) => {
 
     const animationEnd: AnimationEventHandler<HTMLLIElement> = (event) => {
         if (event.animationName === 'scaleOut') {
@@ -23,7 +25,7 @@ const ResultListItem: React.FC<FlatListItem<Result, Test>> = ({ item: result, sh
             onAnimationEnd={animationEnd}
         >
             <div className="row-content">
-                <div className='row-marker'>{result.rank}</div>
+                <div className='row-marker' style={{ backgroundColor: phase !== "PREL" ? `var(--${result.color})` : 'var(--blue)' }}>{result.rank}</div>
                 <div>{result.rider?.fullname}</div>
                 <div>{result.horse?.horseName}</div>
                 <div className="text-right">
@@ -40,7 +42,7 @@ const ResultListItem: React.FC<FlatListItem<Result, Test>> = ({ item: result, sh
 type ResultListProps = {
     results: Result[];
     test: Test;
-    phase: "PREL" | "AFIN" | "BFIN" | "CFIN" | "FIN";
+    phase: Phase;
 }
 
 export const ResultList: React.FC<ResultListProps> = ({ results, test, phase }) => {
@@ -66,5 +68,6 @@ export const ResultList: React.FC<ResultListProps> = ({ results, test, phase }) 
         RenderComponent={ResultListItem} 
         itemsPerPage={10} 
         timePerPage={10000} 
+        parent={phase}
     />
 }

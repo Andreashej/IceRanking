@@ -4,7 +4,9 @@ import { StartListEntry } from '../../../models/startlist.model';
 import { Test } from '../../../models/test.model';
 import { AnimatedFlatList } from './components/AnimatedFlatList';
 
-const StartListItem: React.FC<FlatListItem<StartListEntry, Test>> = ({ item, show, onHidden, onShown }) => {
+type Phase = "PREL" | "AFIN" | "BFIN" | "CFIN" | "FIN"
+
+const StartListItem: React.FC<FlatListItem<StartListEntry, Phase>> = ({ item, show, onHidden, onShown, parent: phase }) => {
     const animationEnd: AnimationEventHandler<HTMLLIElement> = (event) => {
         if (event.animationName === 'scaleOut') {
             onHidden?.();
@@ -23,7 +25,7 @@ const StartListItem: React.FC<FlatListItem<StartListEntry, Test>> = ({ item, sho
             onAnimationEnd={animationEnd}
         >
             <div className="row-content">
-                <div className='row-marker'>{item.startGroup}</div>
+                <div className='row-marker' style={{ backgroundColor: phase !== "PREL" ? `var(--${item.color})` : 'var(--blue)' }}>{item.startGroup}</div>
                 <div>{item.rider?.fullname}</div>
                 <div>{item.horse?.horseName}</div>
                 <div className="text-right">{item.rider?.ageGroup?.split(' ').map((word => word[0]))}</div>
@@ -35,7 +37,7 @@ const StartListItem: React.FC<FlatListItem<StartListEntry, Test>> = ({ item, sho
 type StartListProps = {
     startList: StartListEntry[]
     test: Test;
-    phase: "PREL" | "AFIN" | "BFIN" | "CFIN" | "FIN";
+    phase: Phase;
 }
 
 
@@ -61,6 +63,7 @@ export const StartList: React.FC<StartListProps> = ({ startList, test, phase }) 
         headerImg={test.sponsorLogo ?? "assets/img/ICeCompass_Logo_Final6.png" }
         items={startList} RenderComponent={StartListItem} 
         itemsPerPage={10} 
-        timePerPage={10000} 
+        timePerPage={10000}
+        parent={phase}
     />
 }
