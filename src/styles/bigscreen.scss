@@ -6,7 +6,6 @@ html.bigscreen {
     --yellow: #ffe04a;
     --purple: purple;
     --default: #24305E;
-    font-size: 5vmin;
     
     body {
         font-family: 'Ubuntu', sans-serif!important;
@@ -365,6 +364,9 @@ html.bigscreen {
 
                     grid-template-columns: 1fr 1fr 10ch;
                     grid-template-rows: 1fr;
+
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
 
                     > * {
                         margin: 0;

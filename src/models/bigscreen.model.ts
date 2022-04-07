@@ -7,6 +7,7 @@ export type BigScreen = {
     clientId?: string;
     screenGroupId?: number | null;
     competitionId?: number;
+    rootFontSize: string | null;
 
     screenGroup?: ScreenGroup;
     competition?: Competition;

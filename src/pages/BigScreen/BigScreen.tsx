@@ -127,6 +127,8 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
             if (screen.id) localStorage.setItem('bigscreenId', screen.id.toString());
             setScreen(screen);
             document.body.classList.add(screen.role);
+            console.log(screen);
+            document.documentElement.style.fontSize = screen.rootFontSize ?? '5vmin';
         }
 
         const onScreenGroupChanged = (screenGroup: ScreenGroup) => {
