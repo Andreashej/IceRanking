@@ -104,7 +104,9 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
     useEffect(() => {
         setFullscreen(true);
         document.documentElement.classList.add("bigscreen");
-        socket.current = io(`${process.env.REACT_APP_API_URL}/bigscreen`);
+        socket.current = io(`${process.env.REACT_APP_API_URL}/bigscreen`, {
+            withCredentials: true
+        });
 
         return () => {
             socket.current?.disconnect();
