@@ -21,25 +21,29 @@ import { cancellablePromise } from '../../tools/cancellablePromise';
 const CompetitionResultItem: React.FC<FlatListItem<Result, Test>> = ({ item: result, parent: test }) => {
     const [rider, setRider] = useState<Person>();
     const [horse, setHorse] = useState<Horse>();
+    const [fetchingStarted, setFetchingStarted] = useState<boolean>(false);
     const ref = useRef(null);
     const isVisible = useIntersectionObserver(ref, { rootMargin: '50px' })
 
     useEffect(() => {
-        if (isVisible) {
+        if (isVisible && !fetchingStarted) {
             const params = new URLSearchParams({
                 fields: 'rider,horse',
                 expand: 'rider,horse'
             });
-
+            
+            setFetchingStarted(true)
             const p = getResult(result.id, params);
             const { promise, cancel } = cancellablePromise<Result>(p);
             promise.then((result) => {
+                console.log(result);
                 if (result.horse) setHorse(result.horse);
                 if (result.rider) setRider(result.rider);
             });
             
             return cancel;
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [result.id, isVisible])
 
     const formatMark = (mark: number) => {

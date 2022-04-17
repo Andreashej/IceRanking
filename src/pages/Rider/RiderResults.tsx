@@ -20,12 +20,15 @@ import { cancellablePromise } from '../../tools/cancellablePromise';
 const RiderResult: React.FC<FlatListItem<Result, RiderProps>> = ({ item: result }) => {
     const ref = useRef(null);
     const isVisible = useIntersectionObserver(ref, { rootMargin: '50px' });
+    const [fetchingStarted, setFetchingStarted] = useState<boolean>(false);
 
     const [horse, setHorse] = useState<Horse>();
     const [test, setTest] = useState<Test>();
 
     useEffect(() => {
-        if (isVisible) {
+        if (isVisible && !fetchingStarted) {
+            setFetchingStarted(true);
+
             const { promise: horsePromise, cancel: horseCancel } = cancellablePromise(getHorse(result.horseId))
             
             horsePromise.then((horse) => {
@@ -43,6 +46,7 @@ const RiderResult: React.FC<FlatListItem<Result, RiderProps>> = ({ item: result 
                 testCancel();
             }
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [result, isVisible])
 
     const renderTest = useMemo(() => {

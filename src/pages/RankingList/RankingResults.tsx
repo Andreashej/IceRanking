@@ -95,10 +95,12 @@ const RankingResultListItem: React.FC<FlatListItem<RankingResult, Ranking>> = ({
     const ref = useRef(null);
     const isVisible = useIntersectionObserver(ref, { threshold: 0 });
     const [rankingList] = useRankingList();
+    const [fetchingStarted, setFetchingStarted] = useState<boolean>(false);
 
     useEffect(() => {
         let cancel = () => {};
         const fetchResult = async () => {
+            setFetchingStarted(true);
             const params = new URLSearchParams({
                 'expand': 'rider,horse'
             })
@@ -113,8 +115,9 @@ const RankingResultListItem: React.FC<FlatListItem<RankingResult, Ranking>> = ({
 
         }
         
-        if (isVisible) fetchResult()
+        if (isVisible && !fetchingStarted) fetchResult()
         return cancel;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [result.id, isVisible]);
 
     useLayoutEffect(() => {

@@ -17,17 +17,18 @@ import { getRankingList } from '../../services/v2/rankinglist.service';
 import { useHorse } from '../../contexts/horse.context';
 import { getPerson } from '../../services/v2/person.service';
 import { cancellablePromise } from '../../tools/cancellablePromise';
-import { promises } from 'stream';
 
 const HorseResult: React.FC<FlatListItem<Result, Horse>> = ({ item: result }) => {
     const ref = useRef(null);
     const isVisible = useIntersectionObserver(ref, { rootMargin: '50px' });
+    const [fetchingStarted, setFetchingStarted] = useState<boolean>(false);
 
     const [rider, setRider] = useState<Person>();
     const [test, setTest] = useState<Test>();
 
     useEffect(() => {
-        if (isVisible) {
+        if (isVisible && !fetchingStarted) {
+            setFetchingStarted(true);
             const { promise: personPromise, cancel: personCancel } = cancellablePromise(getPerson(result.riderId));
             personPromise.then((rider) => {
                 setRider(rider);
@@ -43,6 +44,7 @@ const HorseResult: React.FC<FlatListItem<Result, Horse>> = ({ item: result }) =>
                 testCancel();
             }
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [result, isVisible])
 
     const renderTest = useMemo(() => {
