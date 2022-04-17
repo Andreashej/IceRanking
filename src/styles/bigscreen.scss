@@ -9,26 +9,31 @@ html.bigscreen {
     
     body {
         font-family: 'Ubuntu', sans-serif!important;
-
-        &.standalone {
-            background-image: url(../../public/assets/img/bigscreen-bg.jpg);
-            // background-color: lime;
         
-            &::before {
-                background-color: rgba($dark, .8);
-                content: "";
-                position: absolute;
-                inset: 0;
-            }
+        background: url(../../public/assets/img/bigscreen-bg.jpg);
+
+        &::before {
+            background-color: rgba($dark, .8);
+            content: "";
+            position: absolute;
+            inset: 0;
         }
+        
 
         &.vmix {
             background: unset;
+            &::before {
+                content: unset;
+            }
         }
 
         &.key {
             background: lime;
+            &::before {
+                content: unset;
+            }
         }
+
     }
 
     .osd {

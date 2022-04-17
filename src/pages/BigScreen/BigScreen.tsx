@@ -267,9 +267,9 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
             <div className={`template ${templateState.show ? 'show' : 'hide'} ${templateState.currentTemplate?.template}`} ref={screenRef}>
                 {renderTemplate}
             </div>
-            {screenGroup?.showOsd && <div className="osd">
+            {(!screen?.screenGroup || screenGroup?.showOsd) && <div className="osd">
                 <div>Screen ID: {screen?.id}</div>
-                <div>Screen Group: {screenGroup.name}</div>
+                <div>Screen Group: {screenGroup?.name ?? "Screen not claimed"}</div>
             </div>}
         </ScreenContext.Provider>
     )
