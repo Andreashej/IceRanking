@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import { io, Socket } from 'socket.io-client';
 import { useFullscreen } from '../../App';
 import { BigScreen } from '../../models/bigscreen.model';
@@ -100,6 +101,7 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
     const [_, setFullscreen] = useFullscreen();
     const screenRef = useRef<HTMLDivElement>(null);
     const [templateState, dispatch] = useReducer(templateReducer, initialTemplateState)
+    const routeParams = useParams<{ screenId: string }>();
 
     useEffect(() => {
         setFullscreen(true);
@@ -120,8 +122,10 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
 
         const onConnect = () => {
             console.log('connected')
+            const screenId = routeParams.screenId ?? localStorage.getItem('bigscreenId');
+
             if (!screenGroupId) {
-                socket.current?.emit('Screen.Connected', { screenId: localStorage.getItem('bigscreenId') })
+                socket.current?.emit('Screen.Connected', { screenId })
             }
         }
 
@@ -164,6 +168,7 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
         socket.current.on('ScreenGroup.Updated', onScreenGroupChanged)
 
         return () => {
+            console.log('off')
             socket.current?.off('connect', onConnect);
             socket.current?.off('Screen.Created', onScreenCreated);
             socket.current?.off('Screen.Updated', onScreenUpdated);
@@ -171,7 +176,7 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
             socket.current?.off('ScreenGroup.TemplateChanged', onTemplateChanged);
             socket.current?.off('ScreenGroup.HideAll', onHide);
         }
-    },[setFullscreen, screenGroupId, screenGroup, templateState.currentTemplate])
+    },[setFullscreen, screenGroupId, screenGroup, templateState.currentTemplate, routeParams.screenId])
 
 
     const onTemplateHidden = () => {
