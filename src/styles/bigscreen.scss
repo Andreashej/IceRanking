@@ -42,6 +42,7 @@ html.bigscreen {
         padding: 1rem;
         background: rgba($darkgray, .5);
         color: white;
+        z-index: 999;
     }
 
     .logo {

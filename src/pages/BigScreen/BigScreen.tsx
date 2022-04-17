@@ -100,14 +100,15 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
     const [screenGroup, setScreenGroup] = useState<ScreenGroup>();
     const [_, setFullscreen] = useFullscreen();
     const screenRef = useRef<HTMLDivElement>(null);
-    const [templateState, dispatch] = useReducer(templateReducer, initialTemplateState)
-    const routeParams = useParams<{ screenId: string }>();
+    const [templateState, dispatch] = useReducer(templateReducer, initialTemplateState);
+    const location = useLocation();
 
-    const screenId = routeParams.screenId ?? localStorage.getItem('bigscreenId');
+    const urlParams = new URLSearchParams(location.search);
 
+    const screenId = urlParams.get('id') ?? localStorage.getItem('bigscreenId');
 
     useEffect(() => {
-        if (screen && parseInt(screenId) !== screen.id) {
+        if (screen && screenId && parseInt(screenId) !== screen.id) {
             window.location.reload();
         }
     }, [screenId, screen])
@@ -128,6 +129,7 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
 
     useEffect(() => {
         if(!socket.current) return;
+        const urlParams = new URLSearchParams(location.search);
 
         const onConnect = () => {
             console.log('connected')
@@ -138,7 +140,7 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
         }
 
         const onScreenCreated = (screen: BigScreen) => {
-            if (screen.id) localStorage.setItem('bigscreenId', screen.id.toString());
+            if (screen.id && !urlParams.has('id')) localStorage.setItem('bigscreenId', screen.id.toString());
             setScreen(screen);
             document.body.classList.add(screen.role);
             document.documentElement.style.fontSize = screen.rootFontSize ?? '5vmin';
@@ -163,6 +165,9 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
             document.body.classList.remove('standalone', 'key', 'vmix')
             document.body.classList.add(screen.role)
             setScreen(screen);
+
+            if (screenGroup && screenGroup.id !== screen.screenGroup?.id) window.location.reload()
+
             setScreenGroup(screen.screenGroup);
         }
         
@@ -182,7 +187,7 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
             socket.current?.off('ScreenGroup.TemplateChanged', onTemplateChanged);
             socket.current?.off('ScreenGroup.HideAll', onHide);
         }
-    },[setFullscreen, screenGroupId, screenGroup, templateState.currentTemplate, screenId])
+    },[setFullscreen, screenGroupId, screenGroup, templateState.currentTemplate, screenId, location.search])
 
 
     const onTemplateHidden = () => {
@@ -273,7 +278,7 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
             <div className={`template ${templateState.show ? 'show' : 'hide'} ${templateState.currentTemplate?.template}`} ref={screenRef}>
                 {renderTemplate}
             </div>
-            {(!screen?.screenGroup || screenGroup?.showOsd) && <div className="osd">
+            {(!screenGroup || screenGroup?.showOsd) && <div className="osd">
                 <div>Screen ID: {screen?.id}</div>
                 <div>Screen Group: {screenGroup?.name ?? "Screen not claimed"}</div>
             </div>}
