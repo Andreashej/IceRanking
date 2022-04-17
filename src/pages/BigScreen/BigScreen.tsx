@@ -103,6 +103,16 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
     const [templateState, dispatch] = useReducer(templateReducer, initialTemplateState)
     const routeParams = useParams<{ screenId: string }>();
 
+    const screenId = routeParams.screenId ?? localStorage.getItem('bigscreenId');
+
+
+    useEffect(() => {
+        console.log(parseInt(screenId), screen?.id);
+        if (screen && parseInt(screenId) !== screen.id) {
+            window.location.reload();
+        }
+    }, [screenId, screen])
+
     useEffect(() => {
         setFullscreen(true);
         document.documentElement.classList.add("bigscreen");
@@ -122,8 +132,7 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
 
         const onConnect = () => {
             console.log('connected')
-            const screenId = routeParams.screenId ?? localStorage.getItem('bigscreenId');
-
+            
             if (!screenGroupId) {
                 socket.current?.emit('Screen.Connected', { screenId })
             }
@@ -168,7 +177,6 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
         socket.current.on('ScreenGroup.Updated', onScreenGroupChanged)
 
         return () => {
-            console.log('off')
             socket.current?.off('connect', onConnect);
             socket.current?.off('Screen.Created', onScreenCreated);
             socket.current?.off('Screen.Updated', onScreenUpdated);
@@ -176,7 +184,7 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
             socket.current?.off('ScreenGroup.TemplateChanged', onTemplateChanged);
             socket.current?.off('ScreenGroup.HideAll', onHide);
         }
-    },[setFullscreen, screenGroupId, screenGroup, templateState.currentTemplate, routeParams.screenId])
+    },[setFullscreen, screenGroupId, screenGroup, templateState.currentTemplate, screenId])
 
 
     const onTemplateHidden = () => {
