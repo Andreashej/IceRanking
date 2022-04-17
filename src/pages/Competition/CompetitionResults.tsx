@@ -60,7 +60,7 @@ const CompetitionResultItem: React.FC<FlatListItem<Result, Test>> = ({ item: res
             <div className="mobile-span-2" style={{ alignSelf: "center" }}>{(rider && <Link to={`/rider/${rider.id}/results/${test.testcode}`}>{rider.fullname}</Link>) ?? <Skeleton style={{ height: "18px" }} />}</div>
             <div className="mobile-span-2" style={{ alignSelf: "center" }}>{(horse && <Link to={`/horse/${horse.id}/results/${test.testcode}`}>{horse.horseName}</Link>) ?? <Skeleton style={{ height: "18px" }} />}</div>
             <div className="mark">
-                {formatMark(result.mark)}
+                {result.state === "VALID" ? formatMark(result.mark) : result.state}
             </div>
         </li>
     )
