@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog } from 'primereact/dialog';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { InputSwitch } from 'primereact/inputswitch';
+import { cancellablePromise } from '../../tools/cancellablePromise';
 
 type ScreenGroupProps = {
     screenGroup: ScreenGroup;
@@ -18,9 +19,10 @@ type ScreenGroupProps = {
 
 type ScreenProps = {
     screenId: BigScreen['id'];
+    onDelete: (deletedScreenId: number) => void;
 }
 
-const ScreenEditor: React.FC<ScreenProps> = ({screenId}) => {
+const ScreenEditor: React.FC<ScreenProps> = ({screenId, onDelete}) => {
     const [screen, setScreen] = useState<BigScreen>();
     const elementId = `screen-${screenId}`;
 
@@ -29,10 +31,6 @@ const ScreenEditor: React.FC<ScreenProps> = ({screenId}) => {
     }, [screenId])
 
     const dragStart: React.DragEventHandler<HTMLDivElement> = (event) => {
-        // const element = event.target as HTMLDivElement;
-
-        // element.style.visibility = 'hidden';
-
         event.dataTransfer.setData("text", elementId);
     } 
 
@@ -53,8 +51,7 @@ const ScreenEditor: React.FC<ScreenProps> = ({screenId}) => {
 
         await deleteScreen(screen);
 
-        const element = document.getElementById(elementId)
-        element?.remove();
+        onDelete(screenId);
     }
 
     if (!screen) return null;
@@ -88,9 +85,14 @@ const ScreenEditor: React.FC<ScreenProps> = ({screenId}) => {
     )
 }
 
-const ScreenGroupEditor: React.FC<ScreenGroupProps> = ({screenGroup}) => {
+const ScreenGroupEditor: React.FC<ScreenGroupProps> = ({ screenGroup }) => {
     const [osd, setOsd] = useState<boolean>(screenGroup.showOsd);
+    const [screens, setScreens] = useState<BigScreen[]>(screenGroup.screens ?? []);
     const showToast = useToast();
+
+    useEffect(() => {
+        setScreens(screenGroup.screens ?? []);
+    }, [screenGroup])
 
     useEffect(() => {
         patchScreenGroup({ id: screenGroup.id, showOsd: osd })
@@ -141,6 +143,12 @@ const ScreenGroupEditor: React.FC<ScreenGroupProps> = ({screenGroup}) => {
         element.appendChild(draggedElement);
     }
 
+    const onScreenDelete = (deletedScreenId: number) => {
+        setScreens((screens) => {
+            return screens.filter((screen) => screen.id !== deletedScreenId);
+        })
+    }
+
     return (
         <div className='card screen-group-editor'>
             <div className="card-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -157,7 +165,7 @@ const ScreenGroupEditor: React.FC<ScreenGroupProps> = ({screenGroup}) => {
                 onDragLeave={onDragLeave}
                 onDragOver={onDragOver}
             >
-                {screenGroup.screens?.map((screen) => <ScreenEditor key={screen.id} screenId={screen.id} />)}
+                {screens?.map((screen) => <ScreenEditor key={screen.id} screenId={screen.id} onDelete={onScreenDelete} />)}
             </div>
         </div>
     )
@@ -176,12 +184,6 @@ export const ScreenGroupSetup: React.FC = () => {
             'filter[]': `competitionId == ${competition?.id}`,
             'expand': 'screens'
         }));
-    }, [competition])
-
-    useEffect(() => {
-        if (!competition) return;
-
-        
     }, [competition])
 
     useEffect(() => {
