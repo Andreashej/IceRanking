@@ -36,7 +36,6 @@ const CompetitionResultItem: React.FC<FlatListItem<Result, Test>> = ({ item: res
             const p = getResult(result.id, params);
             const { promise, cancel } = cancellablePromise<Result>(p);
             promise.then((result) => {
-                console.log(result);
                 if (result.horse) setHorse(result.horse);
                 if (result.rider) setRider(result.rider);
             });

@@ -41,7 +41,6 @@ export const CompetitionEdit: React.FC = () => {
     }
 
     const copyText = async () => {
-        console.log("click")
         await navigator.clipboard.writeText(competition.extId);
         showToast({
             'severity': 'success',
