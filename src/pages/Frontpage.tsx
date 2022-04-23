@@ -28,7 +28,7 @@ export const Frontpage: React.FC = () => {
         });
 
         const recentParams = new URLSearchParams({
-            'filter[]': `first_date < ${dateToString(today)}`,
+            'filter[]': `first_date <= ${dateToString(today)}`,
             orderBy: "first_date desc",
             'limit': '5'
         });
@@ -97,7 +97,7 @@ export const Frontpage: React.FC = () => {
                             </Card>
                         </div>
                         <div className="col-12 col-md pt-4 pt-md-0">
-                            <Card title="Recently finished" className="list-card">
+                            <Card title="Most recent results" className="list-card">
                                 <EventList events={recentEvents} style={eventCardStyle} />
                             </Card>
                         </div>
