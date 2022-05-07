@@ -162,9 +162,12 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({ screenGroupId }) =
         };
 
         const onScreenUpdated = (screen: BigScreen) => {
+            setScreen(screen);
+            
             document.body.classList.remove('standalone', 'key', 'vmix')
             document.body.classList.add(screen.role)
-            setScreen(screen);
+
+            document.documentElement.style.fontSize = !screen.rootFontSize || screen.rootFontSize.length === 0 ? '5vmin': screen.rootFontSize;
 
             if (screenGroup && screenGroup.id !== screen.screenGroup?.id) window.location.reload()
 
