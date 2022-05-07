@@ -13,7 +13,7 @@ import { TestEdit } from "./TestEdit";
 import { PrimeIcons } from "primereact/api";
 import { TestDialog } from "./TestDialog";
 import { BigScreenController } from "../BigScreen/BigScreenController";
-import { ScreenGroupSetup } from "./ScreenGroupSetup";
+import { ScreenGroupSetup } from "./ScreenGroupSetup/ScreenGroupSetup";
 
 const CompetitionPage: React.FC = ({ children }) => {
     const { resource: competition, loading, error } = useCompetitionContext();

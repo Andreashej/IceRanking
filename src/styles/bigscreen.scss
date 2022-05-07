@@ -687,16 +687,26 @@ html.bigscreen {
     aspect-ratio: 16 / 9;
     padding: .25rem;
     position: relative;
+    cursor: move;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     .actions {
         position: absolute;
         right: .25rem;
+        top: .25rem;
 
         button {
+            padding: .125rem .5rem;
             background: none;
             border: none;
             color: white;
         }
+    }
+
+    .content {
+        font-size: 2rem;
     }
 
     &.add {
@@ -744,6 +754,27 @@ html.bigscreen {
             .check {
                 display: flex;
             }
+
+            .content {
+                display: none;
+            }
+        }
+    }
+
+    &.button {
+        background-color: rgba($dark, .25);
+        border: none;
+
+        .icon {
+            font-size: 3rem;
+        }
+
+        .content {
+            transition: all 500ms ease-in-out;
+        }
+
+        &:hover .content {
+            transform: scale(1.2);
         }
     }
 }
