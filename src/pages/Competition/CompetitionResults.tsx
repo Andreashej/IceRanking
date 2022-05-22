@@ -14,9 +14,12 @@ import { Horse } from '../../models/horse.model';
 import { Result } from '../../models/result.model';
 import { Person } from '../../models/person.model';
 import { Test } from '../../models/test.model';
-import { deleteTest, getTestResults } from '../../services/v2/test.service';
+import { deleteTest, getTestResults, uploadTestResults } from '../../services/v2/test.service';
 import { getResult } from '../../services/v2/result.service';
 import { cancellablePromise } from '../../tools/cancellablePromise';
+import { Dialog } from 'primereact/dialog';
+import { FileUpload, FileUploadHandlerParam } from 'primereact/fileupload';
+import { apiV2 } from '../../services/v2';
 
 const CompetitionResultItem: React.FC<FlatListItem<Result, Test>> = ({ item: result, parent: test }) => {
     const [rider, setRider] = useState<Person>();
@@ -71,6 +74,7 @@ export const CompetitionResults: React.FC = () => {
     const [results, setResults] = useState<Result[]>([]);
     const [pagination, setPagination] = useState<Pagination>();
     const [loading, setLoading] = useState<boolean>(false);
+    const [uploadResultsDialog, setUploadResultsDialog] = useState<boolean>(false);
     const isLoggedIn = useIsLoggedIn();
     const showToast = useToast();
 
@@ -89,7 +93,7 @@ export const CompetitionResults: React.FC = () => {
         cancelLoading.current();
 
         const params = new URLSearchParams({ 
-            "filter[]": "phase == PREL",
+            // "filter[]": "phase == PREL",
             page: pagination?.nextPage?.toString() ?? '1',
             perPage: '100',
         });
@@ -130,7 +134,21 @@ export const CompetitionResults: React.FC = () => {
                 severity: 'error',
                 summary: 'Could not delete test',
                 detail: error as string,
-            })
+            });
+        }
+    }
+
+    const upload = async (event: FileUploadHandlerParam) => {
+        try {
+            const task = await uploadTestResults(test, event.files[0])
+            console.log(task);
+            setUploadResultsDialog(false);
+        } catch (error: unknown) {
+            showToast({
+                severity: 'error',
+                summary: 'Could not upload results',
+                detail: error as string,
+            });
         }
     }
 
@@ -141,6 +159,7 @@ export const CompetitionResults: React.FC = () => {
                     {testcode} results 
                 </h2>
                 {isLoggedIn && <div className="toolbar" style={{ width: "max-content", placeSelf: "end" }} >
+                    <Button icon={PrimeIcons.UPLOAD} className="p-button-text" tooltip="Upload results" tooltipOptions={tooltipOptions} onClick={() => setUploadResultsDialog(true)} />
                     <Button icon={PrimeIcons.PENCIL} className="p-button-text" tooltip="Edit" tooltipOptions={tooltipOptions} onClick={() => history.push(`${history.location.pathname}/edit`)} />
                     <Button icon={PrimeIcons.TRASH} className="p-button-text p-button-danger" tooltip="Delete" tooltipOptions={tooltipOptions} onClick={() => removeTest()} />
                 </div>}
@@ -152,6 +171,9 @@ export const CompetitionResults: React.FC = () => {
                 hasMoreItems={(!pagination && results.length === 0) || (pagination && pagination.hasNext)}
                 onBottomReached={() => getNextPage(test.id)}
             />
+            <Dialog header="Upload results (XLS)" visible={uploadResultsDialog} onHide={() => setUploadResultsDialog(false)}>
+                <FileUpload customUpload uploadHandler={upload} auto />
+            </Dialog>
         </>
     )
 }

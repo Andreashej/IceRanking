@@ -5,6 +5,7 @@ import { Test } from "../../models/test.model";
 import { Result } from "../../models/result.model";
 import { Competition } from "../../models/competition.model";
 import { StartListEntry } from "../../models/startlist.model";
+import { Task } from "../../models/task.model";
 
 export const getTest = async (id: number, params?: URLSearchParams): Promise<Test> => {
     try { 
@@ -79,6 +80,26 @@ export const getTestResults = async (id: number, params?: URLSearchParams ): Pro
         const response = await apiV2.get<ApiResponse<Result[]>>(`/tests/${id}/results`, { params });
 
         return [response.data.data, response.data.pagination];
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            return Promise.reject(error.response?.data.message ?? error.message)
+        }
+        return Promise.reject(error);
+    }
+}
+
+export const uploadTestResults = async (test: Test, file: File): Promise<Task | void> => {
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await apiV2.post<ApiResponse<Task>>(`/tests/${test.id}/results`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        
+        if (response.data.task) return response.data.task;
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
             return Promise.reject(error.response?.data.message ?? error.message)

@@ -110,6 +110,15 @@ export const TestEdit: React.FC = () => {
                         })} />
                     },
                     {
+                        label: "Test name",
+                        input: <InputText id="testname" value={test.testName} onChange={(e) => setTest((prev) => {
+                            return {
+                                ...prev as Test,
+                                testName: e.target.value
+                            }
+                        })} />
+                    },
+                    {
                         label: "Ordering",
                         input: <SelectButton
                             id="order"
