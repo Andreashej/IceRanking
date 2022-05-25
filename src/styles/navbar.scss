@@ -60,7 +60,7 @@ nav.navigation {
     }
 }
 
-.login-button {
+.register-button {
     &.p-button, & .p-button {
         & {
             background-color: $pink;
@@ -83,6 +83,16 @@ nav.navigation {
             a {
                 white-space: nowrap;
             }
+        }
+    }
+}
+
+.login-button {
+    &.p-button {
+        color: white;
+
+        &:hover {
+            color: $pink!important;
         }
     }
 }

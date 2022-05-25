@@ -3,6 +3,7 @@ import React, { createContext, useEffect, useState, useContext, useCallback } fr
 import { getCompetition, patchCompetition } from '../services/v2/competition.service';
 import { ResourceContext } from "../models/resource-context.model";
 import { Test } from "../models/test.model";
+import { useIsLoggedIn } from "./user.context";
 
 export type CompetitionProps = Required<Competition>
 

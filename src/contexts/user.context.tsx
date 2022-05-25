@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { createContext, useEffect, useState, useContext } from 'react';
 import { User } from "../models/user.model";
-import { getProfile, login, logout, patchUser } from "../services/v2/auth.service";
+import { createUser, getProfile, login, logout, patchUser } from "../services/v2/auth.service";
 
 interface UserContext {
     user: User | null;
@@ -9,6 +9,7 @@ interface UserContext {
     logout: () => Promise<void>;
     updateUser: (user: Partial<User>) => Promise<void>;
     isLoggedIn: boolean;
+    register: (username: string, password: string, firstName: string, lastName: string, email: string) => Promise<void>;
 }
 
 const userContext = createContext<UserContext | undefined>(undefined);
@@ -56,6 +57,24 @@ export const UserProvider: React.FC = ({ children }) => {
         }
     }
 
+    const handleRegister = async (username: string, password: string, firstName: string, lastName: string, email: string): Promise<void> => {
+        try {
+            await createUser(username, password, firstName, lastName, email);
+            await handleLogin(username, password);
+
+        } catch (error: unknown) {
+            setUser(null);
+
+            if (axios.isAxiosError(error)) {
+                if (error.response?.status === 401) return Promise.resolve();
+
+                return Promise.reject(error.response?.data.message ?? error.message);
+            }
+
+            return Promise.reject(error);
+        }
+    }
+
     useEffect(() => {
         const fetchProfile = async (): Promise<void> => {
             try {
@@ -81,7 +100,8 @@ export const UserProvider: React.FC = ({ children }) => {
             updateUser,
             login: handleLogin,
             logout: handleLogout,
-            isLoggedIn: user !== null
+            isLoggedIn: user !== null,
+            register: handleRegister,
         }}>
             {children}
         </userContext.Provider>

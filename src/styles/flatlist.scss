@@ -95,11 +95,10 @@ ol.flatlist {
                 grid-row: 1 / 3;
             }
 
-            @keyframes p-progress-spinner-color {
-                100%,
-                0% {
-                    stroke:white;
-                }
+            .p-progress-spinner-circle {
+                animation: 
+                    p-progress-spinner-dash 1.5s ease-in-out infinite,
+                    p-progress-spinner-color-white 6s ease-in-out infinite;
             }
         }
 

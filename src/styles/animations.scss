@@ -50,3 +50,17 @@
         font-size: 80%;
     }
 }
+
+@keyframes p-progress-spinner-color-white {
+    100%,
+    0% {
+        stroke:white;
+    }
+}
+
+@keyframes p-progress-spinner-color-blue {
+    100%,
+    0% {
+        stroke: $dark;
+    }
+}

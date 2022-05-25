@@ -100,7 +100,26 @@ export const getProfile = async (): Promise<User> => {
 
 export const patchUser = async (user: Partial<User>): Promise<User> => {
     try {
-        const response = await apiV2.patch<ApiResponse<User>>(`/competition/${user.id}`, user)
+        const response = await apiV2.patch<ApiResponse<User>>(`/users/${user.id}`, user)
+
+        return response.data.data;
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            return Promise.reject(error.response?.data.message ?? error.message)
+        }
+        return Promise.reject(error);
+    }
+}
+
+export const createUser = async(username: string, password: string, firstName: string, lastName: string, email: string): Promise<User> => {
+    try {
+        const response = await apiV2.post<ApiResponse<User>>(`/users`, {
+            username,
+            password,
+            firstName,
+            lastName,
+            email
+        })
 
         return response.data.data;
     } catch (error: unknown) {

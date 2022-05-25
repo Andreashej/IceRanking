@@ -10,6 +10,7 @@ export type Competition = {
     state?: string;
     extId?: string;
     contactPersonId?: number;
+    isAdmin?: boolean;
 
     tests?: Test[];
     contactPerson?: Person;

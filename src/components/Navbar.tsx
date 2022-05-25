@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 
@@ -9,48 +9,78 @@ import { UserLogin } from './User/UserLogin';
 
 import { SearchBar } from "./Search/SearchBar";
 import { useIsLoggedIn, useProfile } from "../contexts/user.context";
+import { profile } from "console";
 
 const UserSection: React.FC = () => {
     const [showLogin, setShowLogin] = useState<boolean>(false);
+    const [loginVariant, setLoginVariant] = useState<'register' | 'login'>('login');
     const [user, logout] = useProfile();
     const isLoggedIn = useIsLoggedIn();
     const history = useHistory();
 
+    const userActions = useMemo(() => {
+        const adminUserActions = [
+            {
+                label: "Create competition",
+                icon: "pi pi-calendar-plus",
+                command: () => {
+                    history.push("/competition/create");
+                }
+            },
+            {
+                label: "Dashboard",
+                icon: "pi pi-cog",
+                command: () => {
+                    history.push("/dashboard");
+                }
+            }
+        ];
+    
+        const allUserActions = [
+            {
+                label: "Log out",
+                icon: "pi pi-sign-out",
+                command: () => {
+                    logout();
+                }
+            }
+        ];
+
+        if (user?.superUser) return [...adminUserActions, ...allUserActions];
+
+
+        return allUserActions;
+    }, [user, history, logout]);
+
     if (!isLoggedIn) {
         return (
             <>
-                <UserLogin show={showLogin} onHide={() => setShowLogin(false)}></UserLogin>
-                <Button label="Login" icon="pi pi-sign-in" className="p-button-raised p-button-rounded login-button p-button-sm" onClick={() => setShowLogin(true)} />
+                <UserLogin show={showLogin} variant={loginVariant} onHide={() => setShowLogin(false)}></UserLogin>
+                <Button 
+                    label="Login" 
+                    icon="pi pi-sign-in" 
+                    className="p-button-raised p-button-rounded login-button p-button-text p-button-sm" 
+                    onClick={() => {
+                        setLoginVariant('login');
+                        setShowLogin(true)
+                    }} 
+                />
+                <Button 
+                    label="Register" 
+                    icon="pi pi-user" 
+                    className="p-button-raised p-button-rounded register-button p-button-sm" 
+                    onClick={() => {
+                        setLoginVariant('register');
+                        setShowLogin(true)
+                    }} 
+                />
             </>
         );
     }
 
-    const userActions = [
-        {
-            label: "Create competition",
-            icon: "pi pi-calendar-plus",
-            command: () => {
-                history.push("/competition/create");
-            }
-        },
-        {
-            label: "Dashboard",
-            icon: "pi pi-cog",
-            command: () => {
-                history.push("/dashboard");
-            }
-        },
-        {
-            label: "Log out",
-            icon: "pi pi-sign-out",
-            command: () => {
-                logout();
-            }
-        }
-    ];
 
     return (
-        <SplitButton label={user?.username} icon="pi pi-user" model={userActions} className="login-button p-button-sm"></SplitButton>
+        <SplitButton label={user?.username} icon="pi pi-user" model={userActions} className="register-button p-button-sm"></SplitButton>
     );
 }
 

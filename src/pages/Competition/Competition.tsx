@@ -6,7 +6,6 @@ import { dateToString } from "../../tools";
 import { MenuItem } from "primereact/menuitem";
 import { CompetitionInfo } from "./CompetitionInfo";
 import { CompetitionResults } from "./CompetitionResults";
-import { useIsLoggedIn } from "../../contexts/user.context";
 import { CompetitionEdit } from "./CompetitionEdit";
 import { CompetitionResultsUpload } from "./CompetitionResultsUpload";
 import { TestEdit } from "./TestEdit";
@@ -18,8 +17,6 @@ import { ScreenGroupSetup } from "./ScreenGroupSetup/ScreenGroupSetup";
 const CompetitionPage: React.FC = ({ children }) => {
     const { resource: competition, loading, error } = useCompetitionContext();
     const [showTestDialog, setShowTestDialog] = useState<boolean>(false);
-
-    const isLoggedIn = useIsLoggedIn();
     
     const history = useHistory();
     const { pathname } = history.location; 
@@ -57,7 +54,7 @@ const CompetitionPage: React.FC = ({ children }) => {
             }
         ];
 
-        if (!isLoggedIn) return [menuItems, []];
+        if (!competition.isAdmin) return [menuItems, []];
 
         menuItems[0].items.push({
             label: 'Create test',
@@ -85,7 +82,7 @@ const CompetitionPage: React.FC = ({ children }) => {
         ]
 
         return [menuItems, adminItems];
-    }, [competition, loading, error, history, isLoggedIn, pathname]);
+    }, [competition, loading, error, history, pathname]);
 
     return (
         <>
