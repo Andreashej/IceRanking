@@ -22,6 +22,7 @@ export type Result = {
 }
 
 type BaseMark = {
+    id: number | string;
     markType: "mark" | "flag" | "time";
     type: "judge" | "section";
     judgeNo: number;

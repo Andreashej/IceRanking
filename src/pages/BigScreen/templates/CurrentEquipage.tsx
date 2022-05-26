@@ -5,25 +5,14 @@ import { StartListEntry } from '../../../models/startlist.model';
 import { Test } from '../../../models/test.model';
 import { markToDouble } from '../../../tools';
 import { AnimatedFlatList } from './components/AnimatedFlatList';
-import { JudgeCard, judgeNoToLetter } from './components/JudgeCard';
+import { Mark } from './components/JudgeMark';
 import { LowerThird } from './components/LowerThird';
 
 
 
 const EquipageResult: React.FC<FlatListItem<Result, Test>> = ({ item: result, onHidden, show, parent: test}) => {
 
-    const marks = result.marks?.map((mark) => {
-        const m = markToDouble(mark.mark, test.roundingPrecision - 1);
-        return (
-            <div key={`${mark.judgeId}.${result.sta}`}>
-                <span>{judgeNoToLetter(mark.judgeNo)}</span>
-                <span className="sign">{m}</span>
-                {mark.redCard && <JudgeCard color="red" />}
-                {mark.yellowCard && <JudgeCard color="yellow" />}
-                {mark.blueCard && <JudgeCard color="blue" />}
-            </div>
-        );
-    });
+    const marks = result.marks?.map((mark) => <Mark key={mark.id} mark={mark} test={test} result={result} />);
 
     const finalMark = <>
         <div style={{ backgroundColor: "var(--blue)" }}>
@@ -43,7 +32,7 @@ const EquipageResult: React.FC<FlatListItem<Result, Test>> = ({ item: result, on
             onHidden={onHidden} 
             show={show} 
             className="flatlist-item"
-            gridTemplateColumns={`repeat(${result.marks?.length},20%)`}
+            gridTemplateColumns={`repeat(${result.marks?.length},1fr)`}
             footer={finalMark}
         >
             {marks}

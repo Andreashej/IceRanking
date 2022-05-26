@@ -7,6 +7,7 @@ export const judgeNoToLetter = (no: number) => {
         case 3: return 'C';
         case 4: return 'D';
         case 5: return 'E';
+        default: return '';
     }
 }
 
