@@ -3,6 +3,7 @@ import { Competition } from "../../models/competition.model";
 import { ApiResponse, Pagination } from "../../models/apiresponse.model";
 import axios from 'axios'
 import { dateToString } from "../../tools";
+import { User } from "../../models/user.model";
 
 export const getCompetition = async (id: number, params?: URLSearchParams): Promise<Competition> => {
     try { 
@@ -65,6 +66,32 @@ export const patchCompetition = async (competition: Competition) => {
         })
 
         return response.data.data;
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            return Promise.reject(error.response?.data.message ?? error.message)
+        }
+        return Promise.reject(error);
+    }
+}
+
+export const postCompetitionUsers = async (competition: Competition, username: string): Promise<User> => {
+    try {
+        const response = await apiV2.post<ApiResponse<User>>(`/competitions/${competition.id}/users`, {
+            username
+        })
+
+        return response.data.data;
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            return Promise.reject(error.response?.data.message ?? error.message)
+        }
+        return Promise.reject(error);
+    }
+}
+
+export const deleteCompetitionUser = async (competition: Competition, user: User): Promise<void> => {
+    try {
+        await apiV2.delete<ApiResponse<User>>(`/competitions/${competition.id}/users/${user.id}`)
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
             return Promise.reject(error.response?.data.message ?? error.message)

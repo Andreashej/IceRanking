@@ -1,5 +1,6 @@
 import { Person } from "./person.model";
 import { Test } from "./test.model";
+import { User } from "./user.model";
 
 export type Competition = {
     id?: number;
@@ -14,4 +15,5 @@ export type Competition = {
 
     tests?: Test[];
     contactPerson?: Person;
+    adminUsers?: User[];
 }

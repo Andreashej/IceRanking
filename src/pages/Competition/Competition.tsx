@@ -13,6 +13,7 @@ import { PrimeIcons } from "primereact/api";
 import { TestDialog } from "./TestDialog";
 import { BigScreenController } from "../BigScreen/BigScreenController";
 import { ScreenGroupSetup } from "./ScreenGroupSetup/ScreenGroupSetup";
+import { CompetitionAdmins } from "./CompetitionAdmins";
 
 const CompetitionPage: React.FC = ({ children }) => {
     const { resource: competition, loading, error } = useCompetitionContext();
@@ -70,6 +71,11 @@ const CompetitionPage: React.FC = ({ children }) => {
                 command: () => history.push(`/competition/${competition?.id}/edit`)
             },
             {
+                label: "Admins",
+                className: pathname === `/competition/${competition?.id}/admins` ? 'active' : '',
+                command: () => history.push(`/competition/${competition?.id}/admins`)
+            },
+            {
                 label: "Upload results",
                 className: pathname.includes(`/upload`) ? 'active' : '',
                 command: () => history.push(`/competition/${competition?.id}/upload`)
@@ -109,6 +115,7 @@ export const Competition: React.FC = () => {
                     <Route path="/competition/:id/test/:testcode" component={CompetitionResults} />
                     <Route path="/competition/:id/screengroups" component={ScreenGroupSetup} />
                     <Route path="/competition/:id/bigscreencontroller/:screenGroupId" component={BigScreenController} />
+                    <Route path="/competition/:id/admins" component={CompetitionAdmins} />
                 </Switch>
             </CompetitionPage>    
         </CompetitionProvider>

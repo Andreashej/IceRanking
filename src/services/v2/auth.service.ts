@@ -1,7 +1,8 @@
 import { apiV2 } from ".";
-import { ApiResponse, LoginResponse } from "../../models/apiresponse.model";
+import { ApiResponse, LoginResponse, Pagination } from "../../models/apiresponse.model";
 import axios from 'axios'
 import { User } from "../../models/user.model";
+import { URLSearchParams } from "url";
 
 export const login = async (username: string, password: string): Promise<User> => {
     try {
@@ -85,9 +86,9 @@ export const logoutRefreshToken = async (): Promise<void> => {
     }
 }
 
-export const getProfile = async (): Promise<User> => {
+export const getProfile = async (params?: URLSearchParams): Promise<User> => {
     try {
-        const response = await apiV2.get<ApiResponse<User>>('/profile');
+        const response = await apiV2.get<ApiResponse<User>>('/profile', { params });
 
         return response.data.data
     } catch (error: unknown) {
@@ -127,5 +128,31 @@ export const createUser = async(username: string, password: string, firstName: s
             return Promise.reject(error.response?.data.message ?? error.message)
         }
         return Promise.reject(error);
+    }
+}
+
+export const getUsers = async (params?: URLSearchParams): Promise<[User[], Pagination?]> => {
+    try {
+        const response = await apiV2.get<ApiResponse<User[]>>('/users', { params });
+
+        return [response.data.data, response.data.pagination];
+
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            return Promise.reject(error.response?.data.message ?? error.message)
+        }
+        return Promise.reject(error)
+    }
+}
+export const getUser = async (id: number, params?: URLSearchParams): Promise<User> => {
+    try {
+        const response = await apiV2.get<ApiResponse<User>>(`/users/${id}`, { params });
+
+        return response.data.data
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            return Promise.reject(error.response?.data.message ?? error.message)
+        }
+        return Promise.reject(error)
     }
 }

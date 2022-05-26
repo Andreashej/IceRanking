@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card } from 'primereact/card'
 import { dateToString } from '../tools';
@@ -8,11 +8,13 @@ import { getCompetitions } from '../services/v2/competition.service';
 import { RankingList } from '../models/rankinglist.model';
 import { getRankingLists } from '../services/v2/rankinglist.service';
 import EventList from '../components/partials/EventList';
+import { useProfile } from '../contexts/user.context';
 
 export const Frontpage: React.FC = () => {
     const [upcomingEvents, setUpcomingEvents] = useState<Competition[]>([])
     const [recentEvents, setRecentEvents] = useState<Competition[]>([])
     const [rankingLists, setRankingLists] = useState<RankingList[]>([]);
+    const [user] = useProfile();
 
     useEffect(() => {
         const today = new Date();
@@ -66,6 +68,17 @@ export const Frontpage: React.FC = () => {
 
     const eventCardStyle= { margin: "-1em", marginTop: "1em", borderTop: "1px solid rgba(0, 0, 0, 0.125)" };
 
+    const welcomeText = useMemo(() => {
+        if (user?.person) {
+            return <>
+                Welcome,<br />
+                {user.person.firstname}
+            </>
+        }
+
+        return "Welcome";
+    }, [user])
+
     return (
         <>
             <section className="frontpage-branding">
@@ -79,7 +92,9 @@ export const Frontpage: React.FC = () => {
                                 }} alt="Large app logo" />
                             </div>
                             <div className="col-12 col-lg d-flex order-1 order-lg-2 align-items-center stylish-border">
-                                <h1 className="display-1">Welcome</h1>
+                                <h1 className="display-2" style={{ fontSize: "min(12vw, 5.5rem)" }}>
+                                    {welcomeText}
+                                </h1>
                             </div>
                         </div>
                     </div>

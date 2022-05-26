@@ -59,7 +59,7 @@ const UserSection: React.FC = () => {
                 <Button 
                     label="Login" 
                     icon="pi pi-sign-in" 
-                    className="p-button-raised p-button-rounded login-button p-button-text p-button-sm" 
+                    className="login-button p-button-text p-button-sm" 
                     onClick={() => {
                         setLoginVariant('login');
                         setShowLogin(true)

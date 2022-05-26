@@ -1,5 +1,8 @@
+import { Person } from "./person.model";
+
 export type User = {
-    id: string;
+    id: number;
     username: string;
     superUser: boolean;
+    person?: Person;
 }

@@ -78,7 +78,7 @@ export const UserProvider: React.FC = ({ children }) => {
     useEffect(() => {
         const fetchProfile = async (): Promise<void> => {
             try {
-                const user = await getProfile();
+                const user = await getProfile(new URLSearchParams({ 'expand': 'person' }));
                 setUser(user);
             } catch (error : unknown) {
                 if (axios.isAxiosError(error)) {
