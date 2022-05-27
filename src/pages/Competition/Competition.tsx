@@ -14,6 +14,7 @@ import { TestDialog } from "./TestDialog";
 import { BigScreenController } from "../BigScreen/BigScreenController";
 import { ScreenGroupSetup } from "./ScreenGroupSetup/ScreenGroupSetup";
 import { CompetitionAdmins } from "./CompetitionAdmins";
+import { ScreenGroupRoutes } from "./ScreenGroupSetup/ScreenGroupRoutes";
 
 const CompetitionPage: React.FC = ({ children }) => {
     const { resource: competition, loading, error } = useCompetitionContext();
@@ -113,7 +114,8 @@ export const Competition: React.FC = () => {
                     <Route exact path="/competition/:id/upload" component={CompetitionResultsUpload} />
                     <Route exact path="/competition/:id/test/:testcode/edit" component={TestEdit} />
                     <Route path="/competition/:id/test/:testcode" component={CompetitionResults} />
-                    <Route path="/competition/:id/screengroups" component={ScreenGroupSetup} />
+                    <Route exact path="/competition/:id/screengroups" component={ScreenGroupSetup} />
+                    <Route path="/competition/:id/screengroups/routes" component={ScreenGroupRoutes} />
                     <Route path="/competition/:id/bigscreencontroller/:screenGroupId" component={BigScreenController} />
                     <Route path="/competition/:id/admins" component={CompetitionAdmins} />
                 </Switch>

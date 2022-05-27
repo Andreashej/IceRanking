@@ -1,7 +1,9 @@
 import axios from "axios";
 import { apiV2 } from ".";
 import { ApiResponse, Pagination } from "../../models/apiresponse.model";
+import { BigScreenRoute } from "../../models/bigscreen-route.model";
 import { BigScreen } from "../../models/bigscreen.model";
+import { Competition } from "../../models/competition.model";
 import { ScreenGroup } from "../../models/screengroup.model";
 
 export const getScreenGroups = async (params?: URLSearchParams): Promise<[ScreenGroup[], Pagination?]> => {
@@ -111,6 +113,63 @@ export const patchScreenGroup = async (screenGroup: Partial<ScreenGroup>): Promi
         const response = await apiV2.patch<ApiResponse<ScreenGroup>>(`/screengroups/${screenGroup.id}`, screenGroup)
 
         return response.data.data;
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            return Promise.reject(error.response?.data.message ?? error.message)
+        }
+        return Promise.reject(error);
+    }
+}
+
+export const getScreenRoutes = async (competition: Competition, params?: URLSearchParams): Promise<[BigScreenRoute[], Pagination?]> => {
+    try {
+        const response = await apiV2.get<ApiResponse<BigScreenRoute[]>>(`/competitions/${competition.id}/bigscreen-routes`, { params });
+
+        return [response.data.data, response.data?.pagination];
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            return Promise.reject(error.response?.data.message ?? error.message)
+        }
+        return Promise.reject(error);
+    }
+}
+
+export const postScreenRoute = async (competition: Competition, screenRoute: Omit<BigScreenRoute, 'id'>): Promise<BigScreenRoute> => {
+    console.log(screenRoute);
+    try {
+        const response = await apiV2.post<ApiResponse<BigScreenRoute>>(`/competitions/${competition.id}/bigscreen-routes`, {
+            ...screenRoute,
+            tests: screenRoute.tests?.map((test) => test.id)
+        });
+
+        return response.data.data;
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            return Promise.reject(error.response?.data.message ?? error.message)
+        }
+        return Promise.reject(error);
+    }
+}
+
+export const patchScreenRoute = async (competition: Competition, screenRoute: Partial<BigScreenRoute>): Promise<BigScreenRoute> => {
+    try {
+        const response = await apiV2.patch<ApiResponse<BigScreenRoute>>(`/competitions/${competition.id}/bigscreen-routes/${screenRoute.id}`, {
+            ...screenRoute,
+            tests: screenRoute.tests?.map((test) => test.id)
+        })
+
+        return response.data.data;
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            return Promise.reject(error.response?.data.message ?? error.message)
+        }
+        return Promise.reject(error);
+    }
+}
+
+export const deleteScreenRoute = async (competition: Competition, screenRoute: Partial<BigScreenRoute>): Promise<void> => {
+    try {
+        await apiV2.delete<ApiResponse<BigScreenRoute>>(`/competitions/${competition.id}/bigscreen-routes/${screenRoute.id}`)
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
             return Promise.reject(error.response?.data.message ?? error.message)
