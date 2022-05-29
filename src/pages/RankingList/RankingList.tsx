@@ -5,15 +5,15 @@ import { RankingResults } from './RankingResults';
 import { RankingEvents } from './RankingEvents';
 import Page from '../../components/partials/Page';
 import { RankingListProvider, useRankingListContext } from '../../contexts/rankinglist.context';
-import { useIsLoggedIn } from '../../contexts/user.context';
 import { MenuItem } from 'primereact/menuitem';
 import { RankingListEdit } from './admin/RankingListEdit';
 import { RankingEdit } from './admin/RankingEdit';
 import { PrimeIcons } from 'primereact/api';
+import { useProfile } from '../../contexts/user.context';
 
 const RankingListPage: React.FC = ({children}) => {
     const { resource: rankingList, loading, error } = useRankingListContext()
-    const isLoggedIn = useIsLoggedIn();
+    const [user] = useProfile();
     const history = useHistory();
     const { pathname } = history.location;
 
@@ -49,7 +49,7 @@ const RankingListPage: React.FC = ({children}) => {
             }
         ];
 
-        if (!isLoggedIn) return [menuItems, []];
+        if (!user?.superUser) return [menuItems, []];
 
         menuItems[0].items.push({
             label: 'Create ranking',
@@ -68,7 +68,7 @@ const RankingListPage: React.FC = ({children}) => {
         ]
 
         return [menuItems, adminItems];
-    }, [rankingList, loading, error, history, isLoggedIn, pathname]);
+    }, [rankingList, loading, error, history, user, pathname]);
 
     return (
         <Page title={title} subtitle={subtitle} menuItems={menuItems} adminMenuItems={adminMenuItems} icon="list-ol">

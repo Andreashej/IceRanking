@@ -4,6 +4,7 @@ import React, { FormEvent, useEffect, useState } from 'react'
 import { Form } from '../../components/Form/Form';
 import { useRider } from '../../contexts/rider.context';
 import { useToast } from '../../contexts/toast.context';
+import { useProfile } from '../../contexts/user.context';
 import { PersonAlias } from '../../models/personalias.model';
 import { createAlias, getAliases } from '../../services/v2/person.service';
 
@@ -13,6 +14,7 @@ export const RiderEdit: React.FC = () => {
     const [newAlias, setNewAlias] = useState('');
     const [mergePersonId, setMergePersonId] = useState<string>('');
     const showToast = useToast();
+    const [user] = useProfile();
 
     useEffect(() => {
         if (!rider) return;
@@ -87,22 +89,26 @@ export const RiderEdit: React.FC = () => {
                 ]}
                 submitButton={<Button type="submit" label="Save" className="p-button-success p-button-raised p-button-rounded" icon="pi pi-save" />}
             />
-            <h2 className="subtitle mt-4">Aliases</h2>
-            <ul className="list-group">
-                {aliasList}
-                <li className="list-group-item">
-                    <div className="row">
-                        <div className="col">
-                            <InputText id="alias" placeholder="New alias" value={newAlias} onChange={(e) => setNewAlias(e.target.value)} />
-                            <Button type="button" label="Add alias" icon="pi pi-plus" className="p-button-info" onClick={addAlias} />
+            {user?.superUser && (
+                <>
+                <h2 className="subtitle mt-4">Aliases</h2>
+                <ul className="list-group">
+                    {aliasList}
+                    <li className="list-group-item">
+                        <div className="row">
+                            <div className="col">
+                                <InputText id="alias" placeholder="New alias" value={newAlias} onChange={(e) => setNewAlias(e.target.value)} />
+                                <Button type="button" label="Add alias" icon="pi pi-plus" className="p-button-info" onClick={addAlias} />
+                            </div>
+                            <div className="col">
+                                <InputText id="mergeRider" placeholder="Rider ID to merge" value={mergePersonId} onChange={(e) => setMergePersonId(e.target.value)} />
+                                <Button type="button" label="Merge riders" icon="pi pi-plus" className="p-button-info" onClick={mergeRiders} />
+                            </div>
                         </div>
-                        <div className="col">
-                            <InputText id="mergeRider" placeholder="Rider ID to merge" value={mergePersonId} onChange={(e) => setMergePersonId(e.target.value)} />
-                            <Button type="button" label="Merge riders" icon="pi pi-plus" className="p-button-info" onClick={mergeRiders} />
-                        </div>
-                    </div>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+                </>
+            )}
         </>
     )
 }

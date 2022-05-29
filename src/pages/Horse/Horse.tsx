@@ -8,13 +8,13 @@ import HorseInfo from './HorseInfo';
 import { Route, Switch, useParams, useHistory } from 'react-router-dom';
 import { HorseProvider, useHorseContext } from '../../contexts/horse.context';
 import { MenuItem } from 'primereact/menuitem';
-import { useIsLoggedIn } from '../../contexts/user.context';
+import { useProfile } from '../../contexts/user.context';
 
 const HorsePage: React.FC = ({children}) => {
     const { resource: horse, loading, error } = useHorseContext();
     const history = useHistory();
     const { pathname } = history.location;
-    const isLoggedIn = useIsLoggedIn();
+    const [user] = useProfile();
 
 
     const title = useMemo<string | null>(() => {
@@ -48,7 +48,7 @@ const HorsePage: React.FC = ({children}) => {
             }
         ];
 
-        if (!isLoggedIn) return [menuItems, []];
+        if (!user?.superUser) return [menuItems, []];
 
         // const adminItems = [
             // {
@@ -60,7 +60,7 @@ const HorsePage: React.FC = ({children}) => {
 
         return [menuItems, []];
 
-    }, [horse, pathname, loading, error, history, isLoggedIn]);
+    }, [horse, pathname, loading, error, history, user]);
 
     return (
         <Page title={title} subtitle={subtitle} icon="horse-head" menuItems={menuItems} adminMenuItems={adminMenuItems}>

@@ -7,7 +7,6 @@ import { FlatList, FlatListItem } from '../../components/partials/FlatList';
 import { Skeleton } from '../../components/partials/Skeleton';
 import { useCompetitionContext } from '../../contexts/competition.context';
 import { useToast } from '../../contexts/toast.context';
-import { useIsLoggedIn } from '../../contexts/user.context';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import { Pagination } from '../../models/apiresponse.model';
 import { Horse } from '../../models/horse.model';
@@ -19,7 +18,6 @@ import { getResult } from '../../services/v2/result.service';
 import { cancellablePromise } from '../../tools/cancellablePromise';
 import { Dialog } from 'primereact/dialog';
 import { FileUpload, FileUploadHandlerParam } from 'primereact/fileupload';
-import { apiV2 } from '../../services/v2';
 
 const CompetitionResultItem: React.FC<FlatListItem<Result, Test>> = ({ item: result, parent: test }) => {
     const [rider, setRider] = useState<Person>();
@@ -75,7 +73,6 @@ export const CompetitionResults: React.FC = () => {
     const [pagination, setPagination] = useState<Pagination>();
     const [loading, setLoading] = useState<boolean>(false);
     const [uploadResultsDialog, setUploadResultsDialog] = useState<boolean>(false);
-    const isLoggedIn = useIsLoggedIn();
     const showToast = useToast();
 
     const history = useHistory();
@@ -158,7 +155,7 @@ export const CompetitionResults: React.FC = () => {
                 <h2 className="subheader">
                     {testcode} results 
                 </h2>
-                {isLoggedIn && <div className="toolbar" style={{ width: "max-content", placeSelf: "end" }} >
+                {competition?.isAdmin && <div className="toolbar" style={{ width: "max-content", placeSelf: "end" }} >
                     <Button icon={PrimeIcons.UPLOAD} className="p-button-text" tooltip="Upload results" tooltipOptions={tooltipOptions} onClick={() => setUploadResultsDialog(true)} />
                     <Button icon={PrimeIcons.PENCIL} className="p-button-text" tooltip="Edit" tooltipOptions={tooltipOptions} onClick={() => history.push(`${history.location.pathname}/edit`)} />
                     <Button icon={PrimeIcons.TRASH} className="p-button-text p-button-danger" tooltip="Delete" tooltipOptions={tooltipOptions} onClick={() => removeTest()} />

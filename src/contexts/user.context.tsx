@@ -16,6 +16,21 @@ const userContext = createContext<UserContext | undefined>(undefined);
 
 export const UserProvider: React.FC = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
+
+    const fetchProfile = async (): Promise<void> => {
+        try {
+            const user = await getProfile(new URLSearchParams({ 'expand': 'person' }));
+            setUser(user);
+        } catch (error : unknown) {
+            if (axios.isAxiosError(error)) {
+                if (error.response?.status === 401) return Promise.resolve();
+
+                return Promise.reject(error.response?.data.message ?? error.message);
+            }
+
+            return Promise.reject(error);
+        }
+    }
     
     const updateUser: UserContext['updateUser'] = async (user) => {
         try {
@@ -29,8 +44,8 @@ export const UserProvider: React.FC = ({ children }) => {
     const handleLogin = async (username: string, password: string): Promise<void> => {
         try {
             const user = await login(username, password);
-
             setUser(user);
+            fetchProfile();
         } catch (error: unknown) {
             setUser(null);
         }
@@ -76,21 +91,6 @@ export const UserProvider: React.FC = ({ children }) => {
     }
 
     useEffect(() => {
-        const fetchProfile = async (): Promise<void> => {
-            try {
-                const user = await getProfile(new URLSearchParams({ 'expand': 'person' }));
-                setUser(user);
-            } catch (error : unknown) {
-                if (axios.isAxiosError(error)) {
-                    if (error.response?.status === 401) return Promise.resolve();
-
-                    return Promise.reject(error.response?.data.message ?? error.message);
-                }
-
-                return Promise.reject(error);
-            }
-        }
-
         fetchProfile();
     }, [])
     

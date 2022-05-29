@@ -22,12 +22,12 @@ import { Competition } from '../../models/competition.model';
 import { getCompetition } from '../../services/v2/competition.service';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from 'primereact/button';
-import { useIsLoggedIn } from '../../contexts/user.context';
 import { Task } from '../../models/task.model';
 import { TaskBar } from '../../components/Task/TaskBar';
 import { createTask } from '../../services/v2/task.service';
 import { PrimeIcons } from 'primereact/api';
 import { cancellablePromise } from '../../tools/cancellablePromise';
+import { useProfile } from '../../contexts/user.context';
 
 type RankingResultMarkProps = {
     mark: Result;
@@ -244,8 +244,7 @@ export const RankingResults: React.FC = () => {
     const [pagination, setPagination] = useState<Pagination>();
     const [loading, setLoading] = useState<boolean>(false);
     const [tasks, setTasks] = useState<Task[]>([]);
-
-    const isLoggedIn = useIsLoggedIn();
+    const [user] = useProfile();
 
     const history = useHistory();
 
@@ -366,7 +365,7 @@ export const RankingResults: React.FC = () => {
         <> 
             <div className="grid-col-2">
                 <h2 className="subheader">{testcode} results</h2>
-                {isLoggedIn && <div className="toolbar" style={{ width: "max-content", placeSelf: "end" }}>
+                {user?.superUser && <div className="toolbar" style={{ width: "max-content", placeSelf: "end" }}>
                     {toolbar}
                 </div>}
             </div>

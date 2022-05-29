@@ -7,15 +7,15 @@ import { RiderResults } from './RiderResults';
 import RiderInfo from './RiderInfo';
 import { RiderProvider, useRiderContext } from '../../contexts/rider.context';
 import { MenuItem } from 'primereact/menuitem';
-import { useIsLoggedIn } from '../../contexts/user.context';
 import { RiderEdit } from './RiderEdit';
+import { useProfile } from '../../contexts/user.context';
 
 
 const RiderPage: React.FC = ({ children }) => {
     const { resource: rider, loading, error } = useRiderContext();
     const history = useHistory();
-    const isLoggedIn = useIsLoggedIn();
     const { pathname } = history.location;
+    const [user] = useProfile();
     
     const title = useMemo<string | null>(() => {
         if (!loading && rider) return rider.fullname;
@@ -47,7 +47,7 @@ const RiderPage: React.FC = ({ children }) => {
             }
         ];
 
-        if (!isLoggedIn) return [menuItems, []];
+        if (!user?.superUser && user?.person?.id !== rider.id) return [menuItems, []];
 
         const adminItems = [
             {
@@ -59,7 +59,7 @@ const RiderPage: React.FC = ({ children }) => {
 
         return [menuItems, adminItems];
 
-    }, [rider, pathname, loading, error, history, isLoggedIn]);
+    }, [rider, pathname, loading, error, history, user]);
 
     return (
         <Page title={title} subtitle={subtitle} icon="user" menuItems={menuItems} adminMenuItems={adminMenuItems}>
