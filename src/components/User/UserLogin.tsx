@@ -18,6 +18,7 @@ export type UserLoginProps = {
 export const UserLogin: React.FC<UserLoginProps> = ({show, onHide, variant}) => {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [passwordRepeat, setPasswordRepeat] = useState<string>("");
     const [firstName, setFirstName] = useState<string>("");
     const [lastName, setLastName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
@@ -33,7 +34,7 @@ export const UserLogin: React.FC<UserLoginProps> = ({show, onHide, variant}) => 
         setFormError(null);
         let promise;
         if ( variant === 'register') {
-            promise = register(username, password, firstName, lastName, email)
+            promise = register(username, password, passwordRepeat, firstName, lastName, email)
         } else {
             promise = login(username, password)
         }
@@ -89,6 +90,10 @@ export const UserLogin: React.FC<UserLoginProps> = ({show, onHide, variant}) => 
                 <span className="p-float-label">
                     <Password id="password" value={password} onChange={(e) => setPassword(e.target.value)} feedback={false} />
                     <label htmlFor="password">Password</label>
+                </span>
+                <span className="p-float-label">
+                    <Password id="password-repeat" value={passwordRepeat} onChange={(e) => setPasswordRepeat(e.target.value)} feedback={false} />
+                    <label htmlFor="password-repeat">Repeat password</label>
                 </span>
                 <Button label={buttonLabel} icon="pi pi-sign-in" className="p-button-rounded p-button-raised" disabled={loading}/>
                 {loading && <ProgressSpinner style={{ marginLeft: ".5rem", height: "2em", width: "2em" }} strokeWidth=".5rem" />}

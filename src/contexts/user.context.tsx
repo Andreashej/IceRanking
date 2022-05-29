@@ -9,7 +9,7 @@ interface UserContext {
     logout: () => Promise<void>;
     updateUser: (user: Partial<User>) => Promise<void>;
     isLoggedIn: boolean;
-    register: (username: string, password: string, firstName: string, lastName: string, email: string) => Promise<void>;
+    register: (username: string, password: string, passwordRepeat: string, firstName: string, lastName: string, email: string) => Promise<void>;
 }
 
 const userContext = createContext<UserContext | undefined>(undefined);
@@ -42,6 +42,10 @@ export const UserProvider: React.FC = ({ children }) => {
     }
 
     const handleLogin = async (username: string, password: string): Promise<void> => {
+        if ([username, password].some((value) => value === '')) {
+            return Promise.reject("All fields must be filled out!");
+        }
+
         try {
             const user = await login(username, password);
             setUser(user);
@@ -72,7 +76,15 @@ export const UserProvider: React.FC = ({ children }) => {
         }
     }
 
-    const handleRegister = async (username: string, password: string, firstName: string, lastName: string, email: string): Promise<void> => {
+    const handleRegister = async (username: string, password: string, passwordRepeat: string, firstName: string, lastName: string, email: string): Promise<void> => {
+        if ([username, password, firstName, lastName, email, passwordRepeat].some((value) => value === '')) {
+            return Promise.reject("All fields must be filled out!");
+        }
+
+        if (password !== passwordRepeat) {
+            return Promise.reject('Passwords are not equal!')
+        }
+
         try {
             await createUser(username, password, firstName, lastName, email);
             await handleLogin(username, password);
