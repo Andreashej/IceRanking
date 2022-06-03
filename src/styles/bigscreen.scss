@@ -28,7 +28,7 @@ html.bigscreen {
         }
 
         &.key {
-            background: lime;
+            background: rgb(255, 0, 155);
             &::before {
                 content: unset;
             }
