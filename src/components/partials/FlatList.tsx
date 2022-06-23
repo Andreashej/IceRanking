@@ -1,6 +1,7 @@
 import { ProgressSpinner } from 'primereact/progressspinner';
 import React, { AnimationEventHandler, useEffect, useRef, useState } from 'react';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
+import { Ad } from './Ad';
 
 export type FlatListItem<T, P> = {
     item: T;
@@ -21,6 +22,8 @@ export type FlatListProps<T = any, P = any> = {
     onHidden?: () => void;
     showItems?: boolean;
     onShown?: () => void;
+    enableAds?: boolean;
+    adPosition?: number;
 }
 
 const PlaceholderListItem: React.FC<FlatListItem<null, null>> = ({show, onShown, onHidden}) => {
@@ -39,7 +42,7 @@ const PlaceholderListItem: React.FC<FlatListItem<null, null>> = ({show, onShown,
     )
 }
 
-export const FlatList: React.FC<FlatListProps> = ({items, RenderComponent, onBottomReached, hasMoreItems, parent, onHidden, showItems = true, onShown }) => {
+export const FlatList: React.FC<FlatListProps> = ({items, RenderComponent, onBottomReached, hasMoreItems, parent, onHidden, showItems = true, onShown, enableAds = true, adPosition = 3 }) => {
     const listBottomRef = useRef<HTMLDivElement>(null);
     const bottomReached = useIntersectionObserver(listBottomRef, { threshold: 0, rootMargin: '50px' });
     const [hiddenItems, setHiddenItems] = useState<number>(0);
@@ -73,6 +76,13 @@ export const FlatList: React.FC<FlatListProps> = ({items, RenderComponent, onBot
         }
         return <RenderComponent item={item} index={index} key={item.id} parent={parent} onHidden={onItemHidden} show={showItems} onShown={onItemShown} />
     });
+
+    if (enableAds) {
+        const element = (
+            <li className='flatlist-item'><Ad /></li>
+        )
+        listElements.splice(adPosition, 0, element);
+    }
 
     useEffect(() => {
         if(bottomReached && hasMoreItems) onBottomReached?.();
