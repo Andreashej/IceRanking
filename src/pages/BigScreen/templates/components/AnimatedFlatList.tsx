@@ -96,6 +96,7 @@ export const AnimatedFlatList: React.FC<AnimatedFlatListProps> = ({ header, head
                     hasMoreItems={false} 
                     showItems={show && parentShow && showTemplate} 
                     onHidden={handleOnHidden} 
+                    enableAds={false}
                     {...rest}
                     />}
             </div>
