@@ -83,6 +83,7 @@ const BigScreenRouteRow: React.FC<BigScreenRouteRowProps> = ({route: initialRout
                     style={{ height: "100%" }}
                     completeMethod={searchTemplates}
                     suggestions={templateSuggestions}
+                    placeholder={route.templates.length === 0 ? "Any" : ""}
                 />
             </td>
             <td>
@@ -97,7 +98,8 @@ const BigScreenRouteRow: React.FC<BigScreenRouteRowProps> = ({route: initialRout
                             ...prev,
                             tests: e.value
                         }
-                    })} 
+                    })}
+                    placeholder={route.tests?.length === 0 ? "Any" : ""}
                 />
             </td>
             <td>
