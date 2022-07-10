@@ -23,7 +23,7 @@ type SectionMarksProps = {
     group: SectionMarksEntry[]
 }
 
-const SectionMarksLowerThird: React.FC<FlatListItem<SectionMarksEntry, Section>> = ({ item: result, onHidden, show, parent: section}) => {
+const SectionMarksLowerThird: React.FC<FlatListItem<SectionMarksEntry, Section>> = ({ item: result, onHidden, show, extraData: section}) => {
 
     const marks = result.sectionMarks?.map((sectionMark) => {
         const m = markToDouble(sectionMark.mark, section.test.roundingPrecision - 1);
@@ -72,7 +72,7 @@ export const SectionMarks: React.FC<SectionMarksProps> = ({ group, section }) =>
         <AnimatedFlatList 
             items={group} 
             RenderComponent={SectionMarksLowerThird}
-            parent={section}
+            extraData={section}
             itemsPerPage={1}
             timePerPage={10000}
         />

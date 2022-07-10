@@ -2,11 +2,12 @@ import React, { AnimationEventHandler, useMemo } from 'react';
 import { FlatListItem } from '../../../components/partials/FlatList';
 import { Result } from '../../../models/result.model';
 import { Test } from '../../../models/test.model';
+import { markToDouble } from '../../../tools';
 import { AnimatedFlatList } from './components/AnimatedFlatList';
 
 type Phase = "PREL" | "AFIN" | "BFIN" | "CFIN" | "FIN";
 
-const ResultListItem: React.FC<FlatListItem<Result, Phase>> = ({ item: result, show, onHidden, onShown, parent: phase }) => {
+const ResultListItem: React.FC<FlatListItem<Result, {phase: Phase, test: Test}>> = ({ item: result, show, onHidden, onShown, extraData }) => {
 
     const animationEnd: AnimationEventHandler<HTMLLIElement> = (event) => {
         if (event.animationName === 'scaleOut') {
@@ -25,11 +26,11 @@ const ResultListItem: React.FC<FlatListItem<Result, Phase>> = ({ item: result, s
             onAnimationEnd={animationEnd}
         >
             <div className="row-content">
-                <div className='row-marker' style={{ backgroundColor: phase !== "PREL" ? `var(--${result.color})` : 'var(--blue)' }}>{result.rank}</div>
+                <div className='row-marker' style={{ backgroundColor: extraData.phase !== "PREL" ? `var(--${result.color})` : 'var(--blue)' }}>{result.rank}</div>
                 <div>{result.rider?.fullname}</div>
                 <div>{result.horse?.horseName}</div>
                 <div className="text-right">
-                    <b>{result.mark}</b>
+                    <b>{markToDouble(result.mark, extraData.test?.roundingPrecision ?? 2)}</b>
                 </div>
             </div>
             {result.scope && <div className={`row-end-marker ${result.scope.toLowerCase()}`}>
@@ -68,6 +69,6 @@ export const ResultList: React.FC<ResultListProps> = ({ results, test, phase }) 
         RenderComponent={ResultListItem} 
         itemsPerPage={10} 
         timePerPage={10000} 
-        parent={phase}
+        extraData={{phase, test}}
     />
 }

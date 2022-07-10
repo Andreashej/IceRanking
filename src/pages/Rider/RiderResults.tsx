@@ -257,7 +257,7 @@ export const RiderResults: React.FC = () => {
                 items={results}
                 RenderComponent={RiderResult}
                 onBottomReached={() => getNextPage(rider.id)}
-                parent={rider}
+                extraData={rider}
                 hasMoreItems={(!pagination && results.length === 0) || (pagination && pagination.hasNext)}
             />
         </>

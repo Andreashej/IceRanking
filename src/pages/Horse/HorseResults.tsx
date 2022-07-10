@@ -256,7 +256,7 @@ export const HorseResults: React.FC = () => {
                 items={results}
                 RenderComponent={HorseResult}
                 onBottomReached={() => getNextPage(horse.id)}
-                parent={horse}
+                extraData={horse}
                 hasMoreItems={(!pagination && results.length === 0) || (pagination && pagination.hasNext)}
             />
         </>

@@ -83,7 +83,7 @@ const RankingResultMarkItem: React.FC<RankingResultMarkProps> = ({mark, isQualif
     )
 }
 
-const RankingResultListItem: React.FC<FlatListItem<RankingResult, Ranking>> = ({ item: result, parent: ranking }) => {
+const RankingResultListItem: React.FC<FlatListItem<RankingResult, Ranking>> = ({ item: result, extraData: ranking }) => {
     const [rider, setRider] = useState<Person>();
     const [horse, setHorse] = useState<Horse>();
     const [marks, setMarks] = useState<Result[]>([]);
@@ -374,7 +374,7 @@ export const RankingResults: React.FC = () => {
                 items={results}
                 RenderComponent={RankingResultListItem}
                 hasMoreItems={(!pagination && results.length === 0) || (pagination && pagination.hasNext)} 
-                parent={ranking}
+                extraData={ranking}
                 onBottomReached={() => getNextPage(ranking.id)}
             /> : renderTasks}
         </>

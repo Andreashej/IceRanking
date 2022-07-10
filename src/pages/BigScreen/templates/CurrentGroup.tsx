@@ -1,9 +1,7 @@
-import React, { AnimationEventHandler, useEffect, useState } from 'react';
+import React, { AnimationEventHandler } from 'react';
 import { FlatListItem } from '../../../components/partials/FlatList';
-import { Result } from '../../../models/result.model';
 import { StartListEntry } from '../../../models/startlist.model';
 import { Test } from '../../../models/test.model';
-import { useScreenContext } from '../BigScreen';
 import { AnimatedFlatList } from './components/AnimatedFlatList';
 
 

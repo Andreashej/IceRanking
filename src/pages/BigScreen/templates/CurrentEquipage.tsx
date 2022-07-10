@@ -10,7 +10,7 @@ import { LowerThird } from './components/LowerThird';
 
 
 
-const EquipageResult: React.FC<FlatListItem<Result, Test>> = ({ item: result, onHidden, show, parent: test}) => {
+const EquipageResult: React.FC<FlatListItem<Result, Test>> = ({ item: result, onHidden, show, extraData: test}) => {
 
     const marks = result.marks?.map((mark) => <Mark key={mark.id} mark={mark} test={test} result={result} />);
 
@@ -67,7 +67,7 @@ export const CurrentEquipage: React.FC<CurrentEquipageProps> = ({ type, currentG
 
     return (
         <>
-            <AnimatedFlatList parent={test} items={currentGroup} RenderComponent={renderTemplate} itemsPerPage={1} timePerPage={10000} usePlaceholder={false} />
+            <AnimatedFlatList extraData={test} items={currentGroup} RenderComponent={renderTemplate} itemsPerPage={1} timePerPage={10000} usePlaceholder={false} />
         </>
     )
 }

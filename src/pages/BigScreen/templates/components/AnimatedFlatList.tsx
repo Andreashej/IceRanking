@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useScreenContext } from "../../BigScreen";
 import React from 'react';
 import { FlatList, FlatListProps } from "../../../../components/partials/FlatList";

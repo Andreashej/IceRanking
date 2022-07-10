@@ -19,7 +19,7 @@ import { cancellablePromise } from '../../tools/cancellablePromise';
 import { Dialog } from 'primereact/dialog';
 import { FileUpload, FileUploadHandlerParam } from 'primereact/fileupload';
 
-const CompetitionResultItem: React.FC<FlatListItem<Result, Test>> = ({ item: result, parent: test }) => {
+const CompetitionResultItem: React.FC<FlatListItem<Result, Test>> = ({ item: result, extraData: test }) => {
     const [rider, setRider] = useState<Person>();
     const [horse, setHorse] = useState<Horse>();
     const [fetchingStarted, setFetchingStarted] = useState<boolean>(false);
@@ -163,7 +163,7 @@ export const CompetitionResults: React.FC = () => {
             </div>
             <FlatList
                 items={results}
-                parent={test}
+                extraData={test}
                 RenderComponent={CompetitionResultItem} 
                 hasMoreItems={(!pagination && results.length === 0) || (pagination && pagination.hasNext)}
                 onBottomReached={() => getNextPage(test.id)}

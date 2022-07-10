@@ -6,7 +6,7 @@ import { AnimatedFlatList } from './components/AnimatedFlatList';
 
 type Phase = "PREL" | "AFIN" | "BFIN" | "CFIN" | "FIN"
 
-const StartListItem: React.FC<FlatListItem<StartListEntry, Phase>> = ({ item, show, onHidden, onShown, parent: phase }) => {
+const StartListItem: React.FC<FlatListItem<StartListEntry, Phase>> = ({ item, show, onHidden, onShown, extraData: phase }) => {
     const animationEnd: AnimationEventHandler<HTMLLIElement> = (event) => {
         if (event.animationName === 'scaleOut') {
             onHidden?.();
@@ -64,6 +64,6 @@ export const StartList: React.FC<StartListProps> = ({ startList, test, phase }) 
         items={startList} RenderComponent={StartListItem} 
         itemsPerPage={10} 
         timePerPage={10000}
-        parent={phase}
+        extraData={phase}
     />
 }

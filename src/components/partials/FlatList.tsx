@@ -6,7 +6,7 @@ import { Ad } from './Ad';
 export type FlatListItem<T, P> = {
     item: T;
     index: number;
-    parent: P;
+    extraData: P;
     columns?: string;
     onHidden?: () => void;
     show?: boolean;
@@ -15,7 +15,7 @@ export type FlatListItem<T, P> = {
 
 export type FlatListProps<T = any, P = any> = {
     items: T[];
-    parent?: P; 
+    extraData?: P; 
     RenderComponent: React.FC<FlatListItem<T, P>>;
     onBottomReached?: () => void;
     hasMoreItems?: boolean;
@@ -42,7 +42,7 @@ const PlaceholderListItem: React.FC<FlatListItem<null, null>> = ({show, onShown,
     )
 }
 
-export const FlatList: React.FC<FlatListProps> = ({items, RenderComponent, onBottomReached, hasMoreItems, parent, onHidden, showItems = true, onShown, enableAds = true, adPosition = 3 }) => {
+export const FlatList: React.FC<FlatListProps> = ({items, RenderComponent, onBottomReached, hasMoreItems, extraData, onHidden, showItems = true, onShown, enableAds = true, adPosition = 3 }) => {
     const listBottomRef = useRef<HTMLDivElement>(null);
     const bottomReached = useIntersectionObserver(listBottomRef, { threshold: 0, rootMargin: '50px' });
     const [hiddenItems, setHiddenItems] = useState<number>(0);
@@ -72,9 +72,9 @@ export const FlatList: React.FC<FlatListProps> = ({items, RenderComponent, onBot
 
     const listElements = items.map((item, index) => {
         if (item === null) {
-            return <PlaceholderListItem key={index} item={null} index={index} onHidden={onItemHidden} show={showItems} onShown={onItemShown} parent={null} />
+            return <PlaceholderListItem key={index} item={null} index={index} onHidden={onItemHidden} show={showItems} onShown={onItemShown} extraData={null} />
         }
-        return <RenderComponent item={item} index={index} key={item.id} parent={parent} onHidden={onItemHidden} show={showItems} onShown={onItemShown} />
+        return <RenderComponent item={item} index={index} key={item.id} extraData={extraData} onHidden={onItemHidden} show={showItems} onShown={onItemShown} />
     });
 
     if (enableAds) {
