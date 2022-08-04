@@ -68,7 +68,7 @@ export const ResultList: React.FC<ResultListProps> = ({ results, test, phase }) 
         items={results} 
         RenderComponent={ResultListItem} 
         itemsPerPage={10} 
-        timePerPage={10000} 
         extraData={{phase, test}}
+        timePerPage={15000}
     />
 }
