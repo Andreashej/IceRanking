@@ -63,7 +63,7 @@ export const StartList: React.FC<StartListProps> = ({ startList, test, phase }) 
         headerImg={test.sponsorLogo ?? "assets/img/ICeCompass_Logo_Final6.png" }
         items={startList} RenderComponent={StartListItem} 
         itemsPerPage={10} 
-        timePerPage={10000}
+        timePerPage={15000}
         parent={phase}
     />
 }
