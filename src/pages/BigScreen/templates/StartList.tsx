@@ -6,6 +6,8 @@ import { AnimatedFlatList } from './components/AnimatedFlatList';
 
 type Phase = "PREL" | "AFIN" | "BFIN" | "CFIN" | "FIN"
 
+const LIGHT_BACKGROUNDS = ['white', 'yellow']
+
 const StartListItem: React.FC<FlatListItem<StartListEntry, Phase>> = ({ item, show, onHidden, onShown, extraData: phase }) => {
     const animationEnd: AnimationEventHandler<HTMLLIElement> = (event) => {
         if (event.animationName === 'scaleOut') {
@@ -17,6 +19,8 @@ const StartListItem: React.FC<FlatListItem<StartListEntry, Phase>> = ({ item, sh
         }
     }
 
+    const textColor = LIGHT_BACKGROUNDS.includes(item.color) ? 'black' : 'white';
+
 
     return (
         <li 
@@ -25,7 +29,7 @@ const StartListItem: React.FC<FlatListItem<StartListEntry, Phase>> = ({ item, sh
             onAnimationEnd={animationEnd}
         >
             <div className="row-content">
-                <div className='row-marker' style={{ backgroundColor: phase !== "PREL" ? `var(--${item.color})` : 'var(--blue)' }}>{item.startGroup}</div>
+                <div className='row-marker' style={{ backgroundColor: phase !== "PREL" ? `var(--${item.color})` : 'var(--blue)', 'color': textColor }}>{item.startGroup}</div>
                 <div>{item.rider?.fullname}</div>
                 <div>{item.horse?.horseName}</div>
                 <div className="text-right">{item.rider?.ageGroup?.split(' ').map((word => word[0]))}</div>
