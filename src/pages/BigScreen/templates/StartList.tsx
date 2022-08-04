@@ -21,7 +21,6 @@ const StartListItem: React.FC<FlatListItem<StartListEntry, Phase>> = ({ item, sh
 
     const textColor = LIGHT_BACKGROUNDS.includes(item.color) ? 'black' : 'white';
 
-
     return (
         <li 
             className={`flatlist-item ${show ? 'show' : 'hide'}`} 

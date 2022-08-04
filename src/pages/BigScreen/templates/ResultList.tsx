@@ -7,6 +7,8 @@ import { AnimatedFlatList } from './components/AnimatedFlatList';
 
 type Phase = "PREL" | "AFIN" | "BFIN" | "CFIN" | "FIN";
 
+const LIGHT_BACKGROUNDS = ['white', 'yellow']
+
 const ResultListItem: React.FC<FlatListItem<Result, {phase: Phase, test: Test}>> = ({ item: result, show, onHidden, onShown, extraData }) => {
 
     const animationEnd: AnimationEventHandler<HTMLLIElement> = (event) => {
@@ -19,6 +21,8 @@ const ResultListItem: React.FC<FlatListItem<Result, {phase: Phase, test: Test}>>
         }
     }
 
+    const textColor = LIGHT_BACKGROUNDS.includes(result.color) ? 'black' : 'white';
+
     return (
         <li 
             className={`flatlist-item ${show ? 'show' : 'hide'}`} 
@@ -26,7 +30,7 @@ const ResultListItem: React.FC<FlatListItem<Result, {phase: Phase, test: Test}>>
             onAnimationEnd={animationEnd}
         >
             <div className="row-content">
-                <div className='row-marker' style={{ backgroundColor: extraData.phase !== "PREL" ? `var(--${result.color})` : 'var(--blue)' }}>{result.rank}</div>
+                <div className='row-marker' style={{ backgroundColor: extraData.phase !== "PREL" ? `var(--${result.color})` : 'var(--blue)', color: textColor }}>{result.rank}</div>
                 <div>{result.rider?.fullname}</div>
                 <div>{result.horse?.horseName}</div>
                 <div className="text-right">
