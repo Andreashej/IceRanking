@@ -51,7 +51,7 @@ export const Frontpage: React.FC = () => {
                 <div className="container">
                     <div className="row">
                         <div className="col-12 col-sm-auto d-flex justify-content-center">
-                            <img className="logo" src={rankingList.logoUrl} style={{ width: 150, height: 150 }} alt={`${rankingList.shortname} logo`} />
+                            <img className="logo" src={`${process.env.REACT_APP_API_URL}${rankingList.logoUrl}`} style={{ width: 150, height: 150 }} alt={`${rankingList.shortname} logo`} />
                         </div>
                         <div className="col">
                             <h2 className="display-4">{rankingList.shortname}</h2>
