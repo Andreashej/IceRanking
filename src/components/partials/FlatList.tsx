@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 import { Ad } from "./Ad";
+import { v4 as uuidv4 } from "uuid";
 
 export type FlatListItem<T, P> = {
   item: T;
@@ -103,7 +104,7 @@ export const FlatList: React.FC<FlatListProps> = ({
     if (item === null) {
       return (
         <PlaceholderListItem
-          key={window.crypto.randomUUID()}
+          key={uuidv4()}
           item={null}
           index={index}
           onHidden={onItemHidden}
