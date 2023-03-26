@@ -1,4 +1,3 @@
-import { randomUUID } from "crypto";
 import { ProgressSpinner } from "primereact/progressspinner";
 import React, {
   AnimationEventHandler,
@@ -104,7 +103,7 @@ export const FlatList: React.FC<FlatListProps> = ({
     if (item === null) {
       return (
         <PlaceholderListItem
-          key={randomUUID()}
+          key={window.crypto.randomUUID()}
           item={null}
           index={index}
           onHidden={onItemHidden}
