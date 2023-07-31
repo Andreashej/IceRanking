@@ -33,7 +33,6 @@ const SectionMarksLowerThird: React.FC<
     );
     return (
       <div key={`${sectionMark.judgeId}.${result.sta}`}>
-        <span>{judgeNoToLetter(sectionMark.judgeNo)}</span>
         <span className="sign">{m}</span>
         {sectionMark.redCard && <JudgeCard color="red" />}
         {sectionMark.yellowCard && <JudgeCard color="yellow" />}
