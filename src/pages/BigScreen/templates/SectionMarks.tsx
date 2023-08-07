@@ -34,12 +34,7 @@ const SectionMarksLowerThird: React.FC<
 
     return (
       <div className="sign" key={`${sectionMark.judgeId}.${result.sta}`}>
-        <div
-          className="judge-mark"
-          style={{ fontSize: `${(result.sectionMarks?.length ?? 5) / 2}rem` }}
-        >
-          {m}
-        </div>
+        <div className="judge-mark">{m}</div>
         {sectionMark.redCard && <JudgeCard color="red" />}
         {sectionMark.yellowCard && <JudgeCard color="yellow" />}
         {sectionMark.blueCard && <JudgeCard color="blue" />}
