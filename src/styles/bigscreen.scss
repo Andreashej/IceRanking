@@ -163,7 +163,9 @@ html.bigscreen {
                 background-color: $lightgray;
                 color: $dark;
                 padding: .125rem .5rem;
-                display: grid;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
                 border-radius: 0 0 .125rem .125rem;
 
                 > * {
@@ -187,16 +189,39 @@ html.bigscreen {
             }
 
             .sign {
-                background-color: var(--blue);
-                color: white;
-                border-radius: .125rem;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;    
+                grid-template-rows: 1fr .5rem;
+                gap: .125rem;
+                width: fit-content;
+                padding: 0;
+                overflow: hidden;
+                
+                > .judge-mark {
+                    font-size: 2rem;
+                    border-radius: .125em;
+                    background-color: var(--blue);
+                    color: white;
+                    padding: .075em .125em;
+                    grid-column: 1 / -1;
+                }
+
+                > .card {
+                    grid-row: -2 / -1;
+                    grid-column: span 1;
+                    border-radius: .125rem;
+                }
             }
 
             .card {
-                height: 100%;
-                width: 2ch;
-                border-radius: .125rem;
-                margin-left: .125rem;
+                // width: 2ch;
+                border-radius: 0;
+                // margin-left: .125rem;
+            }
+
+            .card-list {
+                display: "grid";
+                grid-template-rows: 1fr 1fr 1fr;
             }
 
             .footer {

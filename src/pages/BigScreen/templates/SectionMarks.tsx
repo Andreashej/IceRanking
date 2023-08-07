@@ -31,9 +31,15 @@ const SectionMarksLowerThird: React.FC<
       sectionMark.mark,
       section.test.roundingPrecision - 1
     );
+
     return (
-      <div key={`${sectionMark.judgeId}.${result.sta}`}>
-        <span className="sign">{m}</span>
+      <div className="sign" key={`${sectionMark.judgeId}.${result.sta}`}>
+        <div
+          className="judge-mark"
+          style={{ fontSize: `${(result.sectionMarks?.length ?? 5) / 2}rem` }}
+        >
+          {m}
+        </div>
         {sectionMark.redCard && <JudgeCard color="red" />}
         {sectionMark.yellowCard && <JudgeCard color="yellow" />}
         {sectionMark.blueCard && <JudgeCard color="blue" />}
