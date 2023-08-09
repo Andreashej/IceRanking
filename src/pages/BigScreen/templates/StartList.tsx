@@ -34,7 +34,12 @@ const StartListItem: React.FC<FlatListItem<StartListEntry, Phase>> = ({
       style={{ gridTemplateColumns: "1fr 1rem" }}
       onAnimationEnd={animationEnd}
     >
-      <div className="row-content">
+      <div
+        className="row-content"
+        style={{
+          gridTemplateColumns: "1fr 1fr 2ch 4ch",
+        }}
+      >
         <div
           className="row-marker"
           style={{
@@ -49,14 +54,15 @@ const StartListItem: React.FC<FlatListItem<StartListEntry, Phase>> = ({
         <div>{item.horse?.horseName}</div>
         <div className="text-right">
           {item.rider?.ageGroup?.split(" ").map((word) => word[0])}
-          <Flag
-            countryCode={item.rider?.team ?? ""}
-            style={{
-              marginLeft: ".5em",
-              height: "1em",
-            }}
-          />
         </div>
+        <Flag
+          countryCode={item.rider?.team ?? ""}
+          style={{
+            height: "1em",
+            alignSelf: "end",
+            marginLeft: "auto",
+          }}
+        />
       </div>
     </li>
   );

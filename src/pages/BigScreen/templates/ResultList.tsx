@@ -33,7 +33,12 @@ const ResultListItem: React.FC<
       style={{ gridTemplateColumns: "1fr 1rem" }}
       onAnimationEnd={animationEnd}
     >
-      <div className="row-content">
+      <div
+        className="row-content"
+        style={{
+          gridTemplateColumns: "1fr 1fr 4ch 4ch",
+        }}
+      >
         <div
           className="row-marker"
           style={{
@@ -52,14 +57,14 @@ const ResultListItem: React.FC<
           <b>
             {markToDouble(result.mark, extraData.test?.roundingPrecision ?? 2)}
           </b>
-          <Flag
-            countryCode={result.rider?.team ?? ""}
-            style={{
-              marginLeft: ".5em",
-              height: "1em",
-            }}
-          />
         </div>
+        <Flag
+          countryCode={result.rider?.team ?? ""}
+          style={{
+            marginLeft: "auto",
+            height: "1em",
+          }}
+        />
       </div>
       {result.scope && (
         <div className={`row-end-marker ${result.scope.toLowerCase()}`}>
