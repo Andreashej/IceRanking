@@ -7,6 +7,7 @@ import { markToDouble } from "../../../tools";
 import { AnimatedFlatList } from "./components/AnimatedFlatList";
 import { Mark } from "./components/JudgeMark";
 import { LowerThird } from "./components/LowerThird";
+import { Flag } from "./components/Flag";
 
 const EquipageResult: React.FC<FlatListItem<Result, Test>> = ({
   item: result,
@@ -33,7 +34,18 @@ const EquipageResult: React.FC<FlatListItem<Result, Test>> = ({
 
   return (
     <LowerThird
-      header={<>{result.rider?.fullname}</>}
+      header={
+        <>
+          {result.rider?.fullname}
+          <Flag
+            countryCode={result.rider?.team ?? ""}
+            style={{
+              height: "1em",
+              marginLeft: "auto",
+            }}
+          />
+        </>
+      }
       color={result.color}
       onHidden={onHidden}
       show={show}
@@ -53,7 +65,18 @@ const EquipageInfo: React.FC<FlatListItem<StartListEntry, Test>> = ({
 }) => {
   return (
     <LowerThird
-      header={<>{item.rider?.fullname}</>}
+      header={
+        <>
+          {item.rider?.fullname}
+          <Flag
+            countryCode={item.rider?.team ?? ""}
+            style={{
+              height: "1em",
+              marginLeft: "auto",
+            }}
+          />
+        </>
+      }
       color={item.color}
       onHidden={onHidden}
       show={show}

@@ -10,6 +10,7 @@ export type Person = {
     userId?: number;
     email?: string;
     ageGroup?: string;
+    team?: string;
 
     testlist?: string[];
     user?: User;

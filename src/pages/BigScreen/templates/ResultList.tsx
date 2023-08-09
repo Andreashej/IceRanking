@@ -4,6 +4,7 @@ import { Result } from "../../../models/result.model";
 import { Test } from "../../../models/test.model";
 import { markToDouble } from "../../../tools";
 import { AnimatedFlatList } from "./components/AnimatedFlatList";
+import { Flag } from "./components/Flag";
 
 type Phase = "PREL" | "AFIN" | "BFIN" | "CFIN" | "FIN";
 
@@ -51,6 +52,13 @@ const ResultListItem: React.FC<
           <b>
             {markToDouble(result.mark, extraData.test?.roundingPrecision ?? 2)}
           </b>
+          <Flag
+            countryCode={result.rider?.team ?? ""}
+            style={{
+              marginLeft: ".5em",
+              height: "1em",
+            }}
+          />
         </div>
       </div>
       {result.scope && (

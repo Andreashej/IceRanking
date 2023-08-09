@@ -7,6 +7,7 @@ import { markToDouble } from "../../../tools";
 import { JudgeCard, judgeNoToLetter } from "./components/JudgeCard";
 import { FlatListItem } from "../../../components/partials/FlatList";
 import { Test } from "../../../models/test.model";
+import { Flag } from "./components/Flag";
 
 type SectionMarksEntry = Result & {
   sectionMarks: SectionMark[];
@@ -57,7 +58,18 @@ const SectionMarksLowerThird: React.FC<
 
   return (
     <LowerThird
-      header={<>{result.rider?.fullname}</>}
+      header={
+        <>
+          {result.rider?.fullname}
+          <Flag
+            countryCode={result.rider?.team ?? ""}
+            style={{
+              height: "1em",
+              marginLeft: "auto",
+            }}
+          />
+        </>
+      }
       color={result.color}
       onHidden={onHidden}
       show={show}

@@ -107,6 +107,8 @@ html.bigscreen {
             border-radius: .25rem .25rem .125rem .125rem;
             overflow: hidden;
             font-size: 1.2rem;
+
+
             
             &:not(:first-child) {
                 border-top-left-radius: 0;
@@ -114,6 +116,10 @@ html.bigscreen {
             
             
             .header-text {
+                display: flex;
+                align-items: center;
+                flex-direction: row;
+                gap: .25em;
                 padding: .25rem;
                 color: white;
                 font-variant: small-caps; 
