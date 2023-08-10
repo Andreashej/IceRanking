@@ -36,7 +36,7 @@ const ResultListItem: React.FC<
       <div
         className="row-content"
         style={{
-          gridTemplateColumns: "1fr 1fr 4ch 4ch",
+          gridTemplateColumns: "1fr 1fr 5ch 4ch",
         }}
       >
         <div
