@@ -466,8 +466,9 @@ html.bigscreen {
 
             .flatlist {
                 grid-template-columns: 1fr 1fr 1fr;
-                grid-template-rows: repeat(3, min-content);
-                grid-auto-flow: column;
+                // grid-template-rows: repeat(3, min-content);
+                // grid-auto-rows: min-content;
+                grid-auto-flow: row;
             }
         }
 
