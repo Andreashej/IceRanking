@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { MouseEventHandler, useEffect, useMemo, useRef, useState } from "react";
 import { useScreenContext } from "../../BigScreen";
 import React from "react";
 import {
@@ -37,17 +37,29 @@ export const AnimatedFlatList: React.FC<AnimatedFlatListProps> = ({
   const [show, setShow] = useState<boolean>(showTemplate ?? true);
   const [headerShown, setHeaderShown] = useState(showTemplate ?? true);
   const listRef = useRef<HTMLDivElement>(null);
+  const intervalRef = useRef<NodeJS.Timer>();
+
+  const nextPage = () => {
+    setShow(false);
+  };
+
+  const clickHandler: MouseEventHandler<HTMLDivElement> = (e) => {
+    nextPage();
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+  };
 
   useEffect(() => {
     if (currentPage === items.length - 1 && !repeat) return;
 
     if (itemsPerPage < items.length) {
-      const interval = setInterval(() => {
-        setShow(false);
-      }, timePerPage);
+      intervalRef.current = setInterval(nextPage, timePerPage);
 
       return () => {
-        clearInterval(interval);
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+        }
       };
     }
   }, [
@@ -124,7 +136,11 @@ export const AnimatedFlatList: React.FC<AnimatedFlatListProps> = ({
           subHeaderContent={subHeader}
         />
       )}
-      <div style={{ gridArea: "listarea" }} ref={listRef}>
+      <div
+        style={{ gridArea: "listarea" }}
+        ref={listRef}
+        onClick={clickHandler}
+      >
         {currentPageItems.length > 0 && (
           <FlatList
             items={currentPageItems}
