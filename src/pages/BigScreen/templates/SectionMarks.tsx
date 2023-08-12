@@ -93,7 +93,7 @@ export const SectionMarks: React.FC<SectionMarksProps> = ({
       RenderComponent={SectionMarksLowerThird}
       extraData={section}
       itemsPerPage={1}
-      timePerPage={150000}
+      timePerPage={15000}
       repeat={false}
     />
   );
