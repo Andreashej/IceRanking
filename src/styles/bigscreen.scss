@@ -207,7 +207,7 @@ html.bigscreen {
                 overflow: hidden;
                 
                 > .judge-mark {
-                    font-size: 2rem;
+                    // font-size: 2rem; // Disabled for Istølt
                     border-radius: .125em;
                     background-color: var(--blue);
                     color: white;
