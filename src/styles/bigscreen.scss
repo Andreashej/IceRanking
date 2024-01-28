@@ -199,8 +199,8 @@ html.bigscreen {
 
             .sign {
                 display: grid;
-                grid-template-columns: 1fr 1fr 1fr;    
-                grid-template-rows: 1fr .5rem;
+                grid-template-columns: 1fr 0.5rem;    
+                grid-template-rows: 1fr 1fr 1fr;
                 gap: .125rem;
                 width: fit-content;
                 padding: 0;
@@ -212,7 +212,7 @@ html.bigscreen {
                     background-color: var(--blue);
                     color: white;
                     padding: .075em .125em;
-                    grid-column: 1 / -1;
+                    grid-row: 1 / -1;
                 }
 
                 > .card {
@@ -242,7 +242,7 @@ html.bigscreen {
 
                 > * {
                     padding: .125rem 1rem;
-                    font-size: 1rem;
+                    // font-size: 1rem; // Disabled for Istølt
                     font-variant: small-caps;
                     background-color: $dark;
                     clip-path: polygon(0 0, calc(100% - 1rem) 0, 100% 100%, 1rem 100%);
