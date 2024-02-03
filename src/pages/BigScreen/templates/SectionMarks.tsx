@@ -1,10 +1,9 @@
 import React from "react";
-import { StartListEntry } from "../../../models/startlist.model";
 import { AnimatedFlatList } from "./components/AnimatedFlatList";
 import { Result, SectionMark } from "../../../models/result.model";
 import { LowerThird } from "./components/LowerThird";
 import { markToDouble } from "../../../tools";
-import { JudgeCard, judgeNoToLetter } from "./components/JudgeCard";
+import { JudgeCard } from "./components/JudgeCard";
 import { FlatListItem } from "../../../components/partials/FlatList";
 import { Test } from "../../../models/test.model";
 import { Flag } from "./components/Flag";
