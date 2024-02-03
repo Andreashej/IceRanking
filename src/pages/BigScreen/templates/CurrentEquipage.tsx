@@ -16,7 +16,7 @@ const EquipageResult: React.FC<FlatListItem<Result, Test>> = ({
   extraData: test,
 }) => {
   const marks = result.marks?.map((mark) => (
-    <Mark key={mark.id} mark={mark} test={test} result={result} />
+    <Mark key={`${result.id}.${mark.judgeNo}`} mark={mark} test={test} result={result} />
   ));
 
   const finalMark = (

@@ -35,7 +35,7 @@ export const AnimatedFlatList: React.FC<AnimatedFlatListProps> = ({
   ...rest
 }) => {
   const { onTemplateHidden, show: showTemplate } = useScreenContext();
-  const [currentPage, setCurrentPage] = useState(startAt ?? 0);
+  const [currentPage, setCurrentPage] = useState(0);
   const [show, setShow] = useState<boolean>(showTemplate ?? true);
   const [headerShown, setHeaderShown] = useState(showTemplate ?? true);
   const listRef = useRef<HTMLDivElement>(null);
@@ -95,7 +95,7 @@ export const AnimatedFlatList: React.FC<AnimatedFlatListProps> = ({
   const currentPageItems = useMemo(() => {
     if (items.length === 0) return [];
 
-    const startIndex = currentPage * itemsPerPage;
+    const startIndex = (startAt ?? currentPage) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const currentPageItems = items.slice(startIndex, endIndex);
 
@@ -108,7 +108,7 @@ export const AnimatedFlatList: React.FC<AnimatedFlatListProps> = ({
     }
 
     return currentPageItems;
-  }, [currentPage, itemsPerPage, items, usePlaceholder]);
+  }, [startAt, currentPage, itemsPerPage, items, usePlaceholder]);
 
   useEffect(() => {
     if (!show && (!headerShown || !header)) {

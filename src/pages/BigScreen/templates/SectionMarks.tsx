@@ -34,7 +34,7 @@ const SectionMarksLowerThird: React.FC<
     );
 
     return (
-      <div className="sign" key={`${sectionMark.judgeId}.${result.sta}`}>
+      <div className="sign" key={`${sectionMark.judgeNo}.${result.id}`}>
         <div className="judge-mark">{m}</div>
         {sectionMark.redCard && <JudgeCard color="red" />}
         {sectionMark.yellowCard && <JudgeCard color="yellow" />}
@@ -83,10 +83,12 @@ const SectionMarksLowerThird: React.FC<
   );
 };
 
+
 export const SectionMarks: React.FC<SectionMarksProps> = ({
   group,
   section,
 }) => {
+  console.log(group.length);
   return (
     <AnimatedFlatList
       items={group}
