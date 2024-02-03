@@ -16,6 +16,7 @@ type AnimatedFlatListProps<T = any, P = any> = FlatListProps<T, P> & {
   headerImg?: string;
   parentShow?: boolean;
   usePlaceholder?: boolean;
+  startAt?: number;
 };
 
 export const AnimatedFlatList: React.FC<AnimatedFlatListProps> = ({
@@ -30,10 +31,11 @@ export const AnimatedFlatList: React.FC<AnimatedFlatListProps> = ({
   onHidden,
   usePlaceholder = true,
   subHeader,
+  startAt,
   ...rest
 }) => {
   const { onTemplateHidden, show: showTemplate } = useScreenContext();
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(startAt ?? 0);
   const [show, setShow] = useState<boolean>(showTemplate ?? true);
   const [headerShown, setHeaderShown] = useState(showTemplate ?? true);
   const listRef = useRef<HTMLDivElement>(null);

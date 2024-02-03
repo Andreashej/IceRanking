@@ -95,6 +95,7 @@ export const SectionMarks: React.FC<SectionMarksProps> = ({
       itemsPerPage={1}
       timePerPage={100000}
       repeat={false}
+      startAt={group.length - 1}
     />
   );
 };
