@@ -49,7 +49,7 @@ export const CollectingRingTemplate: React.FC<CollectingRingTemplateProps> = ({ 
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setTime(new Date().toLocaleTimeString());
+            setTime(new Date().toLocaleTimeString("da-DK"));
         }, 1000);
 
         return () => {
