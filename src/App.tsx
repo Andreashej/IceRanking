@@ -94,7 +94,8 @@ const App: React.FC = () => {
               <Route path="/competition/create" component={CompetitionCreate} />
               <Route path="/competition/:id" component={Competition} />
               <Route path="/dashboard" component={Dashboard} />
-              <Route path="/bigscreen" exact component={BigScreenPage} />
+              <Route path="/bigscreen/:id" exact component={BigScreenPage} />
+              <Route path="/bigscreen" component={BigScreenPage} />
             </Switch>
             {!fullscreen && <Footer />}
           </HashRouter>

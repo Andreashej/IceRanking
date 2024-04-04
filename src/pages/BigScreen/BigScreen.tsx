@@ -115,11 +115,13 @@ export const BigScreenPage: React.FC<BigScreenPageProps> = ({
     templateReducer,
     initialTemplateState
   );
+  const params = useParams<{ id: string}>()
   const location = useLocation();
+  
 
   const urlParams = new URLSearchParams(location.search);
 
-  const screenId = urlParams.get("id") ?? localStorage.getItem("bigscreenId");
+  const screenId = params.id ?? urlParams.get("id") ?? localStorage.getItem("bigscreenId");
 
   useEffect(() => {
     if (screen && screenId && parseInt(screenId) !== screen.id) {
