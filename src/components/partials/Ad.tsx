@@ -17,12 +17,12 @@ export const Ad: React.FC = () => {
       >
         <img
           className="desktop"
-          src="/ads/nm_desktop.jpeg"
+          src="/assets/ads/nm_desktop.jpeg"
           alt="Come to the Nordic Championships 2024 in Herning"
         />
         <img
           className="mobile"
-          src="/ads/nm_mobile.jpeg"
+          src="/assets/ads/nm_mobile.jpeg"
           alt="Come to the Nordic Championships 2024 in Herning"
         />
       </a>
