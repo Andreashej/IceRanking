@@ -35,6 +35,10 @@ export const getCompetitions = async (params: URLSearchParams): Promise<[Competi
 
 export const createCompetition = async (competition: Partial<Competition>) => {
     try {
+        if (!competition.firstDate || !competition.lastDate) {
+            return Promise.reject('First and last date are required')
+        }
+        
         const response = await apiV2.post<ApiResponse<Competition>>(`/competitions`, {
             ...competition,
             firstDate: dateToString(competition.firstDate, 'Y-M-d'),

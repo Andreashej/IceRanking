@@ -32,7 +32,7 @@ const TableRow: React.FC<TableRowProps> = ({ testEntry }) => {
     // }, [startListEntry, dispatch])
 
     const marks = result?.marks?.map((mark, index) => {
-        const formattedMark = markToDouble(mark.mark, test?.roundingPrecision);
+        const formattedMark = markToDouble(mark.mark, test?.roundingPrecision ?? 1);
         return (
             <span key={testEntry.id+mark.judgeNo}>
                 {index !== 0 ? ` - ${formattedMark}` : formattedMark }

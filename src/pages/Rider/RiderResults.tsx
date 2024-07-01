@@ -57,6 +57,8 @@ const RiderResult: React.FC<FlatListItem<Result, RiderProps>> = ({ item: result 
             </>
         );
 
+        
+
         const firstDate = dateToString(test.competition.firstDate, 'd/m/Y');
         const lastDate = dateToString(test.competition.lastDate, 'd/m/Y');
 

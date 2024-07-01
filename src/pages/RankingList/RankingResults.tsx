@@ -76,7 +76,7 @@ const RankingResultMarkItem: React.FC<RankingResultMarkProps> = ({mark, isQualif
             </div>
             <div id={`is-qualifying-${mark.id}`} className="is-qualifying"  data-pr-tooltip="This result is used in the calculation of the final mark." style={{ textAlign: "right", fontWeight: isQualifying ? 'bold' : 'normal' }}>
                 {isQualifying && <Tooltip target={`#is-qualifying-${mark.id}`} position="top" />}
-                {markWithUnit(mark.mark, mark.test?.roundingPrecision, mark.test?.markType)}
+                {mark.test && markWithUnit(mark.mark, mark.test?.roundingPrecision, mark.test?.markType)}
                 <FontAwesomeIcon icon="check-circle" style={{ marginLeft: ".25rem", color: "green", visibility: isQualifying ? "visible" : "hidden" }} />
             </div>
         </>
