@@ -1,6 +1,6 @@
 import React from "react";
-import nmMobile from "./ads/nm_mobile.jpeg";
-import nmDesktop from "./ads/nm_desktop.jpeg";
+import nmMobile from "./ads/nm_mobile.jpg";
+import nmDesktop from "./ads/nm_desktop.jpg";
 
 export const Ad: React.FC = () => {
   return (
