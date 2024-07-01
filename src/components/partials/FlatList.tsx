@@ -129,7 +129,7 @@ export const FlatList: React.FC<FlatListProps> = ({
 
   if (enableAds) {
     const element = (
-      <li className="flatlist-item">
+      <li className="flatlist-item p-0">
         <Ad />
       </li>
     );

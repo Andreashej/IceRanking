@@ -29,6 +29,7 @@ $lightgray: #f8f9fa;
 @import 'flatlist';
 @import 'grid-table';
 @import 'bigscreen';
+@import 'ads';
 
 
 body {
@@ -45,6 +46,10 @@ body {
         border-color: $blue;
     }
 
+}
+
+img {
+    max-width: 100%;
 }
 
 img.logo {
