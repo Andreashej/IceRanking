@@ -1,4 +1,6 @@
 import React from "react";
+import nmMobile from "./ads/nm_mobile.jpeg";
+import nmDesktop from "./ads/nm_desktop.jpeg";
 
 export const Ad: React.FC = () => {
   return (
@@ -17,12 +19,12 @@ export const Ad: React.FC = () => {
       >
         <img
           className="desktop"
-          src="/assets/ads/nm_desktop.jpeg"
+          src={nmDesktop}
           alt="Come to the Nordic Championships 2024 in Herning"
         />
         <img
           className="mobile"
-          src="/assets/ads/nm_mobile.jpeg"
+          src={nmMobile}
           alt="Come to the Nordic Championships 2024 in Herning"
         />
       </a>
