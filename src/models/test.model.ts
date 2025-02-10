@@ -3,16 +3,16 @@ import { RankingList } from "./rankinglist.model";
 import { Result } from "./result.model";
 
 export type Test = {
-    id: number;
-    testcode: string;
-    testName: string;
-    competitionId: number;
-    roundingPrecision: number;
-    order: "asc" | "desc";
-    markType: "mark" | "time";
-    sponsorLogo?: string;
+  id: string;
+  catalogCode: string;
+  testCode: string;
+  competitionId: string;
+  roundingPrecision: number;
+  order: "asc" | "desc";
+  markType: "mark" | "time";
+  sponsorLogo?: string;
 
-    competition?: Competition;
-    results?: Result[];
-    includeInRanking?: RankingList[];
-}
+  competition?: Competition;
+  results?: Result[];
+  includeInRanking?: RankingList[];
+};

@@ -1,44 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { ProgressBar } from 'primereact/progressbar';
-import { Task } from '../../models/task.model';
-import { getTask } from '../../services/v2/task.service';
+import { ProgressBar } from "primereact/progressbar";
+import { Task } from "../../models/task.model";
+import { getTask } from "../../clients/v3/task.service";
 
 type TaskBarProps = {
-    task: Task;
-    onComplete?: () => void;
-}
+  task: Task;
+  onComplete?: () => void;
+};
 
 export const TaskBar: React.FC<TaskBarProps> = ({ task, onComplete }) => {
-    const [progress, setProgress] = useState<number>(task.progress);
-    
-    useEffect(() => {
-        let timeout = 1000;
-        let timeoutId: NodeJS.Timeout;
-    
-        const fetchTask = async () => {
-            const updatedTask = await getTask(task.id);
+  const [progress, setProgress] = useState<number>(task.progress);
 
-            setProgress((prev) => {
-                if (updatedTask.progress === prev) timeout += 1000;
+  useEffect(() => {
+    let timeout = 1000;
+    let timeoutId: NodeJS.Timeout;
 
-                return updatedTask.progress
-            });
+    const fetchTask = async () => {
+      const updatedTask = await getTask(task.id);
 
-            if (updatedTask.complete) {
-                onComplete?.();
-                return;
-            }
+      setProgress((prev) => {
+        if (updatedTask.progress === prev) timeout += 1000;
 
-            timeoutId = setTimeout(fetchTask, timeout)
-        }
+        return updatedTask.progress;
+      });
 
-        fetchTask();
+      if (updatedTask.complete) {
+        onComplete?.();
+        return;
+      }
 
-        return () => {
-            clearTimeout(timeoutId);
-        }
-    }, [task, onComplete])
+      timeoutId = setTimeout(fetchTask, timeout);
+    };
 
-    return <ProgressBar value={progress} color="#374785" />
-}
+    fetchTask();
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [task, onComplete]);
+
+  return <ProgressBar value={progress} color="#374785" />;
+};

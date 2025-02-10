@@ -29,7 +29,9 @@ const GroupInfo: React.FC<FlatListItem<StartListEntry, Test>> = ({
           className="row-marker"
           style={{ backgroundColor: `var(--${item.color})` }}
         ></div>
-        <div>{item.rider?.fullname}</div>
+        <div>
+          {item.rider?.firstName} {item.rider?.lastName}
+        </div>
         <Flag countryCode={item.rider?.team ?? ""} style={{ height: "1em" }} />
       </div>
     </div>

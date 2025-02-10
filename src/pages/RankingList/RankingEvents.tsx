@@ -1,38 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import EventList from '../../components/partials/EventList';
-import { useRankingList } from '../../contexts/rankinglist.context';
+import EventList from "../../components/partials/EventList";
+import { useRankingList } from "../../contexts/rankinglist.context";
 
-import { Competition } from '../../models/competition.model';
-import { getCompetitions } from '../../services/v2/competition.service';
-import { dateToString } from '../../tools';
+import { Competition } from "../../models/competition.model";
+import { getCompetitions } from "../../clients/v3/competition.service";
+import { dateToString } from "../../tools";
 
 export const RankingEvents: React.FC = () => {
-    const [competitions, setCompetitions] = useState<Competition[]>();
-    const [rankingList] = useRankingList();
-    
-    useEffect(() => {
-        const fetchCompetitions = async () => {
-            if (!rankingList) return;
+  const [competitions, setCompetitions] = useState<Competition[]>();
+  const [rankingList] = useRankingList();
 
-            const params = new URLSearchParams({
-                'filter[]': `include_in_ranking contains id == ${rankingList.id}`,
-                'orderBy': 'firstDate asc'
-            });
-            params.append('filter[]', `firstDate > ${dateToString(new Date())}`)
+  useEffect(() => {
+    const fetchCompetitions = async () => {
+      if (!rankingList) return;
 
-            const [competitions] = await getCompetitions(params);
+      const params = new URLSearchParams({
+        "filter[]": `include_in_ranking contains id == ${rankingList.id}`,
+        orderBy: "firstDate asc",
+      });
+      params.append("filter[]", `firstDate > ${dateToString(new Date())}`);
 
-            setCompetitions(competitions);
-        }
-        
-        fetchCompetitions();
-    }, [rankingList])
+      const [competitions] = await getCompetitions(params);
 
-    return (
-        <>
-            <h2 className="subtitle">Upcoming events</h2>
-            <EventList events={competitions} noEventsText="There are no upcoming events registeret yet..." />
-        </>
-    )
-}
+      setCompetitions(competitions);
+    };
+
+    fetchCompetitions();
+  }, [rankingList]);
+
+  return (
+    <>
+      <h2 className="subtitle">Upcoming events</h2>
+      <EventList
+        events={competitions}
+        noEventsText="There are no upcoming events registeret yet..."
+      />
+    </>
+  );
+};

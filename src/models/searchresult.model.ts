@@ -4,14 +4,14 @@ import { Person } from "./person.model";
 import { RankingList } from "./rankinglist.model";
 
 export type SearchResult = {
-    searchString: string;
-    type: "Competition" | "Person" | "Horse" | "RankingList";
-    id: number;
+  searchString: string;
+  type: "Competition" | "Person" | "Horse" | "RankingList";
+  id: string;
 
-    competition?: Competition;
-    person?: Person;
-    horse?: Horse;
-    rankingList?: RankingList;
+  competition?: Competition;
+  person?: Person;
+  horse?: Horse;
+  rankingList?: RankingList;
 
-    link?: string;
-}
+  link?: string;
+};

@@ -1,85 +1,89 @@
-import React, { useMemo } from 'react';
+import React, { useMemo } from "react";
 
-
-import Page from '../../components/partials/Page';
-import { Route, Switch, useParams, useHistory } from 'react-router-dom';
-import { RiderResults } from './RiderResults';
-import RiderInfo from './RiderInfo';
-import { RiderProvider, useRiderContext } from '../../contexts/rider.context';
-import { MenuItem } from 'primereact/menuitem';
-import { RiderEdit } from './RiderEdit';
-import { useProfile } from '../../contexts/user.context';
-
+import Page from "../../components/partials/Page";
+import { Route, Switch, useParams, useHistory } from "react-router-dom";
+import { RiderResults } from "./RiderResults";
+import RiderInfo from "./RiderInfo";
+import { RiderProvider, useRiderContext } from "../../contexts/rider.context";
+import { MenuItem } from "primereact/menuitem";
+import { RiderEdit } from "./RiderEdit";
+import { useProfile } from "../../contexts/user.context";
 
 const RiderPage: React.FC = ({ children }) => {
-    const { resource: rider, loading, error } = useRiderContext();
-    const history = useHistory();
-    const { pathname } = history.location;
-    const [user] = useProfile();
-    
-    const title = useMemo<string | null>(() => {
-        if (!loading && rider) return rider.fullname;
-        if (loading) return null;
-        return '404';
-    },[rider, loading]);
+  const { resource: rider, loading, error } = useRiderContext();
+  const history = useHistory();
+  const { pathname } = history.location;
+  const [user] = useProfile();
 
-    const subtitle = useMemo<string | null>(() => {
-        if (!loading && rider) return ``;
-        if (loading) return null;
-        return 'Rider not found';
-    },[rider, loading]);
+  const title = useMemo<string | null>(() => {
+    if (!loading && rider) return rider.firstName + " " + rider.lastName;
+    if (loading) return null;
+    return "404";
+  }, [rider, loading]);
 
-    const [menuItems, adminMenuItems] = useMemo<[MenuItem[], MenuItem[]]>(() => {
-        if (loading || error || !rider) return [[], []];
+  const subtitle = useMemo<string | null>(() => {
+    if (!loading && rider) return ``;
+    if (loading) return null;
+    return "Rider not found";
+  }, [rider, loading]);
 
-        const tests = rider.testlist.map<MenuItem>((testcode): MenuItem => {
-            return {
-                label: testcode,
-                className: pathname.includes(`results/${testcode}`) ? 'active' : '',
-                command: () => history.push(`/rider/${rider.id}/results/${testcode}`)
-            };
-        });
+  const [menuItems, adminMenuItems] = useMemo<[MenuItem[], MenuItem[]]>(() => {
+    if (loading || error || !rider) return [[], []];
 
-        const menuItems = [
-            {
-                label: "Results",
-                items: tests
-            }
-        ];
+    const tests = rider.testlist.map<MenuItem>((testcode): MenuItem => {
+      return {
+        label: testcode,
+        className: pathname.includes(`results/${testcode}`) ? "active" : "",
+        command: () => history.push(`/rider/${rider.id}/results/${testcode}`),
+      };
+    });
 
-        if (!user?.superUser && user?.person?.id !== rider.id) return [menuItems, []];
+    const menuItems = [
+      {
+        label: "Results",
+        items: tests,
+      },
+    ];
 
-        const adminItems = [
-            {
-                label: "Edit rider",
-                command: () => history.push(`/rider/${rider.id}/edit`),
-                className: pathname.includes("/edit") ? 'active' : ''
-            },
-        ]
+    if (!user?.superUser && user?.person?.id !== rider.id)
+      return [menuItems, []];
 
-        return [menuItems, adminItems];
+    const adminItems = [
+      {
+        label: "Edit rider",
+        command: () => history.push(`/rider/${rider.id}/edit`),
+        className: pathname.includes("/edit") ? "active" : "",
+      },
+    ];
 
-    }, [rider, pathname, loading, error, history, user]);
+    return [menuItems, adminItems];
+  }, [rider, pathname, loading, error, history, user]);
 
-    return (
-        <Page title={title} subtitle={subtitle} icon="user" menuItems={menuItems} adminMenuItems={adminMenuItems}>
-            {rider && children}
-            {/* {!loading && !rider && <div>{error}</div>} */}
-        </Page>
-    )
-}
+  return (
+    <Page
+      title={title}
+      subtitle={subtitle}
+      icon="user"
+      menuItems={menuItems}
+      adminMenuItems={adminMenuItems}
+    >
+      {rider && children}
+      {/* {!loading && !rider && <div>{error}</div>} */}
+    </Page>
+  );
+};
 
 export const Rider: React.FC = () => {
-    const { id } = useParams<{id: string}>();
-    return (
-        <RiderProvider riderId={parseInt(id)}>
-            <RiderPage>
-                <Switch>
-                    <Route exact path="/rider/:id" component={RiderInfo} />
-                    <Route path="/rider/:id/results/:testcode" component={RiderResults} />
-                    <Route path="/rider/:id/edit" component={RiderEdit} />
-                </Switch>
-            </RiderPage>
-        </RiderProvider>
-    );
-}
+  const { id } = useParams<{ id: string }>();
+  return (
+    <RiderProvider riderId={id}>
+      <RiderPage>
+        <Switch>
+          <Route exact path="/rider/:id" component={RiderInfo} />
+          <Route path="/rider/:id/results/:testcode" component={RiderResults} />
+          <Route path="/rider/:id/edit" component={RiderEdit} />
+        </Switch>
+      </RiderPage>
+    </RiderProvider>
+  );
+};

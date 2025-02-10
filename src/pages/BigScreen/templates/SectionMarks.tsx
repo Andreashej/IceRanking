@@ -33,7 +33,7 @@ const SectionMarksLowerThird: React.FC<
     );
 
     return (
-      <div className="sign" key={`${sectionMark.judgeNo}.${result.id}`}>
+      <div className="sign" key={`${sectionMark.judgeNo}.${result.entryId}`}>
         <div className="judge-mark">{m}</div>
         {sectionMark.redCard && <JudgeCard color="red" />}
         {sectionMark.yellowCard && <JudgeCard color="yellow" />}
@@ -50,7 +50,7 @@ const SectionMarksLowerThird: React.FC<
         </div> */}
       <div>
         <span className="light mr-2">Total</span>
-        <span>{markToDouble(result.mark, section.test.roundingPrecision)}</span>
+        <span>{result.score}</span>
       </div>
     </>
   );
@@ -59,9 +59,10 @@ const SectionMarksLowerThird: React.FC<
     <LowerThird
       header={
         <>
-          {result.rider?.fullname}
+          {result?.entry?.participant?.equipage?.rider?.person?.firstName}{" "}
+          {result?.entry?.participant?.equipage?.rider?.person?.lastName}
           <Flag
-            countryCode={result.rider?.team ?? ""}
+            countryCode={result?.entry?.participant?.team ?? ""}
             style={{
               height: "1em",
               marginLeft: "auto",
@@ -69,7 +70,7 @@ const SectionMarksLowerThird: React.FC<
           />
         </>
       }
-      color={result.color}
+      color={result?.entry?.color}
       onHidden={onHidden}
       show={show}
       className="flatlist-item"
@@ -81,7 +82,6 @@ const SectionMarksLowerThird: React.FC<
     </LowerThird>
   );
 };
-
 
 export const SectionMarks: React.FC<SectionMarksProps> = ({
   group,

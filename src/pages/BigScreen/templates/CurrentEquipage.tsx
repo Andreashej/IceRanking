@@ -16,7 +16,12 @@ const EquipageResult: React.FC<FlatListItem<Result, Test>> = ({
   extraData: test,
 }) => {
   const marks = result.marks?.map((mark) => (
-    <Mark key={`${result.id}.${mark.judgeNo}`} mark={mark} test={test} result={result} />
+    <Mark
+      key={`${result.entryId}.${mark.judgeNo}`}
+      mark={mark}
+      test={test}
+      result={result}
+    />
   ));
 
   const finalMark = (
@@ -27,7 +32,7 @@ const EquipageResult: React.FC<FlatListItem<Result, Test>> = ({
       </div>
       <div>
         <span className="light mr-2">Total</span>
-        <span>{markToDouble(result.mark, test.roundingPrecision)}</span>
+        <span>{result.score}</span>
       </div>
     </>
   );
@@ -36,9 +41,10 @@ const EquipageResult: React.FC<FlatListItem<Result, Test>> = ({
     <LowerThird
       header={
         <>
-          {result.rider?.fullname}
+          {result.entry?.participant?.equipage?.rider?.person?.firstName}{" "}
+          {result.entry?.participant?.equipage?.rider?.person?.lastName}
           <Flag
-            countryCode={result.rider?.team ?? ""}
+            countryCode={result.entry?.participant?.team ?? ""}
             style={{
               height: "1em",
               marginLeft: "auto",
@@ -46,7 +52,7 @@ const EquipageResult: React.FC<FlatListItem<Result, Test>> = ({
           />
         </>
       }
-      color={result.color}
+      color={result.entry?.color}
       onHidden={onHidden}
       show={show}
       className="flatlist-item"
@@ -67,7 +73,7 @@ const EquipageInfo: React.FC<FlatListItem<StartListEntry, Test>> = ({
     <LowerThird
       header={
         <>
-          {item.rider?.fullname}
+          {item.rider?.firstName} {item.rider?.lastName}
           <Flag
             countryCode={item.rider?.team ?? ""}
             style={{

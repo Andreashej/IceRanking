@@ -11,16 +11,16 @@ import { FlatList, FlatListItem } from "../../components/partials/FlatList";
 import { RiderProps, useRider } from "../../contexts/rider.context";
 import { Result } from "../../models/result.model";
 import { Pagination } from "../../models/apiresponse.model";
-import { getResults } from "../../services/v2/result.service";
+import { getResults } from "../../clients/v3/result.service";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 import { Horse } from "../../models/horse.model";
 import { Test } from "../../models/test.model";
-import { getHorse } from "../../services/v2/horse.service";
-import { getTest } from "../../services/v2/test.service";
+import { getHorse } from "../../clients/v3/horse.service";
+import { getTest } from "../../clients/v3/test.service";
 import { Skeleton } from "../../components/partials/Skeleton";
 import { FeaturedCard } from "../../components/partials/FeaturedCard";
-import { getRankingResults } from "../../services/v2/rankingresult.service";
-import { getRankingList } from "../../services/v2/rankinglist.service";
+import { getRankingResults } from "../../clients/v3/rankingresult.service";
+import { getRankingList } from "../../clients/v3/rankinglist.service";
 import { cancellablePromise } from "../../tools/cancellablePromise";
 
 const RiderResult: React.FC<FlatListItem<Result, RiderProps>> = ({
@@ -34,19 +34,28 @@ const RiderResult: React.FC<FlatListItem<Result, RiderProps>> = ({
   const [test, setTest] = useState<Test>();
 
   useEffect(() => {
-    if (isVisible && !fetchingStarted) {
+    if (isVisible && !fetchingStarted && result.entry) {
       setFetchingStarted(true);
 
-      const { promise: horsePromise, cancel: horseCancel } = cancellablePromise(
-        getHorse(result.horseId)
-      );
+      let horseCancel = () => {};
 
-      horsePromise.then((horse) => {
-        setHorse(horse);
-      });
+      if (result?.entry?.participant?.equipage) {
+        const { promise: horsePromise, cancel } = cancellablePromise(
+          getHorse(result?.entry?.participant?.equipage?.horseId)
+        );
+
+        horseCancel = cancel;
+
+        horsePromise.then((horse) => {
+          setHorse(horse);
+        });
+      }
 
       const { promise: testPromise, cancel: testCancel } = cancellablePromise(
-        getTest(result.testId, new URLSearchParams({ expand: "competition" }))
+        getTest(
+          result.entry?.testId,
+          new URLSearchParams({ expand: "competition" })
+        )
       );
 
       testPromise.then((test) => {
@@ -59,7 +68,7 @@ const RiderResult: React.FC<FlatListItem<Result, RiderProps>> = ({
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [result, isVisible]);
+  }, [result.entry?.test, isVisible]);
 
   const renderTest = useMemo(() => {
     if (!test || !test.competition)
@@ -70,12 +79,14 @@ const RiderResult: React.FC<FlatListItem<Result, RiderProps>> = ({
         </>
       );
 
-    const firstDate = dateToString(test.competition.firstDate, "d/m/Y");
-    const lastDate = dateToString(test.competition.lastDate, "d/m/Y");
+    const firstDate = dateToString(test.competition.startDate, "d/m/Y");
+    const lastDate = dateToString(test.competition.endDate, "d/m/Y");
 
     return (
       <>
-        <Link to={`/competition/${test.competition.id}/test/${test.testcode}`}>
+        <Link
+          to={`/competition/${test.competition.id}/test/${test.catalogCode}`}
+        >
           {test.competition.name}
         </Link>
         <span className="text-muted d-none d-sm-block">
@@ -88,10 +99,8 @@ const RiderResult: React.FC<FlatListItem<Result, RiderProps>> = ({
   const renderMark = useMemo(() => {
     if (!test) return <Skeleton />;
 
-    return result.state === "VALID"
-      ? markWithUnit(result.mark, test.roundingPrecision, test.markType)
-      : result.state;
-  }, [result.mark, test, result.state]);
+    return result.state === "VALID" ? result?.score : result.state;
+  }, [result.score, test, result.state]);
 
   const renderHorse = useMemo(() => {
     if (!horse || !test)
@@ -104,7 +113,7 @@ const RiderResult: React.FC<FlatListItem<Result, RiderProps>> = ({
 
     return (
       <>
-        <Link to={`/horse/${horse.id}/results/${test?.testcode}`}>
+        <Link to={`/horse/${horse.id}/results/${test?.catalogCode}`}>
           {horse.horseName}
         </Link>
         <span className="text-muted d-none d-sm-block">{horse.feifId}</span>
@@ -126,7 +135,7 @@ const RiderResult: React.FC<FlatListItem<Result, RiderProps>> = ({
 };
 
 const BestResult: React.FC<{
-  riderId: number;
+  riderId: string;
   testcode?: string;
   order?: string;
 }> = ({ riderId, testcode, order }) => {
@@ -157,26 +166,16 @@ const BestResult: React.FC<{
     setResult(undefined);
   }, [riderId, testcode]);
 
-  const renderMark = useMemo(() => {
-    if (!result || !result.test) return null;
-
-    return markWithUnit(
-      result.mark,
-      result.test.roundingPrecision,
-      result.test.markType
-    );
-  }, [result]);
-
   return (
     <FeaturedCard
       title="Personal best"
-      featuredText={renderMark}
-      additionalText={result?.horse?.horseName}
+      featuredText={result?.score}
+      additionalText={result?.entry?.participant?.equipage?.horse?.horseName}
     />
   );
 };
 
-const BestRank: React.FC<{ riderId: number; test?: Test }> = ({
+const BestRank: React.FC<{ riderId: string; test?: Test }> = ({
   riderId,
   test,
 }) => {
@@ -194,14 +193,14 @@ const BestRank: React.FC<{ riderId: number; test?: Test }> = ({
         expand: "test",
         order: `mark ${test.order}`,
       });
-      params.append("filter[]", `test.testcode == ${test.testcode}`);
+      params.append("filter[]", `test.testcode == ${test.catalogCode}`);
       params.append("filter[]", `riders contains id == ${riderId}`);
 
       const [results] = await getRankingResults(params);
 
       if (!results || results.length === 0) {
         setRank("N/A");
-        setListname(`Not currently ranked in ${test.testcode}`);
+        setListname(`Not currently ranked in ${test.catalogCode}`);
         return;
       }
 
@@ -257,7 +256,7 @@ export const RiderResults: React.FC = () => {
   let cancelLoading = useRef(() => {});
 
   const getNextPage = useCallback(
-    async (riderId: number): Promise<void> => {
+    async (riderId: string): Promise<void> => {
       if (loading || (results.length > 0 && !pagination?.hasNext)) return;
       cancelLoading.current();
       setLoading(true);
@@ -302,10 +301,10 @@ export const RiderResults: React.FC = () => {
       <div className="grid-col-3">
         <BestResult
           riderId={rider.id}
-          testcode={results[0]?.test?.testcode}
-          order={results[0]?.test?.order}
+          testcode={results[0]?.entry?.test?.catalogCode}
+          order={results[0]?.entry?.test?.order}
         />
-        <BestRank riderId={rider.id} test={results[0]?.test} />
+        <BestRank riderId={rider.id} test={results[0]?.entry?.test} />
         <Activity numberOfResults={pagination?.totalItems} />
       </div>
       <FlatList

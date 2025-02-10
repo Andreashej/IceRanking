@@ -50,7 +50,9 @@ const StartListItem: React.FC<FlatListItem<StartListEntry, Phase>> = ({
         >
           {item.startGroup}
         </div>
-        <div>{item.rider?.fullname}</div>
+        <div>
+          {item.rider?.firstName} {item.rider?.lastName}
+        </div>
         <div>{item.horse?.horseName}</div>
         <div className="text-right">
           {item.rider?.ageGroup?.split(" ").map((word) => word[0])}
@@ -99,7 +101,7 @@ export const StartList: React.FC<StartListProps> = ({
       header={
         <>
           <span>
-            {test.testName} {phaseText}
+            {test.testCode} {phaseText}
           </span>
           -<small>Start List</small>
         </>

@@ -1,100 +1,114 @@
-import React, { createContext, useEffect, useState, useContext, useCallback } from 'react';
-import { getHorse, patchHorse } from '../services/v2/horse.service';
-import { ResourceContext } from '../models/resource-context.model';
-import { Horse } from '../models/horse.model';
+import React, {
+  createContext,
+  useEffect,
+  useState,
+  useContext,
+  useCallback,
+} from "react";
+import { getHorse, patchHorse } from "../clients/v3/horse.service";
+import { ResourceContext } from "../models/resource-context.model";
+import { Horse } from "../models/horse.model";
 
 type HorseContext = ResourceContext<Horse>;
 
-const HorseContext = createContext<HorseContext | undefined>(undefined);
+const HorseContext = createContext<HorseContext | undefined>(undefined);
 
 type HorseProviderProps = {
-    horseId: number;
-}
+  horseId: string;
+};
 
-export const HorseProvider: React.FC<HorseProviderProps> = ({horseId, children}) => {
-    const [horse, setHorse] = useState<Horse>();
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string>();
-    const [isChanged, setIsChanged] = useState<boolean>(false);
-    
-    const saveHorse: HorseContext['save'] = async () => {
-        if (!horse) return;
+export const HorseProvider: React.FC<HorseProviderProps> = ({
+  horseId,
+  children,
+}) => {
+  const [horse, setHorse] = useState<Horse>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>();
+  const [isChanged, setIsChanged] = useState<boolean>(false);
 
-        try {
-            const savedHorse = await patchHorse(horse);
-            setHorse((prevHorse) => {
-                return {
-                    ...prevHorse,
-                    ...savedHorse
-                }
-            });
-            setIsChanged(false);
-        } catch (error: unknown) {
-            console.log(error);
-        }
+  const saveHorse: HorseContext["save"] = async () => {
+    if (!horse) return;
+
+    try {
+      const savedHorse = await patchHorse(horse);
+      setHorse((prevHorse) => {
+        return {
+          ...prevHorse,
+          ...savedHorse,
+        };
+      });
+      setIsChanged(false);
+    } catch (error: unknown) {
+      console.log(error);
     }
+  };
 
-    const updateHorse: HorseContext['update'] = (updatedFields) => {
-        if (!horse) return;
-        
-        setHorse((prevHorse) => {
-            if (!prevHorse) return;
+  const updateHorse: HorseContext["update"] = (updatedFields) => {
+    if (!horse) return;
 
-            return {
-                ...prevHorse,
-                ...updatedFields
-            }
-        });
-        setIsChanged(true);
+    setHorse((prevHorse) => {
+      if (!prevHorse) return;
+
+      return {
+        ...prevHorse,
+        ...updatedFields,
+      };
+    });
+    setIsChanged(true);
+  };
+
+  const fetchHorse = useCallback(async (): Promise<void> => {
+    try {
+      const horse = await getHorse(horseId);
+      setHorse(horse);
+    } catch (error: unknown) {
+      setHorse(undefined);
+      setError(error as string);
+    } finally {
+      setLoading(false);
     }
+  }, [horseId]);
 
-    const fetchHorse = useCallback(async (): Promise<void> => {
-        try {
+  useEffect(() => {
+    setLoading(true);
+    setError(undefined);
+    fetchHorse();
+  }, [horseId, fetchHorse]);
 
-            const horse = await getHorse(horseId);
-            setHorse(horse);
-        } catch (error : unknown) {
-            setHorse(undefined);
-            setError(error as string);
-        } finally {
-            setLoading(false);
-        }
-    }, [horseId]);
-
-    useEffect(() => {
-
-        setLoading(true);
-        setError(undefined);
-        fetchHorse();
-    }, [horseId, fetchHorse])
-    
-    return (
-        <HorseContext.Provider value={{
-            resource: horse,
-            update: updateHorse,
-            save: saveHorse,
-            fetch: fetchHorse,
-            loading,
-            error,
-            isChanged
-        }}>
-            {children}
-        </HorseContext.Provider>
-    )
-}
+  return (
+    <HorseContext.Provider
+      value={{
+        resource: horse,
+        update: updateHorse,
+        save: saveHorse,
+        fetch: fetchHorse,
+        loading,
+        error,
+        isChanged,
+      }}
+    >
+      {children}
+    </HorseContext.Provider>
+  );
+};
 
 export const useHorseContext = (): HorseContext => {
-    const context = useContext(HorseContext);
+  const context = useContext(HorseContext);
 
-    if (context === undefined) {
-        throw new Error('Missing HorseContext');
-    }
+  if (context === undefined) {
+    throw new Error("Missing HorseContext");
+  }
 
-    return context;
-}
+  return context;
+};
 
-export const useHorse = (): [Horse?, HorseContext['update']?, HorseContext['save']?, HorseContext['isChanged']?] => {
-    const context = useHorseContext();
+export const useHorse = (): [
+  Horse?,
+  HorseContext["update"]?,
+  HorseContext["save"]?,
+  HorseContext["isChanged"]?
+] => {
+  const context = useHorseContext();
 
-    return [context.resource, context.update, context.save, context.isChanged];
-}
+  return [context.resource, context.update, context.save, context.isChanged];
+};

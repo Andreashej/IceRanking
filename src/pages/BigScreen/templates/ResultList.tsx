@@ -23,7 +23,7 @@ const ResultListItem: React.FC<
     }
   };
 
-  const textColor = LIGHT_BACKGROUNDS.includes(result.color)
+  const textColor = LIGHT_BACKGROUNDS.includes(result?.entry?.color ?? "")
     ? "black"
     : "white";
 
@@ -44,22 +44,23 @@ const ResultListItem: React.FC<
           style={{
             backgroundColor:
               extraData.phase !== "PREL" && extraData.phase !== "FIN"
-                ? `var(--${result.color})`
+                ? `var(--${result?.entry?.color})`
                 : "var(--blue)",
             color: textColor,
           }}
         >
           {result.rank}
         </div>
-        <div>{result.rider?.fullname}</div>
-        <div>{result.horse?.horseName}</div>
+        <div>
+          {result?.entry?.participant?.equipage?.rider?.person?.firstName}{" "}
+          {result?.entry?.participant?.equipage?.rider?.person?.lastName}
+        </div>
+        <div>{result?.entry?.participant?.equipage?.horse?.horseName}</div>
         <div className="text-right">
-          <b>
-            {markToDouble(result.mark, extraData.test?.roundingPrecision ?? 2)}
-          </b>
+          <b>{result.score}</b>
         </div>
         <Flag
-          countryCode={result.rider?.team ?? ""}
+          countryCode={result?.entry?.participant?.team ?? ""}
           style={{
             marginLeft: "auto",
             height: "1em",
@@ -105,7 +106,7 @@ export const ResultList: React.FC<ResultListProps> = ({
     <AnimatedFlatList
       header={
         <>
-          {test.testName} {phaseText} - <small>Results</small>
+          {test.testCode} {phaseText} - <small>Results</small>
         </>
       }
       headerImg={test.sponsorLogo ?? "assets/img/ICeCompass_Logo_Final6.png"}

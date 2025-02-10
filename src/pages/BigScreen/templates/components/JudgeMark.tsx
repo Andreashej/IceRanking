@@ -27,7 +27,7 @@ export const Mark: React.FC<MarkProps> = ({ mark, test, result }) => {
   const m = markToDouble(mark.mark, test.roundingPrecision - 1);
 
   if (mark.markType === "time") {
-    const roundingPrecision = test.testcode === "PP1" ? 1 : 2;
+    const roundingPrecision = test.catalogCode === "PP1" ? 1 : 2;
     return (
       <Badge>
         <FontAwesomeIcon

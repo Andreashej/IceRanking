@@ -23,8 +23,7 @@ import {
   deleteTest,
   getTestResults,
   uploadTestResults,
-} from "../../services/v2/test.service";
-import { getResult } from "../../services/v2/result.service";
+} from "../../clients/v3/test.service";
 import { cancellablePromise } from "../../tools/cancellablePromise";
 import { Dialog } from "primereact/dialog";
 import { FileUpload, FileUploadHandlerParam } from "primereact/fileupload";
@@ -33,62 +32,31 @@ const CompetitionResultItem: React.FC<FlatListItem<Result, Test>> = ({
   item: result,
   extraData: test,
 }) => {
-  const [rider, setRider] = useState<Person>();
-  const [horse, setHorse] = useState<Horse>();
-  const [fetchingStarted, setFetchingStarted] = useState<boolean>(false);
-  const ref = useRef(null);
-  const isVisible = useIntersectionObserver(ref, { rootMargin: "50px" });
-
-  useEffect(() => {
-    if (isVisible && !fetchingStarted) {
-      const params = new URLSearchParams({
-        fields: "rider,horse",
-        expand: "rider,horse",
-      });
-
-      setFetchingStarted(true);
-      const p = getResult(result.id, params);
-      const { promise, cancel } = cancellablePromise<Result>(p);
-      promise.then((result) => {
-        if (result.horse) setHorse(result.horse);
-        if (result.rider) setRider(result.rider);
-      });
-
-      return cancel;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [result.id, isVisible]);
-
-  const formatMark = (mark: number) => {
-    const roundedMark = mark.toFixed(test.roundingPrecision);
-    const unit = test?.markType === "time" ? '"' : "";
-
-    return `${roundedMark}${unit}`;
-  };
+  const rider = result.entry?.participant?.equipage?.rider?.person;
+  const horse = result.entry?.participant?.equipage?.horse;
 
   return (
     <li
       className="flatlist-item no-padding-left"
       style={{ gridTemplateColumns: "6ch minmax(0, 1fr) minmax(0, 1fr) 8ch" }}
-      ref={ref}
     >
       <div className="rank">{result.rank ?? "-"}</div>
       <div className="mobile-span-2" style={{ alignSelf: "center" }}>
         {(rider && (
-          <Link to={`/rider/${rider.id}/results/${test.testcode}`}>
-            {rider.fullname}
+          <Link to={`/rider/${rider.id}/results/${test.catalogCode}`}>
+            {rider.firstName} {rider.lastName}
           </Link>
         )) ?? <Skeleton style={{ height: "18px" }} />}
       </div>
       <div className="mobile-span-2" style={{ alignSelf: "center" }}>
         {(horse && (
-          <Link to={`/horse/${horse.id}/results/${test.testcode}`}>
+          <Link to={`/horse/${horse.id}/results/${test.catalogCode}`}>
             {horse.horseName}
           </Link>
         )) ?? <Skeleton style={{ height: "18px" }} />}
       </div>
       <div className="mark">
-        {result.state === "VALID" ? formatMark(result.mark) : result.state}
+        {result.state === "VALID" ? result.score : result.state}
       </div>
     </li>
   );
@@ -109,27 +77,26 @@ export const CompetitionResults: React.FC = () => {
   const { testcode } = useParams<{ testcode: string }>();
 
   const test = useMemo(
-    () => competition?.tests?.find((test) => test.testName === testcode),
+    () => competition?.tests?.find((test) => test.testCode === testcode),
     [testcode, competition?.tests]
   );
 
   const cancelLoading = useRef(() => {});
 
   const getNextPage = useCallback(
-    async (testId: number): Promise<void> => {
+    async (testId: string): Promise<void> => {
       if (loading || (results.length > 0 && !pagination?.hasNext)) return;
       setLoading(true);
       cancelLoading.current();
 
       const params = new URLSearchParams({
-        phase: "PREL",
         page: pagination?.nextPage?.toString() ?? "1",
         perPage: "100",
       });
 
       try {
         const { promise, cancel } = cancellablePromise(
-          getTestResults(testId, params)
+          getTestResults(testId, "PREL", params)
         );
         cancelLoading.current = cancel;
         const [results, pagination] = await promise;
