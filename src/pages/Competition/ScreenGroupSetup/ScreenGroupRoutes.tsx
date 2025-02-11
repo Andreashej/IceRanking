@@ -19,7 +19,7 @@ import {
   getScreenRoutes,
   patchScreenRoute,
   postScreenRoute,
-} from "../../../clients/v3/bigscreen.service";
+} from "../../../services/v3/bigscreen.service";
 
 type BigScreenRouteRowProps = {
   route: BigScreenRoute;

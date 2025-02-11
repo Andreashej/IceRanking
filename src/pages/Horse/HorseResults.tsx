@@ -10,18 +10,18 @@ import { dateToString, markWithUnit } from "../../tools";
 import { FlatList, FlatListItem } from "../../components/partials/FlatList";
 import { Result } from "../../models/result.model";
 import { Pagination } from "../../models/apiresponse.model";
-import { getResults } from "../../clients/v3/result.service";
+import { getResults } from "../../services/v3/result.service";
 import { Person } from "../../models/person.model";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 import { Horse } from "../../models/horse.model";
 import { Test } from "../../models/test.model";
-import { getTest } from "../../clients/v3/test.service";
+import { getTest } from "../../services/v3/test.service";
 import { Skeleton } from "../../components/partials/Skeleton";
 import { FeaturedCard } from "../../components/partials/FeaturedCard";
-import { getRankingResults } from "../../clients/v3/rankingresult.service";
-import { getRankingList } from "../../clients/v3/rankinglist.service";
+import { getRankingResults } from "../../services/v3/rankingresult.service";
+import { getRankingList } from "../../services/v3/rankinglist.service";
 import { useHorse } from "../../contexts/horse.context";
-import { getPerson } from "../../clients/v3/person.service";
+import { getPerson } from "../../services/v3/person.service";
 import { cancellablePromise } from "../../tools/cancellablePromise";
 
 const HorseResult: React.FC<FlatListItem<Result, Horse>> = ({
@@ -205,7 +205,7 @@ const BestRank: React.FC<{ horseId: string; test?: Test }> = ({
       rankingListCancel = rlc;
       const rankinglist = await rankingListPromise;
 
-      setListname(rankinglist.shortname);
+      setListname(rankinglist.slug);
     };
     setRank(undefined);
     setListname(undefined);

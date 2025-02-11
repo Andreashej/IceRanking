@@ -7,9 +7,8 @@ import React, {
 } from "react";
 import {
   getRankingList,
-  getRankingLists,
   patchRankingList,
-} from "../clients/v3/rankinglist.service";
+} from "../services/v3/rankinglist.service";
 import { ResourceContext } from "../models/resource-context.model";
 import { RankingList } from "../models/rankinglist.model";
 
@@ -20,13 +19,13 @@ const RankingListContext = createContext<RankingListContext | undefined>(
 );
 
 type RankingListProviderProps = {
-  rankingListId?: string;
-  rankingListShortname?: string;
+  id?: string;
+  slug?: string;
 };
 
 export const RankingListProvider: React.FC<RankingListProviderProps> = ({
-  rankingListId,
-  rankingListShortname,
+  id,
+  slug,
   children,
 }) => {
   const [rankingList, setRankingList] = useState<RankingList>();
@@ -67,33 +66,25 @@ export const RankingListProvider: React.FC<RankingListProviderProps> = ({
 
   const fetchRankingList = useCallback(async (): Promise<void> => {
     try {
-      if (rankingListId) {
-        const rankingList = await getRankingList(rankingListId);
-        setRankingList(rankingList);
-      } else if (rankingListShortname) {
-        const params = new URLSearchParams({
-          "filter[]": `shortname == ${rankingListShortname}`,
-          expand: "tests",
-        });
-
-        const [rankingLists] = await getRankingLists(params);
-        if (rankingLists.length > 0) {
-          setRankingList(rankingLists[0]);
-        }
+      if (!id && !slug) {
+        throw new Error("No id or slug provided");
       }
+
+      const rankingList = await getRankingList(id ?? slug ?? "");
+      setRankingList(rankingList);
     } catch (error: unknown) {
       setRankingList(undefined);
       setError(error as string);
     } finally {
       setLoading(false);
     }
-  }, [rankingListId, rankingListShortname]);
+  }, [id, slug]);
 
   useEffect(() => {
     setLoading(true);
     setError(undefined);
     fetchRankingList();
-  }, [rankingListId, rankingListShortname, fetchRankingList]);
+  }, [id, slug, fetchRankingList]);
 
   return (
     <RankingListContext.Provider

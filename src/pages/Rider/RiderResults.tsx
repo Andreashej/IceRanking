@@ -11,16 +11,16 @@ import { FlatList, FlatListItem } from "../../components/partials/FlatList";
 import { RiderProps, useRider } from "../../contexts/rider.context";
 import { Result } from "../../models/result.model";
 import { Pagination } from "../../models/apiresponse.model";
-import { getResults } from "../../clients/v3/result.service";
+import { getResults } from "../../services/v3/result.service";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 import { Horse } from "../../models/horse.model";
 import { Test } from "../../models/test.model";
-import { getHorse } from "../../clients/v3/horse.service";
-import { getTest } from "../../clients/v3/test.service";
+import { getHorse } from "../../services/v3/horse.service";
+import { getTest } from "../../services/v3/test.service";
 import { Skeleton } from "../../components/partials/Skeleton";
 import { FeaturedCard } from "../../components/partials/FeaturedCard";
-import { getRankingResults } from "../../clients/v3/rankingresult.service";
-import { getRankingList } from "../../clients/v3/rankinglist.service";
+import { getRankingResults } from "../../services/v3/rankingresult.service";
+import { getRankingList } from "../../services/v3/rankinglist.service";
 import { cancellablePromise } from "../../tools/cancellablePromise";
 
 const RiderResult: React.FC<FlatListItem<Result, RiderProps>> = ({
@@ -215,7 +215,7 @@ const BestRank: React.FC<{ riderId: string; test?: Test }> = ({
 
       const rankinglist = await promise;
 
-      setListname(rankinglist.shortname);
+      setListname(rankinglist.slug);
     };
     setRank(undefined);
     setListname(undefined);

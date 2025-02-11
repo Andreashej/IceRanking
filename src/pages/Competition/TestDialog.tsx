@@ -5,8 +5,8 @@ import React, { useEffect, useState } from "react";
 import { useCompetitionContext } from "../../contexts/competition.context";
 import { useToast } from "../../contexts/toast.context";
 import { Test } from "../../models/test.model";
-import { getTestCatalog } from "../../clients/v3/test-catalog.service";
-import { createTest } from "../../clients/v3/test.service";
+import { getTestCatalog } from "../../services/v3/test-catalog.service";
+import { createTest } from "../../services/v3/test.service";
 
 export const TestDialog: React.FC<DialogProps> = (props) => {
   const [tests, setTests] = useState<Test[]>([]);

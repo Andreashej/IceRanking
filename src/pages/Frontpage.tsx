@@ -4,9 +4,9 @@ import { Card } from "primereact/card";
 import { dateToString } from "../tools";
 
 import { Competition } from "../models/competition.model";
-import { getCompetitions } from "../clients/v3/competition.service";
+import { getCompetitions } from "../services/v3/competition.service";
 import { RankingList } from "../models/rankinglist.model";
-import { getRankingLists } from "../clients/v3/rankinglist.service";
+import { getRankingLists } from "../services/v3/rankinglist.service";
 import EventList from "../components/partials/EventList";
 import { useProfile } from "../contexts/user.context";
 
@@ -55,16 +55,16 @@ export const Frontpage: React.FC = () => {
             <div className="col-12 col-sm-auto d-flex justify-content-center">
               <img
                 className="logo"
-                src={`${process.env.REACT_APP_API_URL}${rankingList.logoUrl}`}
+                src={rankingList.imageUrl ?? ""}
                 style={{ width: 150, height: 150 }}
-                alt={`${rankingList.shortname} logo`}
+                alt={`${rankingList.slug} logo`}
               />
             </div>
             <div className="col">
-              <h2 className="display-4">{rankingList.shortname}</h2>
-              <p className="lead">{rankingList.listname}</p>
+              <h2 className="display-4">{rankingList.slug.toUpperCase()}</h2>
+              <p className="lead">{rankingList.name}</p>
               <Link
-                to={`/rankinglist/${rankingList.shortname}`}
+                to={`/rankinglist/${rankingList.slug}`}
                 className="btn btn-primary"
               >
                 Go to ranking list

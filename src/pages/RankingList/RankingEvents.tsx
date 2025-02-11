@@ -4,7 +4,7 @@ import EventList from "../../components/partials/EventList";
 import { useRankingList } from "../../contexts/rankinglist.context";
 
 import { Competition } from "../../models/competition.model";
-import { getCompetitions } from "../../clients/v3/competition.service";
+import { getCompetitions } from "../../services/v3/competition.service";
 import { dateToString } from "../../tools";
 
 export const RankingEvents: React.FC = () => {

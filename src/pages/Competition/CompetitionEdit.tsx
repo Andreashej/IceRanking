@@ -10,7 +10,7 @@ import React, { FormEvent, useState } from "react";
 import { useCompetition } from "../../contexts/competition.context";
 import { useToast } from "../../contexts/toast.context";
 import { Person } from "../../models/person.model";
-import { getPersons } from "../../clients/v3/person.service";
+import { getPersons } from "../../services/v3/person.service";
 import { EmailDialog } from "../CompetitionCreate/EmailDialog";
 
 export const CompetitionEdit: React.FC = () => {

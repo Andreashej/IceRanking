@@ -6,17 +6,17 @@ import { useParams, useHistory } from "react-router-dom";
 import { useToast } from "../../contexts/toast.context";
 import { Competition } from "../../models/competition.model";
 import { Test } from "../../models/test.model";
-import { getTestCatalog } from "../../clients/v3/test-catalog.service";
+import { getTestCatalog } from "../../services/v3/test-catalog.service";
 import { MultiSelect } from "primereact/multiselect";
 import {
   createTest,
   deleteTest,
   getTests,
   patchTest,
-} from "../../clients/v3/test.service";
+} from "../../services/v3/test.service";
 import { RankingList } from "../../models/rankinglist.model";
-import { getRankingLists } from "../../clients/v3/rankinglist.service";
-import { patchCompetition } from "../../clients/v3/competition.service";
+import { getRankingLists } from "../../services/v3/rankinglist.service";
+import { patchCompetition } from "../../services/v3/competition.service";
 
 type TestsSetupProps = {
   competition?: Competition;
@@ -80,7 +80,7 @@ export const TestsSetup: React.FC<TestsSetupProps> = () => {
           <MultiSelect
             placeholder="Rankinglists"
             value={test.includeInRanking?.map(
-              (rankinglist) => rankinglist.shortname
+              (rankinglist) => rankinglist.slug
             )}
             onChange={(e) => {
               test.includeInRanking = e.value.map((shortname: string) => {
@@ -97,8 +97,8 @@ export const TestsSetup: React.FC<TestsSetupProps> = () => {
             }}
             options={rankingLists.map((rankingList) => {
               return {
-                label: rankingList.shortname,
-                value: rankingList.shortname,
+                label: rankingList.slug,
+                value: rankingList.slug,
               };
             })}
           />

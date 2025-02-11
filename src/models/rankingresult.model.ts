@@ -4,11 +4,12 @@ import { Person } from "./person.model";
 
 export type RankingResult = {
   id: string;
-  rank: number;
-  mark: number;
+  rank: string;
+  score: string;
   testid: string;
   riderId: string | null;
   horseid: string | null;
+  rankingId: string;
 
   // Expandable attributes
   test?: Ranking;

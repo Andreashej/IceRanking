@@ -20,7 +20,7 @@ import { Pagination } from "../../models/apiresponse.model";
 import {
   getRanking,
   getResultForRanking,
-} from "../../clients/v3/ranking.service";
+} from "../../services/v3/ranking.service";
 import { Horse } from "../../models/horse.model";
 import { Person } from "../../models/person.model";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
@@ -30,14 +30,14 @@ import { Result } from "../../models/result.model";
 import {
   getRankingResult,
   getRankingResultMarks,
-} from "../../clients/v3/rankingresult.service";
+} from "../../services/v3/rankingresult.service";
 import { Competition } from "../../models/competition.model";
-import { getCompetition } from "../../clients/v3/competition.service";
+import { getCompetition } from "../../services/v3/competition.service";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "primereact/button";
 import { Task } from "../../models/task.model";
 import { TaskBar } from "../../components/Task/TaskBar";
-import { createTask } from "../../clients/v3/task.service";
+import { createTask } from "../../services/v3/task.service";
 import { PrimeIcons } from "primereact/api";
 import { cancellablePromise } from "../../tools/cancellablePromise";
 import { useProfile } from "../../contexts/user.context";
@@ -80,12 +80,12 @@ const RankingResultMarkItem: React.FC<RankingResultMarkProps> = ({
   }, [competitionId]);
 
   const expiresAt = new Date();
-  if (competition && rankingList) {
-    expiresAt.setTime(
-      competition?.endDate.getTime() +
-        rankingList.resultsValidDays * 24 * 60 * 60 * 1000
-    );
-  }
+  // if (competition && rankingList) {
+  //   expiresAt.setTime(
+  //     competition?.endDate.getTime() +
+  //       rankingList.resultsValidDays * 24 * 60 * 60 * 1000
+  //   );
+  // }
 
   return (
     <>
@@ -159,8 +159,6 @@ const RankingResultListItem: React.FC<FlatListItem<RankingResult, Ranking>> = ({
   item: result,
   extraData: ranking,
 }) => {
-  const [rider, setRider] = useState<Person>();
-  const [horse, setHorse] = useState<Horse>();
   const [marks, setMarks] = useState<Result[]>([]);
   const [height, setHeight] = useState<number>();
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -168,33 +166,10 @@ const RankingResultListItem: React.FC<FlatListItem<RankingResult, Ranking>> = ({
   const markRef = useRef<HTMLDivElement>(null);
   const rankRef = useRef<HTMLDivElement>(null);
   const ref = useRef(null);
-  const isVisible = useIntersectionObserver(ref, { threshold: 0 });
   const [rankingList] = useRankingList();
-  const [fetchingStarted, setFetchingStarted] = useState<boolean>(false);
 
-  useEffect(() => {
-    let cancel = () => {};
-    const fetchResult = async () => {
-      setFetchingStarted(true);
-      const params = new URLSearchParams({
-        expand: "rider,horse",
-      });
-      const { promise, cancel: c } = cancellablePromise<RankingResult>(
-        getRankingResult(result.id, params)
-      );
-
-      cancel = c;
-
-      const r = await promise;
-
-      if (r.horse) setHorse(r.horse);
-      if (r.rider) setRider(r.rider);
-    };
-
-    if (isVisible && !fetchingStarted) fetchResult();
-    return cancel;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [result.id, isVisible]);
+  const rider = result.rider;
+  const horse = result.horse;
 
   useLayoutEffect(() => {
     if (markRef.current) {
@@ -221,10 +196,10 @@ const RankingResultListItem: React.FC<FlatListItem<RankingResult, Ranking>> = ({
     if (marks.length === 0 && rankingList) {
       setLoading(true);
       const fromDate = new Date();
-      fromDate.setTime(
-        new Date().getTime() -
-          rankingList.resultsValidDays * 24 * 60 * 60 * 1000
-      );
+      // fromDate.setTime(
+      //   new Date().getTime() -
+      //     rankingList.resultsValidDays * 24 * 60 * 60 * 1000
+      // );
 
       const grouping = ranking.grouping === "rider" ? "horse" : "rider";
 
@@ -318,24 +293,24 @@ const RankingResultListItem: React.FC<FlatListItem<RankingResult, Ranking>> = ({
           />
         )}
       </div>
-      {ranking.grouping === "rider" && (
+      {rider && (
         <div style={{ alignSelf: "center" }}>
           {(rider && (
             <Link
               style={{ width: "fit-content" }}
-              to={`/rider/${rider.id}/results/${ranking.testcode}`}
+              to={`/rider/${rider.id}/results/${ranking.name}`}
             >
               {rider.firstName} {rider.lastName}
             </Link>
           )) ?? <Skeleton style={{ height: "18px" }} />}
         </div>
       )}
-      {ranking.grouping === "horse" && (
+      {horse && (
         <div style={{ alignSelf: "center" }}>
           {(horse && (
             <Link
               style={{ width: "fit-content" }}
-              to={`/horse/${horse.id}/results/${ranking.testcode}`}
+              to={`/horse/${horse.id}/results/${ranking.name}`}
             >
               {horse.horseName}
             </Link>
@@ -361,7 +336,7 @@ const RankingResultListItem: React.FC<FlatListItem<RankingResult, Ranking>> = ({
         ref={markRef}
         style={{ gridColumn: "3 / 4", gridRow: "1 / 3" }}
       >
-        {markWithUnit(result.mark, ranking.roundingPrecision, ranking.markType)}
+        {result.score}
       </div>
     </li>
   );
@@ -379,9 +354,9 @@ export const RankingResults: React.FC = () => {
   const history = useHistory();
 
   const ranking = useMemo<Ranking | undefined>(() => {
-    if (!rankingList || !rankingList.tests) return;
+    if (!rankingList || !rankingList.rankings) return;
 
-    return rankingList.tests.find((ranking) => ranking.testcode === testcode);
+    return rankingList.rankings.find((ranking) => ranking.name === testcode);
   }, [testcode, rankingList]);
 
   const description = useMemo<JSX.Element | undefined>(() => {
@@ -390,8 +365,8 @@ export const RankingResults: React.FC = () => {
     return (
       <p>
         This ranking is based on the best {ranking.includedMarks} marks per{" "}
-        {ranking.grouping} in {ranking.testcode}. Only marks above{" "}
-        {ranking.minMark} are taken into account.
+        {ranking.grouping} in {ranking.name}. Only marks above {ranking.minMark}{" "}
+        are taken into account.
       </p>
     );
   }, [ranking, rankingList]);
@@ -404,19 +379,16 @@ export const RankingResults: React.FC = () => {
       setLoading(true);
       cancelLoading.current();
 
-      const params = new URLSearchParams({
-        page: pagination?.nextPage?.toString() ?? "1",
-        perPage: "100",
-      });
-
       try {
         const { promise, cancel } = cancellablePromise(
-          getResultForRanking(rankingId, params)
+          getResultForRanking(rankingId)
         );
         cancelLoading.current = cancel;
         const [results, pagination] = await promise;
 
-        setResults((oldValue) => [...oldValue, ...results]);
+        if (results) {
+          setResults((oldValue) => [...oldValue, ...results]);
+        }
         setPagination(pagination);
       } catch (error: unknown) {
         console.log(error);
@@ -464,11 +436,11 @@ export const RankingResults: React.FC = () => {
         onClick={async () => {
           if (ranking) {
             history.push(
-              `/rankinglist/${rankingList?.shortname}/ranking/${testcode}/edit`
+              `/rankinglist/${rankingList?.slug}/ranking/${testcode}/edit`
             );
           }
         }}
-        disabled={tasks.length > 0}
+        disabled={tasks?.length > 0}
       />
       <Button
         tooltip="Recompute marks"
@@ -481,7 +453,7 @@ export const RankingResults: React.FC = () => {
             setTasks((prevTasks) => [...prevTasks, task]);
           }
         }}
-        disabled={tasks.length > 0}
+        disabled={tasks?.length > 0}
       />
       <Button
         tooltip="Flush all results"
@@ -494,7 +466,7 @@ export const RankingResults: React.FC = () => {
             setTasks((prevTasks) => [...prevTasks, task]);
           }
         }}
-        disabled={tasks.length > 0}
+        disabled={tasks?.length > 0}
       />
     </>
   );
@@ -504,7 +476,7 @@ export const RankingResults: React.FC = () => {
   const renderTasks = (
     <div>
       <h4>Ranking is being recomputed. Please wait...</h4>
-      {tasks.map((task) => (
+      {tasks?.map((task) => (
         <TaskBar
           key={task.id}
           task={task}
@@ -530,7 +502,7 @@ export const RankingResults: React.FC = () => {
         )}
       </div>
       {description}
-      {tasks.length === 0 ? (
+      {!tasks || tasks.length === 0 ? (
         <FlatList
           items={results}
           RenderComponent={RankingResultListItem}

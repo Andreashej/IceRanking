@@ -64,7 +64,7 @@ export const patchTest = async (test: Test): Promise<Test> => {
     const response = await apiV2.patch<ApiResponse<Test>>(`/tests/${test.id}`, {
       ...test,
       rankinglists: test.includeInRanking?.map(
-        (rankinglist) => rankinglist.shortname
+        (rankinglist) => rankinglist.slug
       ),
     });
 

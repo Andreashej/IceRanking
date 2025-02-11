@@ -4,16 +4,11 @@ import axios from "axios";
 import { Person } from "../../models/person.model";
 import { PersonAlias } from "../../models/personalias.model";
 
-export const getPerson = async (
-  id: string,
-  params?: URLSearchParams
-): Promise<Person> => {
+export const getPerson = async (id: string): Promise<Person> => {
   try {
-    const response = await apiV2.get<ApiResponse<Person>>(`/persons/${id}`, {
-      params,
-    });
+    const response = await apiV2.get<Person>(`/people/${id}`);
 
-    return response.data.data;
+    return response.data;
   } catch (error: unknown) {
     console.log(error);
     if (axios.isAxiosError(error)) {
@@ -31,7 +26,7 @@ export const getPersons = async (
       params,
     });
 
-    return [response.data.data, response.data.pagination];
+    return [response.data.items, response.data.pagination];
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       return Promise.reject(error.response?.data.message ?? error.message);

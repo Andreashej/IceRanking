@@ -8,7 +8,7 @@ import {
 
 import { SearchItem } from "./SearchItem";
 import { Button } from "primereact/button";
-import { getSearchResults } from "../../clients/v3/search.service";
+import { getSearchResults } from "../../services/v3/search.service";
 import { SearchResult } from "../../models/searchresult.model";
 
 type SearchBarProps = {
@@ -25,7 +25,7 @@ const buildLink = (searchResult: SearchResult) => {
     case "Person":
       return `/rider/${searchResult.person?.id}`;
     case "RankingList":
-      return `/rankinglist/${searchResult.rankingList?.shortname}`;
+      return `/rankinglist/${searchResult.rankingList?.slug}`;
   }
 };
 

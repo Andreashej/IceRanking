@@ -11,8 +11,8 @@ import React, { FormEvent, useState } from "react";
 import { useToast } from "../../contexts/toast.context";
 import { Competition } from "../../models/competition.model";
 import { Person } from "../../models/person.model";
-import { createCompetition } from "../../clients/v3/competition.service";
-import { getPersons } from "../../clients/v3/person.service";
+import { createCompetition } from "../../services/v3/competition.service";
+import { getPersons } from "../../services/v3/person.service";
 import { EmailDialog } from "./EmailDialog";
 
 type CompetitionSetupProps = {

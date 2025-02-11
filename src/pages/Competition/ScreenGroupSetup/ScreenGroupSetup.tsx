@@ -4,7 +4,7 @@ import { useCompetition } from "../../../contexts/competition.context";
 import {
   createScreenGroup,
   getScreenGroups,
-} from "../../../clients/v3/bigscreen.service";
+} from "../../../services/v3/bigscreen.service";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { PrimeIcons } from "primereact/api";

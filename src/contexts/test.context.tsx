@@ -6,7 +6,7 @@ import React, {
   useContext,
   useCallback,
 } from "react";
-import { getTest, patchTest } from "../clients/v3/test.service";
+import { getTest, patchTest } from "../services/v3/test.service";
 import { ResourceContext } from "../models/resource-context.model";
 
 export type TestProps = Required<Test>;

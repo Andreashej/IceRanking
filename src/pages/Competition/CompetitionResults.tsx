@@ -23,7 +23,7 @@ import {
   deleteTest,
   getTestResults,
   uploadTestResults,
-} from "../../clients/v3/test.service";
+} from "../../services/v3/test.service";
 import { cancellablePromise } from "../../tools/cancellablePromise";
 import { Dialog } from "primereact/dialog";
 import { FileUpload, FileUploadHandlerParam } from "primereact/fileupload";

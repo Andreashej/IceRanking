@@ -9,7 +9,7 @@ import React, {
 import {
   getCompetition,
   patchCompetition,
-} from "../clients/v3/competition.service";
+} from "../services/v3/competition.service";
 import { ResourceContext } from "../models/resource-context.model";
 import { Test } from "../models/test.model";
 import { useIsLoggedIn } from "./user.context";

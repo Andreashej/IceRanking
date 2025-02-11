@@ -10,11 +10,11 @@ export const getRanking = async (
   params?: URLSearchParams
 ): Promise<Ranking> => {
   try {
-    const response = await apiV2.get<ApiResponse<Ranking>>(`/rankings/${id}`, {
+    const response = await apiV2.get<Ranking>(`/rankings/${id}`, {
       params,
     });
 
-    return response.data.data;
+    return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       return Promise.reject(error.response?.data.message ?? error.message);
@@ -76,16 +76,14 @@ export const createRanking = async (
 };
 
 export const getResultForRanking = async (
-  id: string,
-  params?: URLSearchParams
+  id: string
 ): Promise<[RankingResult[], Pagination?]> => {
   try {
     const response = await apiV2.get<ApiResponse<RankingResult[]>>(
-      `/rankings/${id}/results`,
-      { params }
+      `/rankings/${id}/results`
     );
 
-    return [response.data.data, response.data.pagination];
+    return [response.data.items, response.data.pagination];
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       return Promise.reject(error.response?.data.message ?? error.message);

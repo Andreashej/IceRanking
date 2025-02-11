@@ -5,7 +5,7 @@ import React, {
   useContext,
   useCallback,
 } from "react";
-import { getPerson, patchPerson } from "../clients/v3/person.service";
+import { getPerson, patchPerson } from "../services/v3/person.service";
 import { Person } from "../models/person.model";
 import { ResourceContext } from "../models/resource-context.model";
 import { useToast } from "./toast.context";
@@ -70,10 +70,7 @@ export const RiderProvider: React.FC<RiderProviderProps> = ({
 
   const fetchRider = useCallback(async (): Promise<void> => {
     try {
-      const params = new URLSearchParams({
-        fields: "id,firstname,lastname,fullname,testlist,email",
-      });
-      const rider = (await getPerson(riderId, params)) as RiderProps;
+      const rider = (await getPerson(riderId)) as RiderProps;
       setRider(rider);
     } catch (error: unknown) {
       setRider(undefined);

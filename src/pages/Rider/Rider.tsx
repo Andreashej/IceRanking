@@ -30,7 +30,7 @@ const RiderPage: React.FC = ({ children }) => {
   const [menuItems, adminMenuItems] = useMemo<[MenuItem[], MenuItem[]]>(() => {
     if (loading || error || !rider) return [[], []];
 
-    const tests = rider.testlist.map<MenuItem>((testcode): MenuItem => {
+    const tests = rider.testlist?.map<MenuItem>((testcode): MenuItem => {
       return {
         label: testcode,
         className: pathname.includes(`results/${testcode}`) ? "active" : "",

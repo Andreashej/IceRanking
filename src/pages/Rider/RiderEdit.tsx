@@ -6,7 +6,7 @@ import { useRider } from "../../contexts/rider.context";
 import { useToast } from "../../contexts/toast.context";
 import { useProfile } from "../../contexts/user.context";
 import { PersonAlias } from "../../models/personalias.model";
-import { createAlias, getAliases } from "../../clients/v3/person.service";
+import { createAlias, getAliases } from "../../services/v3/person.service";
 
 export const RiderEdit: React.FC = () => {
   const [rider, update, save] = useRider();

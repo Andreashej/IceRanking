@@ -14,8 +14,8 @@ import {
 import { useToast } from "../../contexts/toast.context";
 import { RankingList } from "../../models/rankinglist.model";
 import { Test } from "../../models/test.model";
-import { getRankingLists } from "../../clients/v3/rankinglist.service";
-import { getTest, patchTest } from "../../clients/v3/test.service";
+import { getRankingLists } from "../../services/v3/rankinglist.service";
+import { getTest, patchTest } from "../../services/v3/test.service";
 
 export const TestEdit: React.FC = () => {
   const { resource: competition, fetch: fetchCompetition } =
@@ -220,7 +220,7 @@ export const TestEdit: React.FC = () => {
               <MultiSelect
                 placeholder="Rankinglists"
                 value={test.includeInRanking?.map(
-                  (rankinglist) => rankinglist.shortname
+                  (rankinglist) => rankinglist.slug
                 )}
                 onChange={(e) => {
                   setTest((prev) => {
@@ -234,8 +234,8 @@ export const TestEdit: React.FC = () => {
                 }}
                 options={rankingLists.map((rankingList) => {
                   return {
-                    label: rankingList.shortname,
-                    value: rankingList.shortname,
+                    label: rankingList.slug,
+                    value: rankingList.slug,
                   };
                 })}
               />

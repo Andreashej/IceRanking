@@ -12,7 +12,7 @@ import {
   deleteScreen,
   getScreen,
   patchScreen,
-} from "../../../clients/v3/bigscreen.service";
+} from "../../../services/v3/bigscreen.service";
 import { ScreenProps } from "./ScreenGroupSetup";
 
 export const ScreenEditor: React.FC<ScreenProps> = ({ screenId, onDelete }) => {

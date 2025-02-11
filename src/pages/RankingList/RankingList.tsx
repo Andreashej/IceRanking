@@ -1,97 +1,127 @@
-import React, { useMemo } from 'react';
-import { Route, Switch, useHistory, useParams } from 'react-router-dom';
+import React, { useMemo } from "react";
+import { Route, Switch, useHistory, useParams } from "react-router-dom";
 
-import { RankingResults } from './RankingResults';
-import { RankingEvents } from './RankingEvents';
-import Page from '../../components/partials/Page';
-import { RankingListProvider, useRankingListContext } from '../../contexts/rankinglist.context';
-import { MenuItem } from 'primereact/menuitem';
-import { RankingListEdit } from './admin/RankingListEdit';
-import { RankingEdit } from './admin/RankingEdit';
-import { PrimeIcons } from 'primereact/api';
-import { useProfile } from '../../contexts/user.context';
+import { RankingResults } from "./RankingResults";
+import { RankingEvents } from "./RankingEvents";
+import Page from "../../components/partials/Page";
+import {
+  RankingListProvider,
+  useRankingListContext,
+} from "../../contexts/rankinglist.context";
+import { MenuItem } from "primereact/menuitem";
+import { RankingListEdit } from "./admin/RankingListEdit";
+import { RankingEdit } from "./admin/RankingEdit";
+import { PrimeIcons } from "primereact/api";
+import { useProfile } from "../../contexts/user.context";
 
-const RankingListPage: React.FC = ({children}) => {
-    const { resource: rankingList, loading, error } = useRankingListContext()
-    const [user] = useProfile();
-    const history = useHistory();
-    const { pathname } = history.location;
+const RankingListPage: React.FC = ({ children }) => {
+  const { resource: rankingList, loading, error } = useRankingListContext();
+  const [user] = useProfile();
+  const history = useHistory();
+  const { pathname } = history.location;
 
-    const title = useMemo<string | null>(() => {
-        if (!loading && rankingList) return rankingList.listname;
-        if (loading) return null;
-        
-        return '404';
-    }, [rankingList, loading])
+  const title = useMemo<string | null>(() => {
+    if (!loading && rankingList) return rankingList.name;
+    if (loading) return null;
 
-    const subtitle = useMemo<string | null>(() => {
-        if (!loading && rankingList) return rankingList.shortname;
-        if (loading) return null
-        return 'Ranking List not found';
-    },[rankingList, loading]);
+    return "404";
+  }, [rankingList, loading]);
 
-    const [menuItems, adminMenuItems] = useMemo<[MenuItem[], MenuItem[]]>(() => {
-        if (loading || error || !rankingList || !rankingList.tests) return [[], []];
+  const subtitle = useMemo<string | null>(() => {
+    if (!loading && rankingList) return rankingList.slug.toUpperCase();
+    if (loading) return null;
+    return "Ranking List not found";
+  }, [rankingList, loading]);
 
-        const testItems = rankingList.tests.map<MenuItem>((ranking): MenuItem => {
-            const url = `/rankinglist/${rankingList.shortname}/ranking/${ranking.testcode}`;
-            return {
-                label: ranking.testcode,
-                className: pathname.includes(url) ? 'active' : '',
-                command: () => history.push(url)
-            };
-        });
+  const [menuItems, adminMenuItems] = useMemo<[MenuItem[], MenuItem[]]>(() => {
+    if (loading || error || !rankingList || !rankingList.rankings)
+      return [[], []];
 
-        const menuItems = [
-            {
-                label: "Results",
-                items: testItems,
-            }
-        ];
+    const testItems = rankingList.rankings.map<MenuItem>(
+      (ranking): MenuItem => {
+        const url = `/rankinglist/${rankingList.slug}/ranking/${ranking.name}`;
+        return {
+          label: ranking.name,
+          className: pathname.includes(url) ? "active" : "",
+          command: () => history.push(url),
+        };
+      }
+    );
 
-        if (!user?.superUser) return [menuItems, []];
+    const menuItems = [
+      {
+        label: "Results",
+        items: testItems,
+      },
+    ];
 
-        menuItems[0].items.push({
-            label: 'Create ranking',
-            icon: PrimeIcons.PLUS,
-            command: () => history.push(`/rankinglist/${rankingList.shortname}/ranking/create`)
-        })
-        
-        const url = `/rankinglist/${rankingList.shortname}/edit`;
+    if (!user?.superUser) return [menuItems, []];
 
-        const adminItems = [
-            {
-                label: "Edit Ranking List",
-                className: pathname === url ? 'active' : '',
-                command: () => history.push(url)
-            }
-        ]
+    menuItems[0].items.push({
+      label: "Create ranking",
+      icon: PrimeIcons.PLUS,
+      command: () =>
+        history.push(`/rankinglist/${rankingList.slug}/ranking/create`),
+    });
 
-        return [menuItems, adminItems];
-    }, [rankingList, loading, error, history, user, pathname]);
+    const url = `/rankinglist/${rankingList.slug}/edit`;
 
-    return (
-        <Page title={title} subtitle={subtitle} menuItems={menuItems} adminMenuItems={adminMenuItems} icon="list-ol">
-            {children}
-        </Page>
-    )
+    const adminItems = [
+      {
+        label: "Edit Ranking List",
+        className: pathname === url ? "active" : "",
+        command: () => history.push(url),
+      },
+    ];
 
-}
+    return [menuItems, adminItems];
+  }, [rankingList, loading, error, history, user, pathname]);
+
+  return (
+    <Page
+      title={title}
+      subtitle={subtitle}
+      menuItems={menuItems}
+      adminMenuItems={adminMenuItems}
+      icon="list-ol"
+    >
+      {children}
+    </Page>
+  );
+};
 
 export const RankingList: React.FC = () => {
-    const { shortname } = useParams<{shortname: string}>();
+  const { shortname } = useParams<{ shortname: string }>();
 
-    return (
-        <RankingListProvider rankingListShortname={shortname}>
-            <RankingListPage>
-                <Switch>
-                    <Route exact path="/rankinglist/:shortname" component={RankingEvents} />
-                    <Route exact path="/rankinglist/:shortname/ranking/create" component={RankingEdit} />
-                    <Route exact path="/rankinglist/:shortname/ranking/:testcode" component={RankingResults} />
-                    <Route path="/rankinglist/:shortname/edit" component={RankingListEdit} />
-                    <Route path="/rankinglist/:shortname/ranking/:testcode/edit" component={RankingEdit} />
-                </Switch>
-            </RankingListPage>
-        </RankingListProvider>
-    );
-}
+  return (
+    <RankingListProvider slug={shortname}>
+      <RankingListPage>
+        <Switch>
+          <Route
+            exact
+            path="/rankinglist/:shortname"
+            component={RankingEvents}
+          />
+          <Route
+            exact
+            path="/rankinglist/:shortname/ranking/create"
+            component={RankingEdit}
+          />
+          <Route
+            exact
+            path="/rankinglist/:shortname/ranking/:testcode"
+            component={RankingResults}
+          />
+          <Route
+            path="/rankinglist/:shortname/edit"
+            component={RankingListEdit}
+          />
+          <Route
+            path="/rankinglist/:shortname/ranking/:testcode/edit"
+            component={RankingEdit}
+          />
+        </Switch>
+      </RankingListPage>
+    </RankingListProvider>
+  );
+};

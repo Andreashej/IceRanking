@@ -9,7 +9,7 @@ import {
   deleteCompetitionUser,
   getCompetition,
   postCompetitionUsers,
-} from "../../clients/v3/competition.service";
+} from "../../services/v3/competition.service";
 
 export const CompetitionAdmins: React.FC = () => {
   const [competition] = useCompetition();

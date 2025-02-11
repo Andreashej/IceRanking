@@ -5,7 +5,7 @@ import React, {
   useContext,
   useCallback,
 } from "react";
-import { getHorse, patchHorse } from "../clients/v3/horse.service";
+import { getHorse, patchHorse } from "../services/v3/horse.service";
 import { ResourceContext } from "../models/resource-context.model";
 import { Horse } from "../models/horse.model";
 

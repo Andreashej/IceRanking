@@ -5,7 +5,7 @@ import { InputText } from "primereact/inputtext";
 import React, { FormEvent, useEffect, useState } from "react";
 import { useToast } from "../../contexts/toast.context";
 import { Person } from "../../models/person.model";
-import { patchPerson } from "../../clients/v3/person.service";
+import { patchPerson } from "../../services/v3/person.service";
 
 type EmailDialogProps = {
   show: boolean;

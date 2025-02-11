@@ -34,7 +34,7 @@ export const getRankingResults = async (
       { params }
     );
 
-    return [response.data.data, response.data.pagination];
+    return [response.data.items, response.data.pagination];
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       return Promise.reject(error.response?.data.message ?? error.message);

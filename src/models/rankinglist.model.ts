@@ -2,10 +2,9 @@ import { Ranking } from "./ranking.model";
 
 export type RankingList = {
   id: string;
-  listname: string;
-  shortname: string;
-  resultsValidDays: number;
-  logoUrl: string;
+  name: string;
+  slug: string;
+  imageUrl: string | null;
 
-  tests?: Ranking[];
+  rankings?: Ranking[];
 };

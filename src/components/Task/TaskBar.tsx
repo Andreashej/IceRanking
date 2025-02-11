@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { ProgressBar } from "primereact/progressbar";
 import { Task } from "../../models/task.model";
-import { getTask } from "../../clients/v3/task.service";
+import { getTask } from "../../services/v3/task.service";
 
 type TaskBarProps = {
   task: Task;

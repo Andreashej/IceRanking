@@ -8,14 +8,11 @@ export const getRankingList = async (
   params?: URLSearchParams
 ): Promise<RankingList> => {
   try {
-    const response = await apiV2.get<ApiResponse<RankingList>>(
-      `/rankinglists/${id}`,
-      {
-        params,
-      }
-    );
+    const response = await apiV2.get<RankingList>(`/rankinglists/${id}`, {
+      params,
+    });
 
-    return response.data.data;
+    return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       return Promise.reject(error.response?.data.message ?? error.message);
@@ -33,7 +30,7 @@ export const getRankingLists = async (
       { params }
     );
 
-    return [response.data.data, response.data.pagination];
+    return [response.data.items, response.data.pagination];
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       return Promise.reject(error.response?.data.message ?? error.message);

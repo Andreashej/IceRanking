@@ -4,7 +4,8 @@ import { Task } from "./task.model";
 
 export type Ranking = {
   id: string;
-  testcode: string;
+  slug: string;
+  name: string;
   rankinglistId: string;
   includedMarks: number;
   order: "desc" | "asc";

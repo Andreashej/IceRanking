@@ -7,7 +7,7 @@ import {
   login,
   logout,
   patchUser,
-} from "../clients/v3/auth.service";
+} from "../services/v3/auth.service";
 
 interface UserContext {
   user: User | null;

@@ -20,8 +20,8 @@ export const SearchItem: React.FC<SearchItemProps> = ({ searchResult }) => {
       case "RankingList":
         return {
           icon: <FontAwesomeIcon icon="list-ol" size="2x" />,
-          primaryText: searchResult.rankingList?.listname ?? "",
-          secondaryText: searchResult.rankingList?.shortname ?? "",
+          primaryText: searchResult.rankingList?.name ?? "",
+          secondaryText: searchResult.rankingList?.slug ?? "",
         };
       case "Person":
         return {

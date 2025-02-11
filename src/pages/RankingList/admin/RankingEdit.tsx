@@ -11,7 +11,7 @@ import { InputNumber } from "primereact/inputnumber";
 import {
   createRanking,
   patchRanking,
-} from "../../../clients/v3/ranking.service";
+} from "../../../services/v3/ranking.service";
 import { useToast } from "../../../contexts/toast.context";
 import { Form } from "../../../components/Form/Form";
 
@@ -30,8 +30,9 @@ export const RankingEdit: React.FC = () => {
     Ranking | Omit<Ranking, "id" | "rankinglistId">
   >(() => {
     return (
-      rankingList?.tests?.find((ranking) => ranking.testcode === testcode) ?? {
-        testcode: "",
+      rankingList?.rankings?.find((ranking) => ranking.name === testcode) ?? {
+        name: "",
+        slug: "",
         grouping: "rider",
         order: "desc",
         minMark: 5.5,
@@ -68,9 +69,9 @@ export const RankingEdit: React.FC = () => {
         summary: "Ranking saved",
       });
 
-      if (ranking.testcode !== testcode)
+      if (ranking.name !== testcode)
         history.push(
-          `/rankinglist/${rankingList?.shortname}/ranking/${ranking.testcode}/edit`
+          `/rankinglist/${rankingList?.slug}/ranking/${ranking.name}/edit`
         );
     } catch (error: unknown) {
       if (typeof error === "string") {
@@ -105,12 +106,12 @@ export const RankingEdit: React.FC = () => {
             input: (
               <InputText
                 id="testcode"
-                value={ranking?.testcode}
+                value={ranking?.name}
                 onChange={(e) =>
                   setRanking((prevRanking) => {
                     return {
                       ...(prevRanking as Ranking),
-                      testcode: e.target.value,
+                      name: e.target.value,
                     };
                   })
                 }

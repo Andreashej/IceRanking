@@ -12,7 +12,7 @@ import {
   patchScreen,
   patchScreenGroup,
   postScreen,
-} from "../../../clients/v3/bigscreen.service";
+} from "../../../services/v3/bigscreen.service";
 import { ScreenEditor } from "./ScreenEditor";
 import { ScreenGroupProps } from "./ScreenGroupSetup";
 
